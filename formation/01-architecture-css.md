@@ -28,13 +28,16 @@ C'est **le** module qui va définir votre rapport quotidien à Apriso. Aujourd'h
 Après ce module :
 
 ```css
-/* après */
+/* après — overrides.css */
+@layer reset, priority, framework, overrides;
+@import url("./apriso-base.css") layer(framework);
+
 @layer overrides {
   .apriso-machine-card__title { color: var(--ml-color-danger); }
 }
 ```
 
-→ Sélecteur court, intention claire, palette centralisée, override **garanti** par la couche, pas par la spécificité.
+→ Sélecteur court, intention claire, palette centralisée, override **garanti** par la couche, pas par la spécificité. Et le tour de force : ramener Apriso **dans** la cascade en l'important dans une couche nommée.
 
 ---
 
@@ -64,12 +67,12 @@ Spécificité — rappel express :
 
 > 🎯 **Le piège Apriso** : tous leurs sélecteurs sont préfixés `.apriso-dashboard .zone .composant .element` → spécificité **0, 4, 0** voire **0, 5, 0**. Pour battre ça avec la même technique, il faut **monter encore**. Mauvaise idée.
 
-### 2. `@layer` — les couches en cascade (10 min)
+### 2. `@layer` — les couches en cascade (8 min)
 
 `@layer` introduit un niveau d'organisation **au-dessus** de la spécificité. L'ordre des couches déclarées **prime** sur la spécificité interne à chaque couche.
 
 ```css
-@layer reset, framework, overrides;
+@layer framework, overrides;
 
 @layer framework {
   .apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__title {
@@ -84,45 +87,96 @@ Spécificité — rappel express :
 }
 ```
 
-**Règle d'or** : **dernière couche déclarée = couche gagnante**, peu importe la spécificité interne.
+**Règle d'or — déclarations normales** : **dernière couche déclarée = couche gagnante**, peu importe la spécificité interne.
 
-#### Conséquences pratiques
+#### Et les déclarations unlayered ?
 
-- On peut écrire des sélecteurs **courts** dans `overrides`, ils battent les longs du framework.
-- Le code d'override redevient **lisible**.
-- L'intention est explicite : "je suis dans la couche `overrides`, je sais ce que je fais".
+Question piège, et réponse contre-intuitive : **les déclarations sans `@layer` (unlayered) sont placées dans une "couche implicite finale"**. Pour les déclarations normales, dernière couche = gagne → **les déclarations unlayered battent toutes les déclarations layered**.
+
+```css
+@layer overrides {
+  .x { color: blue; }   /* layered → perd */
+}
+
+.x { color: red; }      /* unlayered → "dernière couche" → gagne ❌ */
+```
+
+> 🚨 **Conséquence directe pour Dymasco** : `apriso-base.css` est chargé **sans `@layer`**. Si vous écrivez juste `@layer overrides { .x { ... } }` dans votre CSS, vous **perdez** contre Apriso (normal et !important).
+>
+> Pour reprendre la main, il faut **amener Apriso dans une couche nommée** (cf. §3 ci-dessous).
 
 #### Et `!important` dans tout ça ?
 
-Surprise : **les couches inversent l'ordre de `!important`**.
+L'ordre est **inversé** pour les `!important` : entre couches nommées, c'est la **première déclarée** qui gagne. Et la "couche implicite finale" devient la moins prioritaire. Tableau récapitulatif :
 
-- Sans `@layer` : `!important` du dernier `.css` chargé gagne.
-- Avec `@layer` : `!important` de la **première** couche déclarée gagne (l'inverse !).
+| Déclaration A | Déclaration B | Qui gagne ? |
+|---|---|---|
+| Normal layered (early) | Normal layered (late) | **B** (later wins) |
+| Normal layered | Normal unlayered | **B** (unlayered wins) |
+| Normal | !important | **!important** |
+| !important layered (early) | !important layered (late) | **A** (earlier wins) |
+| !important layered | !important unlayered | **layered** (unlayered loses) |
 
-```css
-@layer reset, framework, overrides;
-
-@layer framework {
-  .x { color: red !important; }   /* ← gagne */
-}
-
-@layer overrides {
-  .x { color: blue !important; }  /* perd ! contre-intuitif */
-}
-```
-
-→ Conclusion : si le framework a `!important` **dans une couche**, vous perdez. **Mais** si le framework a `!important` **hors couches** (cas Apriso), votre couche `overrides` gagne quand même, parce que l'ordre est :
-**unlayered `!important` < earliest layered `!important`** … enfin ça c'est compliqué. Retenez la règle simple :
-
-> 🟢 **Code Apriso = pas de `@layer`, donc "unlayered".** Votre couche `overrides` dépasse leurs sélecteurs **et** leurs `!important`. ✅
-
-À tester en démo, c'est l'effet "wow" du module.
+Lecture utile pour la suite :
+- **Pour battre du normal Apriso unlayered** → il faut amener Apriso dans une couche nommée (§3).
+- **Pour battre du !important Apriso unlayered** → suffit d'un `!important` dans une couche nommée (n'importe laquelle).
 
 #### Cible Baseline
 
 `@layer` : **Widely available** depuis 2022 (Chrome/Edge 99+, Firefox 97+, Safari 15.4+). Pour Dymasco : ✅ feu vert (cf. Module 0).
 
-### 3. `:where()` — la spécificité zéro (5 min)
+### 3. `@import url() layer()` — amener Apriso dans la cascade (8 min)
+
+C'est **le** geste qui débloque tout. On charge `apriso-base.css` **dans** une couche nommée, via `@import` côté override :
+
+```css
+/* overrides.css — premier chargé par le HTML */
+@layer reset, priority, framework, overrides;
+
+@import url("./apriso-base.css") layer(framework);
+
+@layer reset {
+  :where(h1, h2, h3, h4, h5, h6) { margin: 0; }
+}
+
+@layer overrides {
+  /* sélecteurs courts, normales, battent Apriso normal */
+  .apriso-machine-card { background: var(--ml-color-bg-cream); }
+  .apriso-header__title { font-size: 22px; }
+}
+
+@layer priority {
+  /* couche dédiée pour battre les !important Apriso (rare, à minimiser) */
+  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg) !important; }
+}
+```
+
+**Important côté HTML** : retirer le `<link rel="stylesheet" href="apriso-base.css">`. Apriso n'est plus chargé que via votre `@import layer(framework)`. Sans ça, Apriso resterait unlayered en parallèle, et reprendrait la main.
+
+#### Pourquoi 4 couches ?
+
+| Couche | Rôle | Position |
+|---|---|---|
+| `reset` | resets neutres (`margin: 0`, etc.) | très basse — toujours battue |
+| `priority` | escalades **!important** uniquement | **avant** `framework` → bat les !important Apriso |
+| `framework` | Apriso, importé via `@import` | au milieu |
+| `overrides` | vos overrides normaux (sans !important) | dernier → bat les normales Apriso |
+
+Vérification :
+- Normal : `reset < priority < framework < overrides` → **overrides normal gagne** ✓
+- !important : ordre inversé → `overrides-imp < framework-imp < priority-imp` → **priority !important gagne** ✓ (et `reset` reste neutre)
+
+#### Mantra opérationnel
+
+- 95 % du temps : vous écrivez dans `overrides`, **sans `!important`**, sélecteurs courts.
+- Quand Apriso a un `!important` (ex : `.apriso-machine-card--running { border-left-color: ... !important }`), vous escaladez dans `priority` **avec** `!important`.
+- `reset` ne contient que des `:where(...)` à spécificité 0.
+
+#### Cible Baseline
+
+`@import` avec `layer()` : **Widely available** depuis 2022 (même date que `@layer`). ✅.
+
+### 4. `:where()` — la spécificité zéro (5 min)
 
 `:where()` enveloppe un ou plusieurs sélecteurs, et **met leur spécificité à 0**. Identique à `:is()` côté correspondance, mais sans coût de spécificité.
 
@@ -147,7 +201,7 @@ Surprise : **les couches inversent l'ordre de `!important`**.
 /* h2 dans n'importe quel composant gagne sans effort */
 ```
 
-### 4. Nesting CSS natif (5 min)
+### 5. Nesting CSS natif (5 min)
 
 Plus besoin de Sass pour imbriquer. Depuis 2023, le nesting est **natif**.
 
@@ -181,7 +235,7 @@ Plus besoin de Sass pour imbriquer. Depuis 2023, le nesting est **natif**.
 
 Nesting CSS natif : **Widely available** mi-2024. Pour Dymasco : ✅.
 
-### 5. Variables CSS / tokens (10 min)
+### 6. Variables CSS / tokens (8 min)
 
 Les **custom properties** (`--ma-variable`) sont la couche **identité visuelle** de votre projet. Elles vivent à la racine, sont héritées par cascade, sont surchargeables par sélecteur.
 
@@ -239,26 +293,36 @@ Les **custom properties** (`--ma-variable`) sont la couche **identité visuelle*
 
 > 💡 Préfixe **projet** (`--ml-` ici pour Mamie Lulu) ou **éditeur** (`--apriso-`). Jamais de variable nue (`--primary`) → collisions garanties à terme.
 
-### 6. Pyramide complète (5 min)
+### 7. Pyramide complète (4 min)
 
 Architecture cible pour `overrides.css` :
 
 ```css
 /* Target: Edge/Chromium <= 3 ans — last reviewed: 2026-05-18 */
 
-@layer reset, framework, overrides;
+@layer reset, priority, framework, overrides;
+
+@import url("./apriso-base.css") layer(framework);
+
+@layer reset {
+  :where(h1, h2, h3, h4) { margin: 0; }
+}
 
 @layer overrides {
   :root { /* tokens */ }
 
-  /* Composants */
+  /* Composants — sélecteurs courts, normales */
   .apriso-machine-card { ... }
   .apriso-kpi-board    { ... }
-  /* etc. */
+}
+
+@layer priority {
+  /* Quand Apriso a !important : escalader ici, avec !important */
+  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg) !important; }
 }
 ```
 
-→ 3 couches déclarées, tokens en tête, sélecteurs courts, framework Apriso "unlayered" donc battu. **C'est tout.**
+→ **4 couches** : `reset` (très basse), `priority` (pour battre les !important), `framework` (Apriso wrappé), `overrides` (vos overrides normaux). Coût HTML : retirer le `<link>` vers `apriso-base.css`.
 
 ---
 
@@ -274,13 +338,7 @@ Dans `overrides.css` :
 ```
 → Aucun effet. DevTools montre que le sélecteur Apriso (5 classes) gagne. Spécificité 0,5,0 vs 0,1,0.
 
-### Étape 2 — Escalade `!important` (3 min)
-```css
-.apriso-machine-card__title { color: red !important; }
-```
-→ Marche, mais introduit le piège suivant : impossible de revenir sans un `!important` encore plus fort, et plus aucune réutilisabilité.
-
-### Étape 3 — `@layer` (5 min)
+### Étape 2 — `@layer` "tel quel", le piège (4 min)
 
 ```css
 @layer overrides;
@@ -289,20 +347,49 @@ Dans `overrides.css` :
   .apriso-machine-card__title { color: red; }
 }
 ```
-→ **Marche sans `!important`**. Sélecteur court. Faire admirer dans DevTools : la déclaration Apriso est barrée, la nôtre gagne via "Layer: overrides".
+→ **N'a aucun effet non plus**. Apriso est unlayered → couche implicite finale → bat la couche `overrides`.
 
-### Étape 4 — Bonus `!important` du framework (4 min)
+DevTools, panneau "Styles" : la règle est **présente** mais barrée par la déclaration Apriso. Lecture : `Layer: <implicit outer layer> > Layer: overrides`.
 
-Tester sur `.apriso-header__title` (`font-size: 18px !important` côté Apriso) :
+C'est le moment pédagogique critique : démystifier la croyance "@layer surclasse tout".
+
+### Étape 3 — `@import layer(framework)` — la vraie solution (5 min)
+
+1. Retirer du HTML le `<link rel="stylesheet" href="apriso-base.css">`.
+2. Dans `overrides.css` :
+```css
+@layer reset, priority, framework, overrides;
+
+@import url("./apriso-base.css") layer(framework);
+
+@layer overrides {
+  .apriso-machine-card__title { color: red; }
+}
+```
+→ **Marche maintenant sans `!important`**. Apriso est dans `framework`, overrides est plus tard, overrides gagne.
+
+DevTools : `Layer: framework > Layer: overrides`, la déclaration Apriso est barrée comme attendu. **Effet "wow" légitime.**
+
+### Étape 4 — Battre les `!important` Apriso (4 min)
+
+Tester sur `.apriso-machine-card--alert` (Apriso : `background: #fff8e1 !important`) :
 
 ```css
 @layer overrides {
-  .apriso-header__title { font-size: 22px; }
+  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg); }
 }
 ```
-→ Marche **aussi sans `!important`** côté override, parce que la couche `overrides` bat les déclarations unlayered, **y compris leurs `!important`**. Effet **"wow"** garanti.
+→ **Échec.** Le `!important` framework gagne contre une normale overrides.
 
-### Étape 5 — Tokens (5 min)
+Solution : escalader dans la couche `priority` **avec** `!important` :
+```css
+@layer priority {
+  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg) !important; }
+}
+```
+→ Marche. `priority` est déclarée AVANT `framework` → pour les `!important`, ordre inversé → priority gagne.
+
+### Étape 5 — Tokens (3 min)
 
 Remplacer la couleur en dur par une variable :
 ```css
@@ -321,18 +408,31 @@ Remplacer la couleur en dur par une variable :
 
 Refactorer `projet-fil-rouge/00-base/overrides.css` (vide) pour produire l'**état attendu après Module 1** du dashboard Mamie Lulu :
 
-1. Déclarer la pyramide `@layer reset, framework, overrides`.
-2. Définir le bloc `:root` avec les **tokens Mamie Lulu** (cf. concept §5 ci-dessus).
-3. Surcharger les éléments suivants **sans `!important`, avec sélecteurs courts** :
+1. **Modifier le HTML** : retirer `<link rel="stylesheet" href="apriso-base.css">`. Apriso sera chargé via `@import` dans overrides.css.
+
+2. **Déclarer la pyramide** en tête : `@layer reset, priority, framework, overrides;` puis `@import url("./apriso-base.css") layer(framework);`.
+
+3. **Définir le bloc `:root`** dans `@layer overrides` avec les **tokens Mamie Lulu** (cf. concept §6 ci-dessus).
+
+4. **`@layer overrides`** — surcharger sans `!important`, sélecteurs courts :
    - `.apriso-header` → fond `--ml-color-brand-primary`
-   - `.apriso-header__title` → `font-size: 22px` (battre le `!important` Apriso)
+   - `.apriso-header__title` → `font-size: 22px` (Apriso a `!important` ici → exception, voir §5 ci-dessous)
    - `.apriso-machine-card` → fond `--ml-color-bg-cream`, bord `--ml-color-border`, radius `--ml-radius`
-   - `.apriso-machine-card--running` → bord gauche `--ml-color-status-running`
-   - `.apriso-machine-card--idle` → bord gauche `--ml-color-status-idle`
-   - `.apriso-machine-card--alert` → bord gauche `--ml-color-status-alert`
-   - `.apriso-machine-card--maintenance` → bord gauche `--ml-color-status-maintenance`
-4. Utiliser le **nesting natif** dans le bloc `.apriso-machine-card`.
-5. Utiliser `:where()` au moins une fois pour un reset (ex : `:where(h1, h2, h3, h4) { margin: 0 }` — déjà dans le base, à reprendre proprement dans la couche `reset`).
+   - `.apriso-machine-card--running` → bord gauche `--ml-color-status-running` (Apriso a `!important` → §5)
+   - `.apriso-machine-card--idle` → bord gauche `--ml-color-status-idle` (idem §5)
+   - `.apriso-machine-card--alert` → bord gauche `--ml-color-status-alert` (idem §5)
+   - `.apriso-machine-card--maintenance` → bord gauche `--ml-color-status-maintenance` (idem §5)
+
+5. **`@layer priority`** — pour chaque rule où Apriso pose `!important`, écrire la version override **avec** `!important` ici. Ce sont les 6 cas suivants (à grep dans `apriso-base.css`) :
+   - `.apriso-header__title { font-size: ... !important }`
+   - `.apriso-machine-card--running { border-left-color: ... !important }`
+   - `.apriso-machine-card--idle { border-left-color: ... !important }`
+   - `.apriso-machine-card--alert { border-left-color: ... !important; background: ... !important }`
+   - `.apriso-machine-card--maintenance { border-left-color: ... !important }`
+
+6. **Nesting natif** dans `.apriso-machine-card`.
+
+7. **`:where()`** : ajouter dans `@layer reset` un `:where(h1, h2, h3, h4) { margin: 0 }`.
 
 ### Code de départ
 
@@ -343,15 +443,16 @@ Refactorer `projet-fil-rouge/00-base/overrides.css` (vide) pour produire l'**ét
 
 ### Pièges fréquents (à anticiper)
 
-- ❌ Oublier de **déclarer l'ordre** des couches en tête → la dernière définie gagne, ordre imprévisible.
-- ❌ Vouloir mettre `:root` **dans** une couche **autre** qu'`overrides` → tokens héritent partout, mais leur valeur **doit** vivre dans la couche qui les pilote (ici `overrides`).
+- ❌ **Oublier de retirer le `<link>`** vers apriso-base.css du HTML → Apriso est chargé deux fois, dont une unlayered, qui reprend la main. **Vérifier dans DevTools → Network que apriso-base.css n'est chargé qu'une seule fois.**
+- ❌ Oublier de **déclarer l'ordre** des couches en tête → ordre dépend de l'ordre d'apparition, imprévisible.
+- ❌ Mettre `:root` dans `@layer reset` ou `priority` → tokens héritent partout, mais leur **valeur** doit vivre dans la couche qui les pilote (ici `overrides`).
 - ❌ Imbriquer un `&:hover` sans le `&` → erreur de parsing silencieuse selon le nav.
-- ❌ Utiliser `:where()` **autour du sélecteur cible** (ex : `:where(.machine-card)`) → la cible elle-même tombe à 0 spécificité, surchargée par n'importe quoi. `:where()` enveloppe le **scope**, pas la cible.
-- ❌ Hardcoder un `!important` "au cas où" → couche `overrides` rend ça inutile. À chasser à la relecture.
+- ❌ Utiliser `:where()` **autour du sélecteur cible** (ex : `:where(.machine-card)`) → la cible elle-même tombe à 0 spécificité. `:where()` enveloppe le **scope**, pas la cible.
+- ❌ Hardcoder un `!important` "au cas où" dans `@layer overrides` → marche techniquement, mais brouille la lecture. La règle : `!important` **uniquement** dans `@layer priority`, et **uniquement** quand Apriso impose un `!important`.
 
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/01-architecture/overrides.css` (~80 lignes, lisible, zéro `!important`, zéro sélecteur > 2 classes).
+Voir `projet-fil-rouge/checkpoints/01-architecture/overrides.css` (~150 lignes incluant tokens et la couche `priority` pour les 6 `!important` Apriso).
 
 ---
 
@@ -403,13 +504,16 @@ Voir `projet-fil-rouge/checkpoints/01-architecture/overrides.css` (~80 lignes, l
 ## 📝 Récap & checklist
 
 - [ ] Je sais expliquer l'**ordre de cascade** (origine, couche, spécificité, ordre)
-- [ ] Je sais que **dernière couche déclarée = gagne**
-- [ ] Je sais que ma couche `overrides` bat le code Apriso **unlayered**, y compris leurs `!important`
-- [ ] Je n'écris **plus de `!important`** dans mes overrides
-- [ ] Je n'écris **plus de chaînes > 2 classes** dans mes overrides
+- [ ] Je sais que pour les **normales** : dernière couche déclarée = gagne, et **unlayered = couche implicite finale = bat tous les layered**
+- [ ] Je sais que pour les **!important** : ordre **inversé**, première couche déclarée = gagne, et **unlayered = perd contre tous les layered**
+- [ ] Je sais ramener un framework non layered dans la cascade via `@import url() layer(name)`
+- [ ] Je connais la pyramide `reset, priority, framework, overrides`
+- [ ] Je n'écris `!important` que dans `priority`, et seulement quand le framework m'y force
+- [ ] Je n'écris plus de chaînes > 2 classes dans mes overrides
 - [ ] J'utilise `:where()` pour les sélecteurs de portée et les resets
 - [ ] J'imbrique avec le **nesting natif**, pas de Sass
 - [ ] Je centralise toute couleur / espacement / rayon dans **`:root` + tokens préfixés**
 - [ ] Je documente la cible navigateur en tête de fichier
+- [ ] Je vérifie dans **DevTools → Network** que `apriso-base.css` n'est chargé qu'**une seule fois** (via `@import`, pas via `<link>`)
 
-> 🎯 **Mantra du module** : *"L'override propre n'écrase pas. Il prend la couche du dessus."*
+> 🎯 **Mantra du module** : *"`@layer` ne bat pas un framework non layered. Il faut d'abord le ramener dans la cascade via `@import url() layer()`."*
