@@ -1,0 +1,464 @@
+/* ============================================================================
+   FORGE — APRISO BASE
+   ----------------------------------------------------------------------------
+   Framework de composants Forge pour DELMIA Apriso.
+   Version partagée — NE PAS MODIFIER ce fichier en projet client.
+   Toute personnalisation doit se faire dans overrides.css
+   ============================================================================
+*/
+
+/* ----------------------------------------------------------------------------
+   RESET & BASE
+   ---------------------------------------------------------------------------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #2b2b2b;
+    background: #f4f5f7;
+}
+
+body {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+dl,
+dd,
+dt {
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+button,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+/* Hardcoded focus removal — typical of legacy frameworks. */
+button:focus,
+select:focus,
+a:focus {
+    outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+   DASHBOARD — root layout (rigid pixel-based grid)
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard {
+    display: grid;
+    grid-template-rows: 64px 96px 1fr 40px;
+    grid-template-columns: 1fr;
+    height: 100vh;
+    width: 1440px;
+    /* hardcoded width — typical Apriso target */
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #d0d4da;
+}
+
+/* ----------------------------------------------------------------------------
+   HEADER
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: #1f3a5f;
+    color: #ffffff;
+    border-bottom: 2px solid #15294a;
+}
+
+.apriso-dashboard .apriso-header .apriso-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.apriso-dashboard .apriso-header .apriso-header__logo {
+    font-size: 24px;
+}
+
+.apriso-dashboard .apriso-header .apriso-header__brand-name {
+    letter-spacing: 0.3px;
+}
+
+.apriso-dashboard .apriso-header .apriso-header__title {
+    font-size: 18px !important;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.apriso-dashboard .apriso-header .apriso-header__controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.apriso-line-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.apriso-line-selector .apriso-line-selector__select {
+    padding: 6px 10px;
+    background: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid #d0d4da;
+    border-radius: 2px;
+    width: 220px;
+    /* fixed width — text overflow risk */
+}
+
+.apriso-connection-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.apriso-connection-status .apriso-connection-status__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6c757d;
+}
+
+.apriso-connection-status--online .apriso-connection-status__dot {
+    background: #4caf50;
+}
+
+/* ----------------------------------------------------------------------------
+   KPI BOARD
+   Built with <table> + display:table — looks fine but is rigid.
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-kpi-board {
+    background: #f8f9fb;
+    border-bottom: 1px solid #d0d4da;
+    padding: 16px 24px;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi-board__table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi {
+    text-align: left;
+    padding: 8px 16px;
+    border-right: 1px solid #e3e6eb;
+    vertical-align: middle;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi:last-child {
+    border-right: none;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi .apriso-kpi__label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi .apriso-kpi__value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.apriso-dashboard .apriso-kpi-board .apriso-kpi .apriso-kpi__trend {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.apriso-kpi__trend--up {
+    color: #2e7d32;
+}
+
+.apriso-kpi__trend--down {
+    color: #c62828;
+}
+
+.apriso-kpi__trend--neutral {
+    color: #6c757d;
+}
+
+/* ----------------------------------------------------------------------------
+   MAIN — machine grid + event log sidebar
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-main {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    overflow: hidden;
+}
+
+/* ----------------------------------------------------------------------------
+   MACHINE GRID
+   Cards in fixed-pixel widths — does not adapt to context.
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-main .apriso-machine-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    align-content: flex-start;
+    overflow-y: auto;
+    /* overflow without scrollbar-gutter */
+    background: #f4f5f7;
+}
+
+/* Heavy specificity chain — typical pattern in shipped frameworks. */
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card {
+    width: 240px;
+    /* fixed width — does not adapt to its zone */
+    flex: 0 0 auto;
+    background: #ffffff;
+    border: 1px solid #d0d4da;
+    border-left: 4px solid #6c757d;
+    border-radius: 2px;
+    padding: 12px 14px;
+    transition: all 0.3s ease;
+    /* over-broad transition */
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card:hover {
+    border-color: #1f3a5f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    /* No overflow handling — long names will break the layout */
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__status {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: #e9ecef;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__metrics {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__metric {
+    flex: 1;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__metric dt {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__metric dd {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__last-event {
+    font-size: 11px;
+    color: #6c757d;
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px solid #f0f1f3;
+    /* No truncation — long event labels will wrap and grow the card */
+}
+
+/* Status modifiers (left border color) */
+.apriso-machine-card--running {
+    border-left-color: #4caf50 !important;
+}
+
+.apriso-machine-card--idle {
+    border-left-color: #6c757d !important;
+}
+
+.apriso-machine-card--alert {
+    border-left-color: #f57c00 !important;
+    background: #fff8e1 !important;
+}
+
+.apriso-machine-card--maintenance {
+    border-left-color: #1976d2 !important;
+}
+
+.apriso-machine-card--running .apriso-machine-card__status {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.apriso-machine-card--idle .apriso-machine-card__status {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.apriso-machine-card--alert .apriso-machine-card__status {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.apriso-machine-card--maintenance .apriso-machine-card__status {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+/* ----------------------------------------------------------------------------
+   EVENT LOG (sidebar)
+   No sticky header. No scrollbar-gutter. Long messages wrap unpredictably.
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-main .apriso-event-log {
+    background: #ffffff;
+    border-left: 1px solid #d0d4da;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__header {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e3e6eb;
+    background: #f8f9fb;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__count {
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__container {
+    flex: 1;
+    overflow-y: auto;
+    /* no scrollbar-gutter — layout will jump */
+    overflow-x: auto;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #f4f5f7;
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    border-bottom: 1px solid #d0d4da;
+    /* Header is NOT sticky — when the user scrolls, the column titles disappear */
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f1f3;
+    vertical-align: top;
+    /* No text-overflow handling — long messages can break alignment */
+}
+
+.apriso-dashboard .apriso-main .apriso-event-log .apriso-event-log__table tbody tr:hover {
+    background: #f8f9fb;
+}
+
+.apriso-event--critical td:last-child {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.apriso-event--warning td:last-child {
+    color: #e65100;
+    font-weight: 600;
+}
+
+.apriso-event--info td:last-child {
+    color: #6c757d;
+}
+
+/* ----------------------------------------------------------------------------
+   FOOTER
+   ---------------------------------------------------------------------------- */
+
+.apriso-dashboard .apriso-footer {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 24px;
+    background: #f4f5f7;
+    border-top: 1px solid #d0d4da;
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.apriso-dashboard .apriso-footer .apriso-footer__item--time {
+    margin-left: auto;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-variant-numeric: tabular-nums;
+}

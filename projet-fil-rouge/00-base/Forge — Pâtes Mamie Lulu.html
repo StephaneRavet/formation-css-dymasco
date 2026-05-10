@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)file:///Users/sravet/Downloads/index.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forge — Pâtes Mamie Lulu</title>
+    <!-- IMPORTANT: order matters. apriso-base.css first, your overrides last -->
+    <link rel="stylesheet" href="./apriso-base.css">
+    <link rel="stylesheet" href="./overrides.css">
+  </head>
+  <body>
+    <div class="apriso-dashboard">
+      <!-- ========== HEADER ========== -->
+      <header class="apriso-header">
+        <div class="apriso-header__brand">
+          <span class="apriso-header__logo">🍝</span>
+          <span class="apriso-header__brand-name">Pâtes Mamie Lulu</span>
+        </div>
+
+        <h1 class="apriso-header__title">Tableau de bord production</h1>
+
+        <div class="apriso-header__controls">
+          <label class="apriso-line-selector">
+            <span class="apriso-line-selector__label">Ligne</span>
+            <select class="apriso-line-selector__select" name="line">
+              <option value="L1">L1 — Pâtes longues</option>
+              <option value="L2" selected="">L2 — Pâtes courtes</option>
+              <option value="L3">L3 — Lasagnes &amp; spécialités</option>
+            </select>
+          </label>
+
+          <div class="apriso-connection-status apriso-connection-status--online">
+            <span class="apriso-connection-status__dot"></span>
+            <span class="apriso-connection-status__label">Connecté</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ========== KPI BOARD ========== -->
+      <section class="apriso-kpi-board" aria-label="Indicateurs clés">
+        <table class="apriso-kpi-board__table">
+          <tbody>
+            <tr>
+              <td class="apriso-kpi">
+                <span class="apriso-kpi__label">OEE</span>
+                <span class="apriso-kpi__value">76,4 %</span>
+                <span class="apriso-kpi__trend apriso-kpi__trend--up">▲ 2,1</span>
+              </td>
+              <td class="apriso-kpi">
+                <span class="apriso-kpi__label">Disponibilité</span>
+                <span class="apriso-kpi__value">92,8 %</span>
+                <span class="apriso-kpi__trend apriso-kpi__trend--up">▲ 0,5</span>
+              </td>
+              <td class="apriso-kpi">
+                <span class="apriso-kpi__label">Performance</span>
+                <span class="apriso-kpi__value">88,1 %</span>
+                <span class="apriso-kpi__trend apriso-kpi__trend--down">▼ 1,2</span>
+              </td>
+              <td class="apriso-kpi">
+                <span class="apriso-kpi__label">Qualité</span>
+                <span class="apriso-kpi__value">93,5 %</span>
+                <span class="apriso-kpi__trend apriso-kpi__trend--neutral">— 0,0</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ========== MAIN CONTENT (machine grid + sidebar event log) ========== -->
+      <main class="apriso-main">
+        <!-- ----- MACHINE GRID ----- -->
+        <section class="apriso-machine-grid" aria-label="Machines de la ligne">
+          <article class="apriso-machine-card apriso-machine-card--running">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Mélangeur Mama</h2>
+              <span class="apriso-machine-card__status">En marche</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Cadence</dt>
+                <dd>342 kg/h</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Température</dt>
+                <dd>24,2 °C</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Dernière mesure : il y a 8 s</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--running">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Pétrin Papa</h2>
+              <span class="apriso-machine-card__status">En marche</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Cadence</dt>
+                <dd>318 kg/h</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Couple</dt>
+                <dd>42,1 N·m</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Dernière mesure : il y a 12 s</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--alert">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Laminoir Léon</h2>
+              <span class="apriso-machine-card__status">Alerte</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Épaisseur</dt>
+                <dd>1,12 mm</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Tolérance</dt>
+                <dd>± 0,05 mm</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">⚠ Dérive d'épaisseur détectée</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--running">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Tagliatelle Tatie</h2>
+              <span class="apriso-machine-card__status">En marche</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Cadence</dt>
+                <dd>295 kg/h</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Découpe</dt>
+                <dd>OK</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Dernière mesure : il y a 4 s</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--idle">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Spaghetti Sergio</h2>
+              <span class="apriso-machine-card__status">À l'arrêt</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Dernière prod.</dt>
+                <dd>14:32</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Motif</dt>
+                <dd>Changement format</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Arrêt planifié — redémarrage 15:00</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--running">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Penne Pépé</h2>
+              <span class="apriso-machine-card__status">En marche</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Cadence</dt>
+                <dd>410 kg/h</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Pression filière</dt>
+                <dd>118 bar</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Dernière mesure : il y a 2 s</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--maintenance">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Rigatoni Régine</h2>
+              <span class="apriso-machine-card__status">Maintenance</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Type</dt>
+                <dd>Préventive</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Fin prévue</dt>
+                <dd>15:30</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Intervention en cours — Tech. : J. Moreau</p>
+          </article>
+
+          <article class="apriso-machine-card apriso-machine-card--running">
+            <header class="apriso-machine-card__header">
+              <h2 class="apriso-machine-card__title">Conditionneuse Coco</h2>
+              <span class="apriso-machine-card__status">En marche</span>
+            </header>
+            <dl class="apriso-machine-card__metrics">
+              <div class="apriso-machine-card__metric">
+                <dt>Cadence</dt>
+                <dd>52 paq/min</dd>
+              </div>
+              <div class="apriso-machine-card__metric">
+                <dt>Rejets</dt>
+                <dd>0,8 %</dd>
+              </div>
+            </dl>
+            <p class="apriso-machine-card__last-event">Dernière mesure : il y a 5 s</p>
+          </article>
+        </section>
+
+        <!-- ----- EVENT LOG (sidebar) ----- -->
+        <aside class="apriso-event-log" aria-label="Journal d&#39;événements">
+          <header class="apriso-event-log__header">
+            <h2 class="apriso-event-log__title">Journal d'événements</h2>
+            <span class="apriso-event-log__count">128 événements aujourd'hui</span>
+          </header>
+
+          <div class="apriso-event-log__container">
+            <table class="apriso-event-log__table">
+              <thead>
+                <tr>
+                  <th scope="col">Heure</th>
+                  <th scope="col">Machine</th>
+                  <th scope="col">Événement</th>
+                  <th scope="col">Sévérité</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="apriso-event apriso-event--critical">
+                  <td>14:42:18</td>
+                  <td>Laminoir Léon</td>
+                  <td>Dérive d'épaisseur supérieure à la tolérance — référence OF-2026-0428-L2-A</td>
+                  <td>Critique</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:38:02</td>
+                  <td>Conditionneuse Coco</td>
+                  <td>Rejet emballage — code-barres illisible</td>
+                  <td>Info</td>
+                </tr>
+                <tr class="apriso-event apriso-event--warning">
+                  <td>14:35:11</td>
+                  <td>Pétrin Papa</td>
+                  <td>Couple moteur en hausse — surveillance recommandée</td>
+                  <td>Avertissement</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:32:00</td>
+                  <td>Spaghetti Sergio</td>
+                  <td>Arrêt planifié — changement de format (penne → spaghetti n°5)</td>
+                  <td>Info</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:28:45</td>
+                  <td>Rigatoni Régine</td>
+                  <td>Démarrage maintenance préventive — technicien J. Moreau</td>
+                  <td>Info</td>
+                </tr>
+                <tr class="apriso-event apriso-event--warning">
+                  <td>14:21:33</td>
+                  <td>Mélangeur Mama</td>
+                  <td>Température en hausse (24,2 °C) — proche du seuil haut (25 °C)</td>
+                  <td>Avertissement</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:15:09</td>
+                  <td>Tagliatelle Tatie</td>
+                  <td>Changement de bobine — opérateur M. Costa</td>
+                  <td>Info</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:08:22</td>
+                  <td>Penne Pépé</td>
+                  <td>Cadence stabilisée à 410 kg/h après ramp-up</td>
+                  <td>Info</td>
+                </tr>
+                <tr class="apriso-event apriso-event--info">
+                  <td>14:00:00</td>
+                  <td>Système</td>
+                  <td>Début équipe après-midi — superviseur : C. Bernard</td>
+                  <td>Info</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </aside>
+      </main>
+
+      <!-- ========== FOOTER ========== -->
+      <footer class="apriso-footer">
+        <span class="apriso-footer__item">Forge v1.0.0</span>
+        <span class="apriso-footer__item">Équipe : Après-midi (14h-22h)</span>
+        <span class="apriso-footer__item">Superviseur : C. Bernard</span>
+        <span class="apriso-footer__item apriso-footer__item--time">14:42:24</span>
+      </footer>
+    </div>
+  
+
+</body></html>
