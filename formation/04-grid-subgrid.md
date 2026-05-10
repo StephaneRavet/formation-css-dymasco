@@ -1,7 +1,7 @@
-# Module 4 — Grid Layout, Subgrid & layouts denses
+# Module 4 — Grid Layout & layouts denses
 
 > ⏱️ **Durée** : 2h15 — **J1 après-midi, gros bloc**
-> 🧭 **Type** : module fondateur (Grid, Subgrid, sticky, scrollbar-gutter, tableaux denses)
+> 🧭 **Type** : module fondateur (Grid, sticky, scrollbar-gutter, tableaux denses + démo Subgrid de clôture)
 > 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/04-grid/overrides.css`
 
 ---
@@ -142,34 +142,9 @@ Cas Apriso : le KPI Board est un vrai `<table>`, on n'a pas la main sur le HTML.
 
 ⚠️ **Piège accessibilité** : `display: contents` retire l'élément de l'**arbre d'accessibilité** dans certains navigateurs anciens. Bug largement corrigé depuis 2023, mais à vérifier sur la cible client (Module 0). Pour un `<table>` sémantique critique → préférer `role="presentation"` côté HTML, mais ce n'est pas notre sujet ici (KPI = présentation, pas un tableau de données).
 
-### 5. Subgrid — aligner des enfants sur la grille du parent (5 min)
+> 💡 **Note pédagogique — Subgrid** : la propriété `subgrid` (aligner les enfants d'une card sur la grille du parent) est **volontairement sortie du tronc commun**. Le module est déjà dense (Grid + areas + auto-fit + display:contents + sticky + scrollbar-gutter + tableaux denses). Subgrid est traité en **démo de clôture de 5 min**, sans exercice — voir § *Pour aller plus loin* en bas de module.
 
-Problème classique : on a une grille de cards, et **dans chaque card** on a des sous-éléments (label, value, trend) qu'on aimerait alignés **entre cards**.
-
-Sans Subgrid → chaque card a sa propre mise en page interne, désalignements garantis.
-
-Avec Subgrid :
-
-```css
-.apriso-machine-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  grid-template-rows: auto auto auto;   /* 3 zones internes */
-  gap: var(--ml-spacing-3);
-}
-
-.apriso-machine-card {
-  display: grid;
-  grid-row: span 3;                     /* occupe les 3 lignes */
-  grid-template-rows: subgrid;          /* hérite des lignes du parent */
-}
-```
-
-→ Toutes les cards ont leur header / metrics / footer **alignés** entre eux, peu importe le contenu interne de chacune.
-
-Cible Baseline : Subgrid = **Widely available** mi-2024 (Chrome/Edge 117+). Pour Dymasco : ✅ feu vert.
-
-### 6. `position: sticky` — l'en-tête qui suit (8 min)
+### 5. `position: sticky` — l'en-tête qui suit (8 min)
 
 ```css
 .apriso-event-log__table thead th {
@@ -205,7 +180,7 @@ Sticky **par cellule**, pas par ligne. Pour rendre toute une ligne `<tr>` sticky
 
 > 💡 Pour empiler une "ligne 1" et "ligne 2" sticky : `top: 0` puis `top: 32px` (la hauteur de la première).
 
-### 7. `scrollbar-gutter` — le layout qui ne saute plus (4 min)
+### 6. `scrollbar-gutter` — le layout qui ne saute plus (4 min)
 
 Sur Windows et Linux, les scrollbars **prennent de la place**. Quand le contenu déborde, le layout se décale brutalement (~16px) à l'apparition de la scrollbar.
 
@@ -225,7 +200,7 @@ scrollbar-gutter: stable both-edges;   /* symétrie visuelle */
 
 Cible Baseline : **Widely available** depuis 2022. ✅.
 
-### 8. Patterns tableaux denses (3 min)
+### 7. Patterns tableaux denses (3 min)
 
 Pour un journal d'événements lisible, retenir 4 règles :
 
@@ -338,8 +313,6 @@ Reprendre le checkpoint Module 3 et :
    - Lignes paires → background zebra (token `--ml-color-bg-cream`).
    - Hover discret sur les lignes.
 
-5. **Bonus Subgrid** : (optionnel, à tester si temps) faire en sorte que les `header / metrics / last-event` des cards machine soient **alignés entre cards** via Subgrid.
-
 ### Tests à faire
 
 - Resize la fenêtre : grille machines doit reflow proprement (autant de colonnes que possible).
@@ -363,6 +336,35 @@ Voir `projet-fil-rouge/checkpoints/04-grid/overrides.css`.
 ---
 
 ## 🚀 Pour aller plus loin
+
+### 🎬 Démo de clôture — Subgrid (5 min, sans exercice)
+
+Problème classique : on a une grille de cards, et **dans chaque card** on a des sous-éléments (header / metrics / footer) qu'on aimerait alignés **entre cards**.
+
+Sans Subgrid → chaque card a sa propre mise en page interne, désalignements garantis.
+
+Avec Subgrid :
+
+```css
+.apriso-machine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-rows: auto auto auto;   /* 3 zones internes */
+  gap: var(--ml-spacing-3);
+}
+
+.apriso-machine-card {
+  display: grid;
+  grid-row: span 3;                     /* occupe les 3 lignes */
+  grid-template-rows: subgrid;          /* hérite des lignes du parent */
+}
+```
+
+→ Toutes les cards ont leur header / metrics / footer **alignés** entre eux, peu importe le contenu interne de chacune.
+
+**À montrer en live, pas à faire faire.** Effet "ah ouais quand même" garanti, message à retenir : *Subgrid existe, sortez-le quand vous galérez à aligner des sous-éléments inter-composants.*
+
+Cible Baseline : Subgrid = **Widely available** mi-2024 (Chrome/Edge 117+). Pour Dymasco : ✅ feu vert.
 
 ### Bonus 1 — `place-items` / `place-content` shorthand
 
@@ -410,7 +412,7 @@ Avec subgrid, tester `place-self` sur les enfants pour fine-tuner alignement par
 - [ ] Je sais lire et écrire un layout en `grid-template-areas`
 - [ ] Je connais `repeat(auto-fit, minmax(min, 1fr))` par cœur
 - [ ] Je sais transformer un `<table>` en Grid via `display: contents`
-- [ ] Je sais utiliser Subgrid pour aligner des items entre composants
+- [ ] Je sais que **Subgrid existe** et sert à aligner des sous-éléments entre composants (vu en démo de clôture)
 - [ ] Je connais les **4 conditions** pour que `position: sticky` fonctionne
 - [ ] Je n'oublie **jamais** le `background` sur un sticky
 - [ ] J'utilise `scrollbar-gutter: stable` sur tous mes conteneurs scrollables
