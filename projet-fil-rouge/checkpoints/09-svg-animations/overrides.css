@@ -1,0 +1,503 @@
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 9 — SVG & micro-animations d'état
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Ajouts vs checkpoint Module 8 :
+   - .apriso-status-icon — picto SVG inline, dimensionné en em, currentColor
+   - Status badges teintés via la teinte status-* du modifier
+   - Transition .apriso-machine-card en propriétés ciblées (transform / box-shadow)
+   - @keyframes ml-pulse — animation sobre opacité 1 ↔ 0.55, 1.6s
+   - Animation appliquée uniquement au picto des cards alert (pas la card entière)
+   - Désactivation auto via @media reduced-motion (héritage Module 8)
+   ============================================================================
+*/
+
+@layer reset, framework, overrides;
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   KEYFRAMES — sobres, hors layer pour rester accessibles partout
+   ---------------------------------------------------------------------------- */
+
+@keyframes ml-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ---------------------------------------------------------- */
+
+    :root {
+        color-scheme: light dark;
+
+        --ml-color-brand-primary: oklch(54% 0.17 38);
+        --ml-color-brand-accent:  oklch(78% 0.16 80);
+
+        --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
+        --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
+        --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
+        --ml-color-brand-primary-darker:   color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+
+        --ml-color-bg-app:     oklch(96% 0.02 80);
+        --ml-color-bg-cream:   oklch(97% 0.04 80);
+        --ml-color-surface:    oklch(100% 0 0);
+        --ml-color-text:       oklch(22% 0.02 60);
+        --ml-color-text-muted: oklch(48% 0.02 60);
+        --ml-color-border:     oklch(88% 0.05 80);
+
+        --ml-color-status-running:     oklch(52% 0.16 145);
+        --ml-color-status-idle:        oklch(56% 0.02 60);
+        --ml-color-status-alert:       oklch(70% 0.16 60);
+        --ml-color-status-maintenance: oklch(56% 0.16 250);
+
+        --ml-color-status-alert-bg:    color-mix(in oklab, var(--ml-color-status-alert), white 88%);
+        --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), white 92%);
+        --ml-color-row-zebra:          color-mix(in oklab, var(--ml-color-bg-cream), white 30%);
+        --ml-color-row-hover:          color-mix(in oklab, var(--ml-color-brand-accent), white 88%);
+
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 4cqi, 18px);
+
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width-min:      240px;
+        --ml-sidebar-width:       380px;
+        --ml-select-width:        max(180px, 14ch);
+
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --ml-color-bg-app:     oklch(20% 0.02 60);
+            --ml-color-bg-cream:   oklch(24% 0.02 60);
+            --ml-color-surface:    oklch(28% 0.02 60);
+            --ml-color-text:       oklch(95% 0.01 80);
+            --ml-color-text-muted: oklch(72% 0.01 80);
+            --ml-color-border:     oklch(40% 0.02 60);
+            --ml-color-row-zebra:  color-mix(in oklab, var(--ml-color-bg-cream), white 5%);
+            --ml-color-row-hover:  color-mix(in oklab, var(--ml-color-brand-accent), black 30%);
+        }
+    }
+
+    @media (prefers-contrast: more) {
+        :root {
+            --ml-color-text:       oklch(10% 0 0);
+            --ml-color-text-muted: oklch(30% 0 0);
+            --ml-color-border:     oklch(40% 0 0);
+        }
+        .apriso-machine-card { border-width: 2px; }
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        block-size: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 1fr var(--ml-sidebar-width);
+        grid-template-areas:
+            "header  header"
+            "kpi     kpi"
+            "main    sidebar"
+            "footer  footer";
+    }
+
+    .apriso-header        { grid-area: header; }
+    .apriso-kpi-board     { grid-area: kpi; }
+    .apriso-main          { grid-area: main; display: contents; }
+    .apriso-machine-grid  { grid-area: main; }
+    .apriso-event-log     { grid-area: sidebar; }
+    .apriso-footer        { grid-area: footer; }
+
+    /* --- HEADER ----------------------------------------------------------- */
+
+    .apriso-header {
+        display: flex;
+        align-items: center;
+        gap: var(--ml-spacing-4);
+        padding-inline: max(16px, 2vw);
+        background: var(--ml-color-brand-primary);
+        border-block-end-color: var(--ml-color-brand-primary-darker);
+    }
+
+    :is(.apriso-header__brand, .apriso-header__controls) { flex: 0 0 auto; }
+
+    .apriso-header__title {
+        flex: 1 1 auto;
+        min-inline-size: 0;
+        font-size: var(--ml-fs-header-title);
+        text-wrap: balance;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .apriso-line-selector__select { inline-size: var(--ml-select-width); }
+
+    .apriso-connection-status__dot {
+        inline-size: 0.6em;
+        block-size: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD -------------------------------------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-block-end-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi-board__table,
+    .apriso-kpi-board__table tbody {
+        display: contents;
+    }
+
+    .apriso-kpi-board__table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--ml-spacing-4);
+    }
+
+    .apriso-kpi {
+        border-inline-end: 1px solid var(--ml-color-border);
+        text-align: start;
+    }
+    .apriso-kpi:last-child { border-inline-end: none; }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); font-variant-numeric: tabular-nums; }
+
+    /* --- MACHINE GRID + CARD --------------------------------------------- */
+
+    .apriso-machine-grid {
+        container-type: inline-size;
+        container-name: machine-zone;
+
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--ml-card-width-min), 1fr));
+        gap: var(--ml-spacing-3);
+        padding: var(--ml-spacing-4);
+        align-content: start;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        background: var(--ml-color-bg-app);
+    }
+
+    .apriso-machine-card {
+        inline-size: auto;
+        max-inline-size: none;
+        flex: initial;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--ml-spacing-2);
+        min-inline-size: 0;
+
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-inline-start: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding-block: var(--ml-spacing-3);
+        padding-inline: var(--ml-spacing-4);
+
+        /* Transition CIBLÉE — annule "transition: all 0.3s ease" du framework */
+        transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+
+        & .apriso-machine-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--ml-spacing-2);
+            min-inline-size: 0;
+        }
+
+        & .apriso-machine-card__title {
+            flex: 1 1 auto;
+            min-inline-size: 0;
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        & .apriso-machine-card__status {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--ml-spacing-1);
+        }
+
+        & .apriso-machine-card__metrics {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--ml-spacing-2);
+        }
+
+        & .apriso-machine-card__last-event { display: none; }
+
+        &.apriso-machine-card--running {
+            border-inline-start-color: var(--ml-color-status-running);
+            & .apriso-machine-card__status { color: var(--ml-color-status-running); }
+        }
+
+        &.apriso-machine-card--idle {
+            border-inline-start-color: var(--ml-color-status-idle);
+            & .apriso-machine-card__status { color: var(--ml-color-status-idle); }
+        }
+
+        &.apriso-machine-card--maintenance {
+            border-inline-start-color: var(--ml-color-status-maintenance);
+            & .apriso-machine-card__status { color: var(--ml-color-status-maintenance); }
+        }
+
+        &.apriso-machine-card--alert {
+            border-inline-start-color: var(--ml-color-status-alert);
+            background: var(--ml-color-status-alert-bg);
+            & .apriso-machine-card__status { color: var(--ml-color-status-alert); }
+
+            /* Animation pulse uniquement sur le PICTO, pas la card */
+            & .apriso-status-icon {
+                animation: ml-pulse 1.6s ease-in-out infinite;
+            }
+        }
+
+        &:not(.apriso-machine-card--running, .apriso-machine-card--idle, .apriso-machine-card--alert, .apriso-machine-card--maintenance) {
+            outline: 1px dashed var(--ml-color-border);
+        }
+    }
+
+    .apriso-machine-card:has(.apriso-machine-card__status--alert) {
+        outline: 2px solid var(--ml-color-status-alert);
+        outline-offset: -2px;
+    }
+
+    .apriso-machine-card:has(:focus-visible) {
+        outline: 2px solid var(--ml-color-brand-primary);
+        outline-offset: -2px;
+    }
+
+    /* --- PICTOS SVG inline ------------------------------------------------ */
+
+    .apriso-status-icon {
+        inline-size: 1em;
+        block-size: 1em;
+        flex: 0 0 auto;
+        vertical-align: -0.125em;
+        /* fill="currentColor" côté SVG inline → suit la couleur du parent */
+    }
+
+    /* --- HOVER (souris fine) --------------------------------------------- */
+
+    @media (hover: hover) and (pointer: fine) {
+        .apriso-machine-card:hover {
+            box-shadow: var(--ml-shadow-2);
+            transform: translateY(-1px);
+        }
+
+        .apriso-event-log__table tbody tr:hover {
+            background: var(--ml-color-row-hover);
+        }
+    }
+
+    /* --- TACTILE coarse --------------------------------------------------- */
+
+    @media (hover: none) and (pointer: coarse) {
+        .apriso-machine-card:active { transform: scale(0.98); }
+
+        .apriso-line-selector__select,
+        button,
+        a {
+            min-block-size: 44px;
+        }
+    }
+
+    /* --- CONTAINER QUERIES ------------------------------------------------ */
+
+    @container machine-zone (min-width: 280px) {
+        .apriso-machine-card__metrics {
+            grid-template-columns: 1fr 1fr;
+        }
+        .apriso-machine-card__last-event {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    @container machine-zone (min-width: 480px) {
+        .apriso-machine-card {
+            padding-block: var(--ml-spacing-4);
+            padding-inline: var(--ml-spacing-5);
+        }
+        .apriso-machine-card__metrics {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    /* --- EVENT LOG -------------------------------------------------------- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-inline-start-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-block-end-color: var(--ml-color-border);
+        }
+
+        & .apriso-event-log__container { scrollbar-gutter: stable; }
+
+        & .apriso-event-log__table thead th {
+            position: sticky;
+            inset-block-start: 0;
+            z-index: 1;
+            background: var(--ml-color-bg-cream);
+            border-block-end: 1px solid var(--ml-color-border);
+            text-align: start;
+        }
+
+        & .apriso-event-log__table td:first-child {
+            font-variant-numeric: tabular-nums;
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td:last-child {
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td { overflow-wrap: anywhere; }
+
+        & :where(.apriso-event-log__table tbody tr:nth-child(even)) {
+            background: var(--ml-color-row-zebra);
+        }
+
+        & .apriso-event--critical:has(td) td {
+            background: var(--ml-color-status-critical-bg);
+        }
+
+        & .apriso-event--critical:has(td) td:first-child {
+            font-weight: 700;
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-block-start-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+
+    .apriso-footer__item--time {
+        margin-inline-start: auto;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .apriso-footer:has(.apriso-footer__item--alert) {
+        background: var(--ml-color-status-alert-bg);
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   REDUCED MOTION — neutralise pulse + transitions
+   ---------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   PRINT
+   ---------------------------------------------------------------------------- */
+
+@media print {
+    :root {
+        --ml-color-bg-app:     white;
+        --ml-color-bg-cream:   white;
+        --ml-color-surface:    white;
+        --ml-color-text:       black;
+        --ml-color-text-muted: #555;
+        --ml-color-border:     #999;
+    }
+
+    .apriso-header__controls,
+    .apriso-machine-grid,
+    .apriso-footer__item--time {
+        display: none;
+    }
+
+    .apriso-dashboard {
+        block-size: auto;
+        display: block;
+        border: none;
+    }
+
+    .apriso-event-log {
+        border: none;
+        inline-size: 100%;
+    }
+
+    .apriso-event-log__table tr { break-inside: avoid; }
+
+    * { print-color-adjust: exact; }
+
+    a::after {
+        content: " (" attr(href) ")";
+        color: #666;
+        font-size: 0.85em;
+    }
+}
