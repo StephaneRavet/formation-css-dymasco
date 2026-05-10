@@ -1,0 +1,304 @@
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 4 — Grid Layout, Subgrid & layouts denses
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Ajouts vs checkpoint Module 3 :
+   - Layout dashboard via grid-template-areas
+   - Grille machines via repeat(auto-fit, minmax(...))
+   - KPI Board <table> transformé en Grid via display: contents
+   - Journal : sticky thead + scrollbar-gutter
+   - Tableau dense : tabular-nums, alignement métier, zebra rows, hover
+   ============================================================================
+*/
+
+@layer reset, framework, overrides;
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ----------------------------------------------------------- */
+
+    :root {
+        /* Brand */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        /* Status */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        /* Spacing */
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typo fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width-min:      240px;
+        --ml-sidebar-width:       380px;
+        --ml-select-width:        max(180px, 14ch);
+
+        /* Radius / shadow */
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    /* --- DASHBOARD — layout via grid-template-areas ----------------------- */
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 1fr var(--ml-sidebar-width);
+        grid-template-areas:
+            "header  header"
+            "kpi     kpi"
+            "main    sidebar"
+            "footer  footer";
+    }
+
+    .apriso-header        { grid-area: header; }
+    .apriso-kpi-board     { grid-area: kpi; }
+    .apriso-main          { grid-area: main; display: contents; }
+    .apriso-machine-grid  { grid-area: main; }
+    .apriso-event-log     { grid-area: sidebar; }
+    .apriso-footer        { grid-area: footer; }
+
+    /* --- HEADER ----------------------------------------------------------- */
+
+    .apriso-header {
+        display: flex;
+        align-items: center;
+        gap: var(--ml-spacing-4);
+        padding-inline: max(16px, 2vw);
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+    }
+
+    .apriso-header__brand    { flex: 0 0 auto; }
+    .apriso-header__controls { flex: 0 0 auto; }
+
+    .apriso-header__title {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: var(--ml-fs-header-title);
+        text-wrap: balance;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .apriso-line-selector__select { width: var(--ml-select-width); }
+
+    .apriso-connection-status__dot {
+        width: 0.6em;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD — <table> transformé en Grid --------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi-board__table,
+    .apriso-kpi-board__table tbody {
+        display: contents;
+    }
+
+    .apriso-kpi-board__table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--ml-spacing-4);
+    }
+
+    .apriso-kpi {
+        border-right: 1px solid var(--ml-color-border);
+    }
+
+    .apriso-kpi:last-child { border-right: none; }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); font-variant-numeric: tabular-nums; }
+
+    /* --- MACHINE GRID — Grid avec auto-fit + minmax ----------------------- */
+
+    .apriso-machine-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--ml-card-width-min), 1fr));
+        gap: var(--ml-spacing-3);
+        padding: var(--ml-spacing-4);
+        align-content: start;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        background: var(--ml-color-bg-app);
+    }
+
+    .apriso-machine-card {
+        /* annule width / flex hérités des modules précédents */
+        width: auto;
+        max-width: none;
+        flex: initial;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--ml-spacing-2);
+        min-width: 0;
+
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--ml-spacing-2);
+            min-width: 0;
+        }
+
+        & .apriso-machine-card__title {
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        & .apriso-machine-card__status { flex: 0 0 auto; }
+
+        & .apriso-machine-card__last-event {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        &:hover { box-shadow: var(--ml-shadow-2); }
+
+        &.apriso-machine-card--running     { border-left-color: var(--ml-color-status-running); }
+        &.apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle); }
+        &.apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance); }
+
+        &.apriso-machine-card--alert {
+            border-left-color: var(--ml-color-status-alert);
+            background: color-mix(in oklab, var(--ml-color-status-alert), white 90%);
+        }
+    }
+
+    /* --- EVENT LOG — sticky header + scrollbar-gutter + tableau dense ----- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-bottom-color: var(--ml-color-border);
+        }
+
+        & .apriso-event-log__container {
+            scrollbar-gutter: stable;
+        }
+
+        & .apriso-event-log__table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--ml-color-bg-cream);
+            border-bottom: 1px solid var(--ml-color-border);
+        }
+
+        /* Alignement métier */
+        & .apriso-event-log__table td:first-child {        /* Heure */
+            font-variant-numeric: tabular-nums;
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td:last-child {         /* Sévérité */
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td {
+            overflow-wrap: anywhere;
+        }
+
+        /* Zebra rows — :where() pour garder la spécificité basse */
+        & :where(.apriso-event-log__table tbody tr:nth-child(even)) {
+            background: color-mix(in oklab, var(--ml-color-bg-cream), white 30%);
+        }
+
+        & .apriso-event-log__table tbody tr:hover {
+            background: color-mix(in oklab, var(--ml-color-brand-accent), white 88%);
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
