@@ -16,7 +16,26 @@
    ============================================================================
 */
 
-@layer reset, framework, overrides;
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("../../00-base/apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-inline-start-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-inline-start-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-inline-start-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-inline-start-color: var(--ml-color-status-alert) !important;
+        background: var(--ml-color-status-alert-bg) !important;
+    }
+}
 
 /* ----------------------------------------------------------------------------
    RESET
@@ -196,9 +215,9 @@
     :is(.apriso-header__brand, .apriso-header__controls) { flex: 0 0 auto; }
 
     .apriso-header__title {
+        /* font-size : escaladé dans @layer priority (Apriso !important) */
         flex: 1 1 auto;
         min-inline-size: 0;
-        font-size: var(--ml-fs-header-title);
         text-wrap: balance;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -308,24 +327,23 @@
 
         & .apriso-machine-card__last-event { display: none; }
 
+        /* Status modifiers : border-inline-start-color (et background pour
+           --alert) escaladés dans @layer priority — Apriso !important.
+           Ici on garde uniquement les styles non-!important. */
+
         &.apriso-machine-card--running {
-            border-inline-start-color: var(--ml-color-status-running);
             & .apriso-machine-card__status { color: var(--ml-color-status-running); }
         }
 
         &.apriso-machine-card--idle {
-            border-inline-start-color: var(--ml-color-status-idle);
             & .apriso-machine-card__status { color: var(--ml-color-status-idle); }
         }
 
         &.apriso-machine-card--maintenance {
-            border-inline-start-color: var(--ml-color-status-maintenance);
             & .apriso-machine-card__status { color: var(--ml-color-status-maintenance); }
         }
 
         &.apriso-machine-card--alert {
-            border-inline-start-color: var(--ml-color-status-alert);
-            background: var(--ml-color-status-alert-bg);
             & .apriso-machine-card__status { color: var(--ml-color-status-alert); }
             & .apriso-status-icon {
                 animation: ml-pulse 1.6s ease-in-out infinite;

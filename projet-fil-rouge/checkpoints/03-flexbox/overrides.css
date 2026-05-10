@@ -13,7 +13,26 @@
    ============================================================================
 */
 
-@layer reset, framework, overrides;
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("../../00-base/apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
 
 /* ----------------------------------------------------------------------------
    RESET
@@ -112,9 +131,9 @@
     .apriso-header__controls { flex: 0 0 auto; }
 
     .apriso-header__title {
+        /* font-size : escaladé dans @layer priority (Apriso le pose en !important) */
         flex: 1 1 auto;
         min-width: 0;
-        font-size: var(--ml-fs-header-title);
         text-wrap: balance;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -196,14 +215,7 @@
 
         &:hover { box-shadow: var(--ml-shadow-2); }
 
-        &.apriso-machine-card--running     { border-left-color: var(--ml-color-status-running); }
-        &.apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle); }
-        &.apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance); }
-
-        &.apriso-machine-card--alert {
-            border-left-color: var(--ml-color-status-alert);
-            background: color-mix(in oklab, var(--ml-color-status-alert), white 90%);
-        }
+        /* Status modifiers escaladés dans @layer priority (Apriso !important) */
     }
 
     /* --- EVENT LOG — overflow textes longs -------------------------------- */

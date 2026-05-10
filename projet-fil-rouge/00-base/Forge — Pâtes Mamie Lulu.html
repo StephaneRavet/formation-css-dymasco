@@ -4,8 +4,10 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Forge — Pâtes Mamie Lulu</title>
-    <!-- IMPORTANT: order matters. apriso-base.css first, your overrides last -->
-    <link rel="stylesheet" href="./apriso-base.css">
+    <!-- Apriso framework chargé via @import layer(framework) DANS overrides.css.
+         Ne PAS ajouter de <link> direct vers apriso-base.css : il serait alors
+         chargé en plus comme déclarations unlayered et reprendrait la main sur
+         la cascade (cf. Module 1 — règles @layer / unlayered). -->
     <link rel="stylesheet" href="./overrides.css">
   </head>
   <body>
