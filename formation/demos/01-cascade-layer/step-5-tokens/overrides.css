@@ -1,0 +1,23 @@
+/* Étape 5 — Tokens : valeurs centralisées dans :root.
+   Identique étape 4 visuellement, mais piloté par variables. */
+
+@layer reset, priority, framework, overrides;
+
+@import url("../apriso-mini.css") layer(framework);
+
+@layer overrides {
+    :root {
+        --ml-color-danger: #d32f2f;
+        --ml-color-status-alert-bg: #e8f5e9;
+    }
+
+    .apriso-machine-card__title {
+        color: var(--ml-color-danger);
+    }
+}
+
+@layer priority {
+    .apriso-machine-card--alert {
+        background: var(--ml-color-status-alert-bg) !important;
+    }
+}

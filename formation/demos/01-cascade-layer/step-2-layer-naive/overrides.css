@@ -1,0 +1,14 @@
+/* Étape 2 — @layer naïf, sans @import.
+   Apriso reste UNLAYERED (couche implicite finale) → bat @layer overrides. */
+
+@layer overrides;
+
+@layer overrides {
+    .apriso-machine-card__title {
+        color: #d32f2f;
+    }
+
+    .apriso-machine-card--alert {
+        background: #e8f5e9;
+    }
+}

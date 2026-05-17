@@ -1,0 +1,56 @@
+/* ============================================================================
+   APRISO-MINI — extrait minimal de apriso-base.css pour la démo cascade
+   Reproduit les 2 pièges clés :
+   1. Chaîne 5 classes (spécificité 0,5,0) sur .apriso-machine-card__title
+   2. !important sur .apriso-machine-card--alert (background)
+   NE PAS MODIFIER — c'est le "framework hostile" qu'on doit battre.
+   ============================================================================ */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f5f7;
+    margin: 0;
+    padding: 24px;
+}
+
+.apriso-dashboard {
+    background: #ffffff;
+    border: 1px solid #d0d4da;
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.apriso-dashboard .apriso-main {
+    display: block;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card {
+    width: 280px;
+    background: #ffffff;
+    border: 1px solid #d0d4da;
+    border-left: 4px solid #6c757d;
+    border-radius: 2px;
+    padding: 14px 16px;
+}
+
+/* Spécificité 0,5,0 — la chaîne piège */
+.apriso-dashboard .apriso-main .apriso-machine-grid .apriso-machine-card .apriso-machine-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* !important framework — verrouille background */
+.apriso-machine-card--alert {
+    border-left-color: #f57c00 !important;
+    background: #fff8e1 !important;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Étape 3 — @import url() layer()</title>
+    <!-- ⚠️ Pas de <link> vers apriso-mini.css : il est importé via @import dans overrides.css -->
+    <link rel="stylesheet" href="./overrides.css">
+</head>
+<body>
+    <p style="font-family: system-ui; max-width: 900px; margin: 0 auto 16px; padding: 16px; background: #d1edff; border: 1px solid #1f3a5f; border-radius: 4px;">
+        <strong>Étape 3 — <code>@import url() layer()</code>.</strong> Apriso ramené dans la cascade.
+        <br><strong>Attendu</strong> : titres <em>rouges</em> ✅. Background alert <em>encore jaune</em> (le <code>!important</code> framework tient).
+        <br><strong>DevTools</strong> : Network → <code>apriso-mini.css</code> chargé une seule fois. Styles → colonne Layer = <code>framework</code> ou <code>overrides</code>.
+        <br><a href="../index.html">← retour launcher</a>
+    </p>
+    <div class="apriso-dashboard">
+        <div class="apriso-main">
+            <div class="apriso-machine-grid">
+                <article class="apriso-machine-card">
+                    <h3 class="apriso-machine-card__title">Ligne 1 — Tagliatelle</h3>
+                </article>
+                <article class="apriso-machine-card apriso-machine-card--alert">
+                    <h3 class="apriso-machine-card__title">Ligne 2 — Spaghetti (alerte)</h3>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

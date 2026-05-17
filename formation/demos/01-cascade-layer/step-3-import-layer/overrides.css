@@ -1,0 +1,17 @@
+/* Étape 3 — @import url() layer() : la vraie solution.
+   Apriso est ramené dans la couche `framework`, overrides est plus tard → gagne. */
+
+@layer reset, priority, framework, overrides;
+
+@import url("../apriso-mini.css") layer(framework);
+
+@layer overrides {
+    .apriso-machine-card__title {
+        color: #d32f2f;
+    }
+
+    /* Cette règle restera battue par Apriso !important — voir étape 4 */
+    .apriso-machine-card--alert {
+        background: #e8f5e9;
+    }
+}

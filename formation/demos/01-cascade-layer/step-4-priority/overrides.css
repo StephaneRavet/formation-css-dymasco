@@ -1,0 +1,21 @@
+/* Étape 4 — Couche priority pour battre les !important Apriso.
+   `priority` est déclarée AVANT `framework` → ordre des couches inversé pour !important
+   → priority gagne. */
+
+@layer reset, priority, framework, overrides;
+
+@import url("../apriso-mini.css") layer(framework);
+
+@layer overrides {
+    .apriso-machine-card__title {
+        color: #d32f2f;
+    }
+}
+
+@layer priority {
+    /* Apriso pose `background: #fff8e1 !important;` → on escalade en !important
+       dans la couche `priority` (déclarée avant `framework`). */
+    .apriso-machine-card--alert {
+        background: #e8f5e9 !important;
+    }
+}

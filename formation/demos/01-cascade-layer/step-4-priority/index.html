@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Étape 4 — Battre les !important via priority</title>
+    <link rel="stylesheet" href="./overrides.css">
+</head>
+<body>
+    <p style="font-family: system-ui; max-width: 900px; margin: 0 auto 16px; padding: 16px; background: #d4edda; border: 1px solid #28a745; border-radius: 4px;">
+        <strong>Étape 4 — Couche <code>priority</code>.</strong> Battre les <code>!important</code> Apriso.
+        <br><strong>Attendu</strong> : titres <em>rouges</em> ✅ + background alert <em>vert clair</em> ✅.
+        <br><strong>Pourquoi ça marche</strong> : <code>priority</code> déclarée AVANT <code>framework</code> → pour les <code>!important</code>, ordre des couches inversé → <code>priority</code> gagne.
+        <br><a href="../index.html">← retour launcher</a>
+    </p>
+    <div class="apriso-dashboard">
+        <div class="apriso-main">
+            <div class="apriso-machine-grid">
+                <article class="apriso-machine-card">
+                    <h3 class="apriso-machine-card__title">Ligne 1 — Tagliatelle</h3>
+                </article>
+                <article class="apriso-machine-card apriso-machine-card--alert">
+                    <h3 class="apriso-machine-card__title">Ligne 2 — Spaghetti (alerte)</h3>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

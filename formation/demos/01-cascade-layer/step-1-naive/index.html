@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Étape 1 — Tentative naïve</title>
+    <link rel="stylesheet" href="../apriso-mini.css">
+    <link rel="stylesheet" href="./overrides.css">
+</head>
+<body>
+    <p style="font-family: system-ui; max-width: 900px; margin: 0 auto 16px; padding: 16px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+        <strong>Étape 1 — Tentative naïve.</strong> Override sans <code>@layer</code>.
+        <br><strong>Attendu</strong> : titres <em>noirs</em> (override KO, Apriso gagne en spécificité 0,5,0 vs 0,1,0). Background alert jaune (Apriso !important).
+        <br><a href="../index.html">← retour launcher</a>
+    </p>
+    <div class="apriso-dashboard">
+        <div class="apriso-main">
+            <div class="apriso-machine-grid">
+                <article class="apriso-machine-card">
+                    <h3 class="apriso-machine-card__title">Ligne 1 — Tagliatelle</h3>
+                </article>
+                <article class="apriso-machine-card apriso-machine-card--alert">
+                    <h3 class="apriso-machine-card__title">Ligne 2 — Spaghetti (alerte)</h3>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
