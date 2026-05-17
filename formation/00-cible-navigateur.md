@@ -200,53 +200,213 @@ Un CDC ne dit jamais "Chrome ≥ 115". Il dit :
 
 ---
 
-## 🔍 Démonstration (15 min)
+## 🛠️ Cas concrets — 3 CDC à arbitrer (35 min)
 
-**Scénario** : on doit choisir si on utilise `@layer` (Module 1) sur le projet Mamie Lulu.
+### Consigne (commune aux 3 exercices)
 
-Démarche live :
+Pour chaque CDC : produire **(a)** un `.browserslistrc` argumenté (versions fixes de préférence) et **(b)** un tableau "feature → décision" pour les 5 features clés de la formation : `@layer`, `:has()`, `@container`, `oklch()`, Subgrid.
 
-1. **Vérifier Baseline** : [developer.mozilla.org/en-US/docs/Web/CSS/@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) → badge "Widely available".
-2. **Vérifier [caniuse](https://caniuse.com/mdn-css_at-rules_layer)** : Chrome 99+, Edge 99+, Safari 15.4+, Firefox 97+ → tous depuis début 2022.
-3. **Croiser avec la cible Dymasco** : Edge/Chromium ≤ 3 ans → ✅ on a marge confortable.
-4. **Décision écrite** : ajouter une note dans `overrides.css` :
-   ```css
-   /* Target: Edge/Chromium <= 3 ans (Baseline widely available features OK) */
-   ```
+**Découpage** :
 
-Contre-exemple, même démarche pour `@scope` :
-
-1. [Baseline](https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@scope) → "Limited availability" (Chrome/Edge 118+ depuis fin 2023, Safari 17.4+, **Firefox encore en attente**).
-2. [caniuse](https://caniuse.com/css-cascade-scope) → support partiel selon parc.
-3. **Décision aujourd'hui** : hors périmètre formation principale (Firefox manque). **Mais** veille à 12-18 mois : `@scope` résout nativement le scoping qu'on bricole en 4 couches `@layer`. Pour les parcs Edge/Chromium pur (cas Dymasco interne, certains clients agroalimentaires) → utilisable **maintenant** en projet pilote. Voir bonus M01 si le temps le permet.
-
-**Bilan** : la décision se prend en **3 minutes**, sources à l'appui.
+- **Exercice 1** — démonstration faite **ensemble** au tableau (15 min).
+- **Exercices 2 et 3** — chaque stagiaire seul **5 min** sur sa feuille, puis correction **dérouée en live** (~5 min) — même format que l'exercice 1.
 
 ---
 
-## 🛠️ Cas concrets — Lecture de 3 CDC (20 min)
+### 🔍 Exercice 1 — CDC "Pâtes Mamie Lulu" (démonstration ensemble, 15 min)
 
-### Consigne
+> *"Le module Forge sera déployé sur les postes superviseurs (PC industriels Windows 11, Edge installé par l'IT, mises à jour automatiques) et sur 4 tablettes opérateurs Samsung Galaxy Tab Active5 sous Android 14 (Chrome stable). Pas d'usage public web."*
 
-Pour chacun des 3 CDC ci-dessous : produire **(a)** un `.browserslistrc` argumenté et **(b)** un tableau "feature → décision" pour 5 features de la formation : `@layer`, `:has()`, Container Queries, `oklch()`, Subgrid.
+#### Étape 1 — Extraire la cible du CDC
 
-### CDC 1 — "Pâtes Mamie Lulu" (notre fil rouge)
+| Élément CDC | Traduction technique |
+| --- | --- |
+| Postes superviseurs Windows 11, Edge installé par l'IT, MAJ auto | **Edge récent**, retard max ~6 mois sur stable |
+| 4 tablettes Galaxy Tab Active5, Android 14, Chrome stable | **Chrome Android récent** (Play Store à jour) |
+| Pas d'usage public web | **Pas de Firefox ni Safari** dans le parc → on ne les porte pas |
+| Pas de mention de durée de vie | À clarifier par mail client — par défaut 24 mois |
 
-> Extrait : *"Le module Forge sera déployé sur les postes superviseurs (PC industriels Windows 11, Edge installé par l'IT, mises à jour automatiques) et sur 4 tablettes opérateurs Samsung Galaxy Tab Active5 sous Android 14 (Chrome stable). Pas d'usage public web."*
+#### Étape 2 — Le `.browserslistrc` argumenté
 
-Décision : cible large + récente, **toutes les features de la formation passent**.
+```text
+# .browserslistrc — projet Mamie Lulu / Forge override
+# Cible parc : Edge superviseurs (Win11, auto-update IT)
+#            + Chrome Android (Galaxy Tab Active5, Android 14)
+# Hors cible : Firefox, Safari (intranet industriel, pas de public web)
+# Revue : 2026-05-17 — prochaine relecture dans 12 mois ou si changement de parc
 
-### CDC 2 — Industriel automobile fictif
+Edge >= 120
+ChromeAndroid >= 120
+not dead
+```
 
-> Extrait : *"Le poste cible est un PC d'atelier sous Windows 10 LTSC, Edge non mis à jour automatiquement, version figée par DSI. Validation IT requise pour toute mise à jour. Durée de vie attendue de la solution : 5 ans."*
+Pourquoi des **versions fixes** plutôt que `last 2 versions` :
 
-Décision : cible figée à une version Edge précise (à demander). `browserslist` du type `Edge 109` (dernière version supportée sur certains OS legacy). `@layer` ✅, `:has()` à vérifier sur la version exacte, Container Queries probablement ✅, `oklch` ✅, Subgrid à vérifier.
+- `last 2 Edge versions` couvre ~8 semaines en arrière — trop court pour audit client et pour engagement contractuel ("on garantit jusqu'à quoi exactement ?").
+- Une version plancher chiffrée est **vérifiable** : le client peut interroger sa DSI et confirmer "tous nos postes sont ≥ Edge 120". `last 2 versions` est mouvant, impossible à valider.
+- Choix du plancher = max(version requise par les 5 features de la matrice) + marge. Subgrid demande Edge 117 → on prend **120** (3 versions de marge ≈ 3 mois de tolérance pour postes en retard).
+- Edge ≥ 120 et Chrome Android ≥ 120 sont sortis fin 2023 → > 2 ans de recul à date, parfaitement réalistes pour un parc auto-update IT en 2026.
+- `not dead` → filet de sécurité (cf. encadré §2).
+- **Pas de Firefox / Safari** → aucune présence dans le parc, on ne gonfle pas inutilement la matrice de support.
 
-### CDC 3 — ETI agroalimentaire avec sous-traitants BYOD
+À valider en CLI avant envoi client :
 
-> Extrait : *"Le tableau de bord sera consulté par 12 collaborateurs internes (parc Chrome récent géré IT) et par environ 30 partenaires sous-traitants utilisant leur propre matériel. Aucune contrainte navigateur n'est imposée aux partenaires."*
+```bash
+npx browserslist "Edge >= 120, ChromeAndroid >= 120, not dead"
+```
 
-Décision : cible large et **conservatrice** (le maillon faible des sous-traitants pilote). Probablement `last 4 Chrome versions, last 4 Edge versions, last 2 Firefox versions, last 2 Safari versions, not dead`. Pour les features récentes : `@supports` systématique.
+#### Étape 3 — Tableau de décision "feature → décision"
+
+| Feature | Baseline | Première version OK | Statut cible Mamie Lulu | Décision | Note livraison |
+| --- | --- | --- | --- | --- | --- |
+| `@layer` (Module 1) | [**Widely** depuis mars 2022](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) | [Edge 99 / Chrome 99](https://caniuse.com/css-cascade-layers) | Plancher 120 ≫ 99 (+21) | ✅ Utiliser directement | Pierre angulaire de l'archi `overrides.css` |
+| `:has()` (Module 5) | [**Widely** depuis déc 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) | [Edge 105 / Chrome 105](https://caniuse.com/css-has) | Plancher 120 ≫ 105 (+15) | ✅ Utiliser directement | Styling parent-driven (lignes critiques) |
+| `@container` (Module 6) | [**Widely** depuis févr 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) | [Edge 105 / Chrome 105](https://caniuse.com/css-container-queries) | Plancher 120 ≫ 105 (+15) | ✅ Utiliser directement | Préférer aux media queries pour composants dashboard |
+| `oklch()` (Module 7) | [**Widely** depuis mai 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) | [Edge 111 / Chrome 111](https://caniuse.com/css-oklch-oklab) | Plancher 120 ≫ 111 (+9) | ✅ Utiliser directement | Tokens couleur en `oklch` — gradients perceptuels propres |
+| Subgrid (Module 4) | [**Widely** depuis sept 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Subgrid) | [Edge 117 / Chrome 117](https://caniuse.com/css-subgrid) | Plancher 120 ≫ 117 (+3) | ✅ Utiliser directement | Usage ciblé : tableaux 2D alignés, ne pas en abuser |
+
+#### Étape 4 — Bilan et trace écrite
+
+Cible Edge + Chrome Android récents avec auto-update → **les 5 features passent sans `@supports`**. La décision tient en 3 minutes, sources à l'appui.
+
+On documente le verdict en tête d'`overrides.css` :
+
+```css
+/* Target: Edge >= 120, ChromeAndroid >= 120, not dead
+   Scope: Forge / Mamie Lulu — pas de public web
+   Last reviewed: 2026-05-17 — toutes features Baseline widely OK */
+```
+
+> 💡 **Mamie Lulu est le cas facile**. Sur les exercices 2 et 3, le tableau aura des `❌` et des lignes "`@supports` obligatoire" ou "refuser la feature". L'objectif : **détecter quand le ✅ n'est plus automatique**.
+
+---
+
+### ✏️ Exercice 2 — Industriel automobile fictif (5 min seul + correction live)
+
+> **Énoncé** : *"Le poste cible est un PC d'atelier sous Windows 10 LTSC, Edge non mis à jour automatiquement, version figée par DSI. Validation IT requise pour toute mise à jour. Durée de vie attendue de la solution : 5 ans."*
+
+**5 min** pour produire votre propre `.browserslistrc` + tableau de décision. Puis on déroule la correction ensemble.
+
+#### 🔑 Correction — Exercice 2 (à dérouler après les 5 min)
+
+##### Étape 1 — Extraction (exo 2)
+
+| Élément CDC | Traduction technique |
+| --- | --- |
+| Win 10 LTSC, Edge non mis à jour auto, version figée par DSI | **Edge plancher inconnu** → **à demander à la DSI client** avant validation |
+| Validation IT pour toute MAJ | Le plancher d'aujourd'hui sera quasi le plancher dans 1 an |
+| Durée de vie 5 ans | On s'engage jusqu'en 2031 sur le parc **actuel** — pas sur le futur |
+| Aucune mention d'Android / tablettes / public | Edge desktop **uniquement** |
+
+**Action obligatoire avant code** : mail DSI client pour obtenir la version Edge exacte en parc. Sans réponse, on prend un plancher conservateur (hypothèse de travail).
+
+##### Étape 2 — `.browserslistrc` (exo 2)
+
+```text
+# .browserslistrc — projet Automobile / Atelier override
+# Cible parc : Edge desktop figé DSI (Win 10 LTSC, MAJ manuelle)
+# Plancher HYPOTHÈSE — à confirmer par mail DSI client avant validation finale
+# Hors cible : Chrome, Firefox, Safari, mobile
+# Revue : 2026-05-17 — relecture obligatoire si DSI confirme version réelle
+
+Edge >= 110
+not dead
+```
+
+Justification :
+
+- **Plancher 110 = hypothèse conservatrice** sans info DSI. Edge 110 sorti févr 2023, plausible pour un parc LTSC mis à jour il y a 1-2 ans.
+- Pas de `last N versions` → cible **figée**, le `last` mouvant n'a aucun sens ici.
+- Si DSI répond "Edge 130" → on remonte le plancher (bonus pour nous). Si DSI répond "Edge 95" → on redescend et on rouvre le tableau de décision.
+
+##### Étape 3 — Tableau de décision (exo 2, plancher Edge 110)
+
+| Feature | Première version OK | Statut cible (plancher 110) | Décision |
+| --- | --- | --- | --- |
+| `@layer` | Edge 99 | 110 ≫ 99 (+11) | ✅ Utiliser directement |
+| `:has()` | Edge 105 | 110 ≫ 105 (+5, marge fine) | ⚠️ Utiliser, mais **prévoir `@supports selector(:has(*))`** pour les blocs critiques |
+| `@container` | Edge 105 | 110 ≫ 105 (+5) | ✅ Utiliser, marge correcte |
+| `oklch()` | Edge 111 | 110 < 111 (−1) | ❌ **Fallback hex/rgb obligatoire** via `@supports (color: oklch(0% 0 0))` |
+| Subgrid | Edge 117 | 110 < 117 (−7) | ❌ **Refuser ou fallback grid simple** — pas de bricolage |
+
+##### Étape 4 — Bilan (exo 2)
+
+Cible figée + 5 ans de durée de vie = **2 features sortent du périmètre Baseline** (`oklch`, Subgrid). Sur 5 ans, le parc ne bougera quasiment pas → ne pas s'engager sur ce qui ne passe pas aujourd'hui.
+
+```css
+/* Target: Edge >= 110 (hypothèse — à confirmer DSI client) — Win 10 LTSC figé
+   Scope: Automobile / Atelier
+   Last reviewed: 2026-05-17 — oklch + Subgrid HORS périmètre cible
+   Engagement contractuel : 5 ans → revue version Edge tous les 12 mois */
+```
+
+---
+
+### ✏️ Exercice 3 — ETI agroalimentaire avec sous-traitants BYOD (5 min seul + correction live)
+
+> **Énoncé** : *"Le tableau de bord sera consulté par 12 collaborateurs internes (parc Chrome récent géré IT) et par environ 30 partenaires sous-traitants utilisant leur propre matériel. Aucune contrainte navigateur n'est imposée aux partenaires."*
+
+**5 min** pour produire votre propre `.browserslistrc` + tableau de décision. Puis correction ensemble.
+
+#### 🔑 Correction — Exercice 3 (à dérouler après les 5 min)
+
+##### Étape 1 — Extraction (exo 3)
+
+| Élément CDC | Traduction technique |
+| --- | --- |
+| 12 internes Chrome récent géré IT | Chrome desktop **récent**, fenêtre courte (auto-update) |
+| 30 sous-traitants BYOD, aucune contrainte | **Tout est possible** : Chrome / Edge / Firefox / Safari (desktop + mobile), versions inconnues |
+| Aucune contrainte navigateur imposée aux partenaires | **Maillon faible pilote** la cible — on doit s'aligner sur le pire plausible |
+| Pas de mention de durée de vie | À clarifier par mail — par défaut 24 mois |
+
+**Action obligatoire avant code** : mail au client pour faire **valider par écrit** une clause type *"navigateurs supportés : versions stables sorties dans les 24 derniers mois"*. Sans cette clause, n'importe quel sous-traitant peut ouvrir le dashboard sous Safari 13 et "ça marche pas" devient légitime.
+
+##### Étape 2 — `.browserslistrc` (exo 3)
+
+```text
+# .browserslistrc — projet Agroalimentaire / Dashboard partenaires
+# Cible parc : Chrome internes + BYOD sous-traitants (desktop + mobile)
+# Engagement contractuel : navigateurs stables sortis dans les 24 derniers mois
+# Plancher = versions sorties fin 2023 (≈ 18-24 mois de recul à date)
+# Revue : 2026-05-17 — relecture tous les 12 mois (cible glissante)
+
+Chrome >= 120
+Edge >= 120
+Firefox >= 121
+Safari >= 17
+iOS >= 17
+not dead
+```
+
+Justification :
+
+- Plancher 120 pour Chromium (sorti fin 2023, > 18 mois de recul).
+- **Firefox 121** précisément : c'est la première version Firefox avec `:has()` (déc 2023). Plancher en-dessous = `:has()` casse pour les sous-traitants sur Firefox ESR.
+- **Safari 17 / iOS 17** : aligne sur la fenêtre Baseline Widely Subgrid + `:has()` natifs.
+- **Pas de `last N versions`** ici non plus : on engage le client sur du chiffrable. Le `last` deviendra ambigu en revue 12 mois.
+
+##### Étape 3 — Tableau de décision (exo 3, plancher commun)
+
+| Feature | Première version OK (toutes plateformes) | Statut cible (plancher commun) | Décision |
+| --- | --- | --- | --- |
+| `@layer` | Chrome 99 / FF 97 / Safari 15.4 | Plancher 120/121/17 ≫ tous seuils | ✅ Utiliser directement |
+| `:has()` | Chrome 105 / FF 121 / Safari 15.4 | Plancher 121 = seuil FF (+0) | ✅ Utiliser, **mais plancher Firefox calé pile** — surveiller en revue |
+| `@container` | Chrome 105 / FF 110 / Safari 16 | Plancher ≫ tous seuils | ✅ Utiliser directement |
+| `oklch()` | Chrome 111 / FF 113 / Safari 15.4 | Plancher ≫ tous seuils | ✅ Utiliser directement |
+| Subgrid | Chrome 117 / FF 71 / Safari 16 | Plancher ≫ tous seuils | ✅ Utiliser directement |
+
+##### Étape 4 — Bilan (exo 3)
+
+Si **la clause "navigateurs stables ≤ 24 mois" est validée par mail**, les 5 features passent. C'est **l'engagement écrit qui fait la cible**, pas l'intuition.
+
+```css
+/* Target: Chrome/Edge >= 120, FF >= 121, Safari/iOS >= 17, not dead
+   Scope: Agroalimentaire / Dashboard partenaires BYOD
+   Last reviewed: 2026-05-17 — clause contractuelle "navigateurs < 24 mois" requise
+   Revue obligatoire annuelle (cible glissante) */
+```
+
+> ⚠️ **Variante "si client refuse la clause"** : il faut alors viser le **pire plausible** (Safari 14, Firefox ESR 102…). À ce moment-là, le tableau passe à `@supports` systématique sur `:has()`, `oklch()`, Subgrid. Le coût d'intégration explose — c'est l'argument à présenter au client pour faire signer la clause.
 
 ---
 
@@ -292,7 +452,4 @@ Plus précis que `@supports (display: grid)` quand on cible un sélecteur récen
 - [ ] Je sais croiser **Baseline** + **caniuse** + **CDC client** pour décider
 - [ ] J'écris `@supports` quand la cible est mixte
 - [ ] Je documente la cible **dans le CSS** (commentaire en tête)
-- [ ] Je sais que CSS Anchor, View Transitions, `if()` sont **hors périmètre** de cette formation (trop récents ou hors cas d'usage Dymasco)
-- [ ] Je sais que `@scope` est en **veille 12-18 mois** (Firefox manque) — utilisable dès maintenant pour parcs Edge/Chromium pur en pilote
-
 > 🎯 **Mantra du module** : *"On ne dit plus 'je crois que ça passe'. On dit 'Baseline widely / cible client OK'."*
