@@ -426,7 +426,7 @@ Tester sur `.apriso-machine-card--alert` (Apriso : `background: #fff8e1 !importa
 
 ```css
 @layer overrides {
-  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg); }
+  .apriso-machine-card--alert { background: #fcd34d; }
 }
 ```
 
@@ -436,7 +436,7 @@ Solution : escalader dans la couche `priority` **avec** `!important` :
 
 ```css
 @layer priority {
-  .apriso-machine-card--alert { background: var(--ml-color-status-alert-bg) !important; }
+  .apriso-machine-card--alert { background: #fcd34d !important; }
 }
 ```
 
@@ -449,7 +449,7 @@ Remplacer la couleur en dur par une variable :
 ```css
 @layer overrides {
   :root { --ml-color-brand-primary: #c2410c; }
-  .apriso-header { background: var(--ml-color-brand-primary); }
+  .apriso-header { background: var(--ml-color-brand-primary) !important; }
 }
 ```
 
