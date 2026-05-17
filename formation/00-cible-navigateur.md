@@ -1,3 +1,46 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir naviguer caniuse.com en live (URL directe par feature)
+    - avoir une fiche MDN ouverte d'avance pour montrer le badge Baseline
+    - connaître la définition exacte de "not dead" (maj 24 mois + > 0.5% part de marché)
+  ressources_demo_a_preparer:
+    - onglet MDN :has() pour montrer badge Baseline
+    - onglet caniuse @layer ouvert
+    - terminal avec npx browserslist prêt
+  pitch_ouverture: >
+    "Vous êtes seniors, vous savez écrire du CSS. Ce qu'on va faire ensemble, c'est
+    arbitrer : qu'est-ce qu'on peut s'autoriser chez tel client, et comment on le
+    justifie sans répondre 'je crois que ça passe'."
+  energie_attendue: haute — c'est l'ouverture, on pose le ton "seniors qui décident"
+  duree_cible: 60 min — découpage 5 / 20 / 15 / 20
+  variantes_timing:
+    si_en_retard: couper CDC 2 et 3, garder seulement CDC 1 Mamie Lulu (gain 12 min)
+    si_en_avance: faire ouvrir caniuse en live sur une feature au choix du groupe
+  points_a_marteler:
+    - Baseline = la nouvelle référence n°1 (badge visible en haut de chaque fiche MDN)
+    - browserslist = document d'arbitrage écrit, pas un outil de build
+    - "@supports teste la syntaxe, pas le bon fonctionnement"
+    - décision = 3 sources (Baseline + caniuse + CDC) + écrit dans le code
+  pieges_stagiaires:
+    - confondre cible Dymasco (Edge récent, tout passe) et cible CLIENT (variable)
+    - vouloir un fallback "au cas où" même quand Baseline widely OK → surcoût inutile
+    - lire caniuse uniquement (manquer le statut Baseline)
+  questions_probables:
+    - q: "Et si le client n'a pas de CDC technique précis ?"
+      r: Tu écris la cible TOI, tu la fais valider par mail. Ça devient la référence.
+    - q: "browserslist sans pipeline de build, ça sert à quoi ?"
+      r: Document d'arbitrage partagé équipe + commentaire en tête overrides.css.
+    - q: "Baseline vs caniuse, lequel je consulte ?"
+      r: Baseline d'abord (verdict rapide), caniuse si besoin de granularité version.
+    - q: "Pourquoi @scope est exclu ?"
+      r: Limited availability (Safari récent only). Hors périmètre formation.
+  transition_module_suivant: >
+    "Maintenant qu'on sait DÉCIDER ce qu'on peut utiliser, on attaque le sujet
+    qui fait perdre le plus de temps en intégration : la cascade et la spécificité.
+    Direction le module 1."
+---
+
 # Module 0 — Cible navigateur & arbitrage
 
 > ⏱️ **Durée** : 1h00 — **J1 matin, ouverture**
@@ -38,7 +81,11 @@ Ces réponses se traduisent en une **cible navigateur écrite** dans le projet. 
 
 ### 2. `browserslist` — la source unique
 
-`browserslist` est le standard de fait. Lu par PostCSS, Autoprefixer, esbuild, Vite, etc. Même sans pipeline de build chez Dymasco, c'est un excellent **document d'arbitrage** : on l'écrit dans un `.browserslistrc` à la racine du projet d'override, et il sert de référence partagée.
+> 🏭 **Précision Apriso d'emblée** : le runtime DELMIA Apriso (Process Builder + Screen Manager, IIS) **ne lit pas** `.browserslistrc`. Pas de pipeline Node embarqué côté serveur. Le CSS saisi dans le HTML Layout Editor part tel quel au navigateur opérateur.
+>
+> **Chez Dymasco, `browserslist` n'a qu'un seul usage : document d'arbitrage humain.** Pas de build externe prévu côté équipe. Fichier dans le repo + commentaire en tête d'`overrides.css` → trace écrite, revue client, alignement équipe. Apriso s'en fout, c'est pour les humains. Tant que ce choix tient, on saute le pipeline.
+
+`browserslist` est le standard de fait dans l'écosystème front (lu par PostCSS, Autoprefixer, esbuild, Vite…). Côté Dymasco, on **emprunte uniquement le format** comme convention d'écriture : on l'écrit dans un `.browserslistrc` à la racine du projet d'override, et il sert de référence partagée — sans outil de build derrière.
 
 Syntaxe utile :
 
@@ -79,6 +126,8 @@ npx browserslist "last 2 Chrome versions, last 2 Edge versions"
 ```
 
 → liste les versions exactes ciblées **aujourd'hui**.
+
+> 💡 Pour tester/valider une query sans installer Node : [browsersl.ist](https://browsersl.ist) — éditeur visuel en ligne. Suffit pour l'usage "document d'arbitrage" Dymasco.
 
 ### 3. **Baseline** — le nouveau langage commun
 
@@ -167,9 +216,9 @@ Démarche live :
 
 Contre-exemple, même démarche pour `@scope` :
 
-1. [Baseline](https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@scope) → "Limited availability" (Safari récent uniquement).
-2. [caniuse](https://caniuse.com/css-cascade-scope) → pas dans Firefox stable.
-3. Décision : **non utilisé** dans la formation. C'est explicitement dans les modules **non couverts** (cf. CONTEXT.md).
+1. [Baseline](https://developer.mozilla.org/fr/docs/Web/CSS/Reference/At-rules/@scope) → "Limited availability" (Chrome/Edge 118+ depuis fin 2023, Safari 17.4+, **Firefox encore en attente**).
+2. [caniuse](https://caniuse.com/css-cascade-scope) → support partiel selon parc.
+3. **Décision aujourd'hui** : hors périmètre formation principale (Firefox manque). **Mais** veille à 12-18 mois : `@scope` résout nativement le scoping qu'on bricole en 4 couches `@layer`. Pour les parcs Edge/Chromium pur (cas Dymasco interne, certains clients agroalimentaires) → utilisable **maintenant** en projet pilote. Voir bonus M01 si le temps le permet.
 
 **Bilan** : la décision se prend en **3 minutes**, sources à l'appui.
 
@@ -243,6 +292,7 @@ Plus précis que `@supports (display: grid)` quand on cible un sélecteur récen
 - [ ] Je sais croiser **Baseline** + **caniuse** + **CDC client** pour décider
 - [ ] J'écris `@supports` quand la cible est mixte
 - [ ] Je documente la cible **dans le CSS** (commentaire en tête)
-- [ ] Je sais que `@scope`, CSS Anchor, View Transitions, `if()` sont **hors périmètre** de cette formation (trop récents ou hors cas d'usage Dymasco)
+- [ ] Je sais que CSS Anchor, View Transitions, `if()` sont **hors périmètre** de cette formation (trop récents ou hors cas d'usage Dymasco)
+- [ ] Je sais que `@scope` est en **veille 12-18 mois** (Firefox manque) — utilisable dès maintenant pour parcs Edge/Chromium pur en pilote
 
 > 🎯 **Mantra du module** : *"On ne dit plus 'je crois que ça passe'. On dit 'Baseline widely / cible client OK'."*

@@ -1,3 +1,49 @@
+---
+formateur:
+  prerequis_formateur:
+    - maîtriser l'algo cascade exact (origine > couche > spécificité > ordre)
+    - savoir expliquer en 1 phrase pourquoi unlayered bat layered (pour normal)
+    - savoir expliquer en 1 phrase pourquoi !important inverse l'ordre des couches
+    - avoir testé soi-même la démo @import url() layer() la veille au soir
+  ressources_demo_a_preparer:
+    - projet-fil-rouge/00-base/ ouvert dans VSCode + navigateur
+    - DevTools panneau Styles agrandi pour voir colonne "Layer"
+    - tableau récap layered/unlayered/!important imprimé ou affiché
+    - calculatrice de spécificité (specificity.keegan.st) en favori
+  pitch_ouverture: >
+    "Ouvrez vos derniers overrides.css. Comptez les !important. Comptez les chaînes
+    > 3 classes. C'est le module qui supprime ça pour toujours."
+  energie_attendue: très haute — module fondateur, 2h, c'est LE moment d'engager
+  duree_cible: 120 min — découpage 40 concepts / 20 démo / 50 exo / 10 récap
+  variantes_timing:
+    si_en_retard: couper §1 rappel cascade (5 min) + bonus 1/2/3 + nesting passé en 2 min
+    si_en_avance: ajouter live de spécificité sur leur ancien overrides.css
+  points_a_marteler:
+    - "@layer NE BAT PAS un framework unlayered tel quel"
+    - "il faut RAMENER Apriso dans la cascade via @import url() layer()"
+    - "pour les !important l'ordre des couches est INVERSÉ"
+    - "priority est AVANT framework dans la déclaration (donc gagne en !important)"
+    - "retirer le <link> vers apriso-base.css du HTML, sinon Apriso chargé 2 fois"
+  pieges_stagiaires:
+    - croire que @layer surclasse tout, sans @import → démo étape 2 essentielle
+    - oublier de retirer le <link> HTML → Apriso unlayered reprend la main
+    - mettre :where() autour de la cible au lieu du scope → cible à spé 0
+    - hardcoder !important "au cas où" dans overrides → règle priority cassée
+  questions_probables:
+    - q: "Pourquoi 4 couches et pas 3 ?"
+      r: priority = pour battre !important Apriso, séparée d'overrides pour clarté.
+    - q: "Et si j'ai du legacy IE ?"
+      r: hors cible Dymasco (Module 0). Si vraiment, fallback hors @layer.
+    - q: "Nesting natif vs Sass, je perds quelque chose ?"
+      r: mixins et variables au build. Pas pour nous (pas de pipeline).
+    - q: "Combien de tokens c'est trop ?"
+      r: 5-10 couleurs sources + 4-6 spacings. Tout le reste dérivé.
+  transition_module_suivant: >
+    "Architecture posée. Maintenant on s'attaque aux pixels figés : largeurs en dur,
+    typo statique. Direction module 2 — fluide partout, une seule règle pour 3 tailles
+    d'écran."
+---
+
 # Module 1 — Architecture CSS pour overrides
 
 > ⏱️ **Durée** : 2h00 — **J1 matin**
@@ -62,8 +108,12 @@ Spécificité — rappel express :
 | `#id` | 1, 0, 0 |
 | `.a .b .c` | 0, 3, 0 |
 | `.a .b .c .d .e` (Apriso) | 0, 5, 0 |
-| `style=""` inline | 1, 0, 0, 0 |
+| `style=""` inline | (cf. note) |
 | `!important` | écrase tout (à spécificité égale) |
+
+> 📝 **Note — inline & `!important`** : `style=""` et `!important` ne sont **pas** des niveaux supplémentaires de spécificité. Ils opèrent à l'étape **origine + importance** (étape 1 de la cascade), **au-dessus** du calcul `(a, b, c)`. Le tuple `(1, 0, 0, 0)` qu'on voit parfois est une notation pédagogique abusive : techniquement, l'inline gagne parce qu'il est traité comme une origine "author override", pas parce qu'il a un score plus élevé.
+
+<!-- -->
 
 > 🎯 **Le piège Apriso** : tous leurs sélecteurs sont préfixés `.apriso-dashboard .zone .composant .element` → spécificité **0, 4, 0** voire **0, 5, 0**. Pour battre ça avec la même technique, il faut **monter encore**. Mauvaise idée.
 
@@ -456,6 +506,93 @@ Voir `projet-fil-rouge/checkpoints/01-architecture/overrides.css` (~150 lignes i
 
 ---
 
+## 🧪 Drill DevTools — Audit cascade en live (10 min, optionnel si temps)
+
+> 🎯 **Pourquoi** : 80 % du temps quotidien chez Dymasco, vous n'écrivez pas du CSS — vous **lisez** la cascade dans DevTools pour comprendre pourquoi votre règle ne s'applique pas. Ce drill rend ce geste réflexe.
+
+### Drill 1 — Lire le panneau Styles
+
+1. Ouvrir le fil rouge état checkpoint M01, sélectionner `.apriso-machine-card--alert` dans Elements.
+2. Dans le panneau **Styles**, repérer pour chaque déclaration :
+   - le **nom de la couche** (`Layer: framework` / `Layer: overrides` / `Layer: priority`)
+   - les déclarations **barrées** (overridées) avec l'icône d'info au survol
+3. Question piège à se poser : *"si je vois `priority > framework > overrides`, qui gagne sur une déclaration normale ?"* (réponse : `overrides`, dernière couche pour les normales).
+
+### Drill 2 — Computed + filtre
+
+1. Onglet **Computed** → colonne **Source** : montre **le fichier + la couche** d'où vient la valeur finale.
+2. Filtrer par propriété (`background`, `border-left-color`) → ne voir que les valeurs effectives.
+3. Cliquer sur la valeur → DevTools déroule **toute la chaîne** des déclarations rejetées avec raison.
+
+### Drill 3 — CSS Overview (Chrome/Edge)
+
+`F12 → More tools → CSS Overview → Capture overview`. Affiche :
+
+- nombre de **couleurs uniques** (avant tokens : 47, après : 9 → preuve que tokens marchent)
+- nombre de **déclarations !important** (avant : 23, après pyramide : 6, **uniquement** dans `priority`)
+- **contrast ratios** WCAG par paire (anticipe M10)
+
+À faire **avant et après** votre refacto pour quantifier le gain. Capture d'écran à archiver dans le PR.
+
+### Drill 4 — Spécificité interactive
+
+Inspecter un sélecteur Apriso à 5 classes dans Styles → DevTools affiche le tuple `(0, 5, 0)` au survol. Comparer avec votre override `(0, 1, 0)` dans `@layer overrides` → DevTools montre **explicitement** que la spé perd, mais la **couche** gagne. Démonstration visuelle imparable du module.
+
+---
+
+## 🛠️ Exercice alternatif — Migration legacy "vrai monde sale" (45 min, variant pour stagiaires avancés)
+
+> 🎯 **Pourquoi** : le fil rouge Mamie Lulu part d'un `overrides.css` vide. La réalité Dymasco = vous héritez d'un fichier de 600-1200 lignes accumulé sur 3 ans, chaînes 5 classes + `!important` partout, 0 token. Cet exo simule **ce vrai cas**.
+
+### Code de départ : `legacy-overrides.css` (fourni)
+
+Fichier de 500+ lignes avec les pathologies typiques :
+
+- 47 occurrences de `!important`
+- chaînes moyennes 4,2 classes
+- 23 couleurs hardcodées hex/rgb (jamais de variables)
+- pas de structure (composants mélangés, ordre chronologique de commits)
+
+### Consigne — Plan en 5 étapes (à appliquer **dans cet ordre**)
+
+1. **Auditer** (5 min) : lancer CSS Overview, archiver compteur `!important`, couleurs uniques, spé moyenne. **Point de départ chiffré**.
+2. **Ajouter la pyramide sans rien casser** (5 min) :
+
+   ```css
+   @layer reset, priority, framework, overrides, legacy;
+   @import url("./apriso-base.css") layer(framework);
+   /* legacy/* contenu actuel reste unlayered le temps de la migration */
+   ```
+
+   Pourquoi déclarer `legacy` même si vide ? Pour avoir l'ordre verrouillé quand on commencera à y mettre des choses. La règle "unlayered = couche implicite finale" vous **protège** : votre legacy continue de marcher.
+
+3. **Extraire les tokens** (15 min) : grep les 23 couleurs, créer `:root` dans `@layer overrides`, remplacer **uniquement** les hex/rgb dans les déclarations qui n'ont pas `!important` (les autres viendront en étape 4).
+
+4. **Migrer composant par composant** (15 min) : pour chaque section thématique (header, cards, footer…), déplacer les règles dans `@layer overrides` (sans `!important`) et `@layer priority` (avec `!important` uniquement si le framework l'impose). Tester après chaque composant. **Jamais de big bang.**
+
+5. **Vider `legacy`** (5 min) : à terme la couche `legacy` doit être vide et supprimée. Si elle ne l'est pas après 2 sprints → revue d'équipe, c'est probablement du JS qui pose des inline styles.
+
+### Critères de succès
+
+| Avant | Après cible |
+| --- | --- |
+| 47 `!important` | ≤ 8, **tous** dans `priority` |
+| Chaînes moy 4,2 classes | ≤ 1,5 classe |
+| 23 couleurs hex | 9 tokens sources + dérivés `color-mix` |
+| 0 documentation cible | Header avec `browserslist` + date de revue |
+
+### Pièges spécifiques migration
+
+- ❌ Tout migrer en une seule PR → ingérable, code review impossible, régressions invisibles. **Une PR par composant**.
+- ❌ Supprimer un `!important` legacy sans vérifier qu'il battait vraiment quelque chose → certains sont historiques, plus aucune utilité. Tester avec DevTools : désactiver `!important` à la main, observer si autre déclaration prend le dessus. Si non → `!important` mort, à virer.
+- ❌ Oublier le commentaire `/* migré depuis legacy l.234 — 2026-05-18 */` dans la nouvelle règle → traçabilité perdue au prochain merge.
+
+### Livrable
+
+Diff git annoté + CSS Overview avant/après + commentaire de PR avec les 4 chiffres du tableau de succès. C'est le **vrai livrable Dymasco**, pas un fichier "qui rend bien".
+
+---
+
 ## 🚀 Pour aller plus loin
 
 ### Bonus 1 — Couches imbriquées
@@ -489,7 +626,55 @@ Voir `projet-fil-rouge/checkpoints/01-architecture/overrides.css` (~150 lignes i
 ```css
 @import url("vendor/some-lib.css") layer(framework);
 ```
+
 → Importer un CSS tiers **dans** une couche, pour le neutraliser globalement. Très puissant côté intégration Apriso.
+
+### Bonus 4 — Survivre à un upgrade Apriso (defensive selectors)
+
+Cas vécu : DELMIA Apriso upgrade `2023 → 2024`. Certains noms de classes changent (`.apriso-machine-card__title` devient `.aps-card-title`), certains IDs runtime mutent (`ctl00_xxx`), de nouveaux `!important` apparaissent. Vos overrides cassent silencieusement.
+
+#### Stratégie
+
+1. **Audit avant upgrade** : copier le HTML rendu Apriso v(n) avant la migration. Diff structurel vs Apriso v(n+1) → liste des classes/sélecteurs perdus.
+2. **Defensive selectors** dans `overrides.css` : pour les composants critiques, **cibler par attribut data** quand possible (`[data-component="machine-card"]`), pas par classe Apriso seule.
+
+   ```css
+   /* fragile — casse à l'upgrade si classe renommée */
+   @layer overrides {
+     .apriso-machine-card { ... }
+   }
+
+   /* défensif — combine classe ET data-attribute si Apriso les expose */
+   @layer overrides {
+     .apriso-machine-card,
+     [data-apriso-component~="machine-card"] {
+       /* mêmes overrides */
+     }
+   }
+   ```
+
+3. **Tests visuels de régression** : Percy/Chromatic ou simple capture avant/après upgrade sur les 5 écrans les plus utilisés. Diff pixel = signal early.
+4. **Couche de compat dédiée** : si un upgrade casse beaucoup, intercaler une couche `@layer compat` entre `framework` et `overrides` qui re-mappe les nouveaux noms vers vos anciens overrides :
+
+   ```css
+   @layer reset, priority, framework, compat, overrides;
+
+   @layer compat {
+     /* alias temporaire le temps de la migration */
+     .aps-card-title { /* mêmes règles que .apriso-machine-card__title */ }
+   }
+   ```
+
+   À supprimer dès que les overrides sont migrés sur les nouveaux noms.
+
+#### Quand l'appliquer
+
+Pas systématiquement. Coût supplémentaire ~20 % de lignes. Justifié pour :
+
+- composants où la régression visuelle a un coût métier (badges status critiques, alertes safety)
+- projets dont la durée de vie attendue dépasse une version Apriso (≥ 18 mois)
+
+Pour des overrides cosmétiques (couleurs, espacements) : sélecteur Apriso natif suffit, on accepte de refaire au prochain upgrade.
 
 ### Ressources
 

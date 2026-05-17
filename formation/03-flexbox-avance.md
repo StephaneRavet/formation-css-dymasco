@@ -1,3 +1,46 @@
+---
+formateur:
+  prerequis_formateur:
+    - décrypter flex: <grow> <shrink> <basis> instantanément
+    - savoir expliquer flex: 1 1 0 vs flex: 1 1 auto (colonnes égales vs basé contenu)
+    - savoir POURQUOI min-width: 0 débloque text-overflow (default min-width: auto)
+    - avoir testé que line-clamp 2 marche sur la cible navigateur Dymasco
+  ressources_demo_a_preparer:
+    - checkpoint Module 2 ouvert
+    - HTML avec 1 machine renommée "Ligne d'extrusion sous-vide L2 — Conditionneuse Coco"
+    - cheatsheet flex CSS Tricks ou Joshwcomeau ouvert en favori
+  pitch_ouverture: >
+    "C'est l'après-midi, on attaque le concret. Vous avez tous galéré au moins une
+    fois avec text-overflow: ellipsis qui marche pas. Aujourd'hui on règle ça —
+    et un secret : c'est presque JAMAIS l'élément, c'est le parent."
+  energie_attendue: bonne — début d'aprem, café OK, on enchaîne
+  duree_cible: 75 min — découpage 25 concepts / 15 démo / 25 exo / 10 récap
+  variantes_timing:
+    si_en_retard: zapper bonus pseudo ::after qui absorbe, garder triptyque overflow
+    si_en_avance: faire écrire à voix haute leur réflexe ellipsis-qui-marche-pas
+  points_a_marteler:
+    - "flex: 1 1 240px = card qui REMPLIT l'espace (vs 0 0 240px = rigide)"
+    - "min-width: 0 sur item flex = clé du text-overflow ellipsis"
+    - "le piège ellipsis n'est presque JAMAIS l'élément, c'est le PARENT flex"
+    - "triptyque overflow : ellipsis (1 ligne) / line-clamp (N lignes) / overflow-wrap (mot)"
+    - "tester avec un nom long AVANT de livrer, toujours"
+  pieges_stagiaires:
+    - écrire flex: 1 (raccourci ambigu = 1 1 0%) au lieu de 1 1 auto
+    - oublier min-width: 0 sur les ancêtres flex de l'élément ellipsé
+    - utiliser word-break: break-all → texte illisible (préférer overflow-wrap: anywhere)
+    - dernier item étiré 100% avec flex-wrap → solution flex 999 1 sur ::after
+  questions_probables:
+    - q: "line-clamp sans -webkit- ça marche quand ?"
+      r: Newly available 2024 — Dymasco OK mais préférer -webkit- pour cible mixte.
+    - q: "Flexbox vs Grid pour des cards ?"
+      r: Grid si alignement strict colonnes (Module 4). Flex si wrap libre.
+    - q: "Pourquoi min-width: auto par défaut ?"
+      r: empêche un item de devenir plus petit que son contenu (sécurité spec).
+  transition_module_suivant: >
+    "Flex c'est 1D. Le dashboard a aussi des layouts 2D — tableaux, KPI board, journal
+    scrollable. Module 4 : Grid + transformer un <table> en grille + sticky header + Subgrid."
+---
+
 # Module 3 — Flexbox avancé
 
 > ⏱️ **Durée** : 1h15 — **J1 après-midi, ouverture**

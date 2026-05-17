@@ -1,3 +1,48 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir différence container-type inline-size vs size (size casse souvent layout)
+    - connaître unités cq* (cqi = 1% inline-size conteneur)
+    - savoir qu'une @container sans container-type quelque part = SILENCE total
+    - widely available 2023 — OK Dymasco
+  ressources_demo_a_preparer:
+    - checkpoint Module 5 ouvert
+    - DevTools prêt pour resize la sidebar (modifier width inline)
+    - tableau récap container-type / cq* affiché
+  pitch_ouverture: >
+    "Le Saint Graal du composant réutilisable. La même Card-Machine dans la sidebar
+    (200px), la grille (280px), l'écran mural (500px) — un seul CSS. Avant : 3 variantes
+    BEM. Maintenant : le composant interroge SA place."
+  energie_attendue: haute — module court, effet "wow" immédiat, plaisir formateur
+  duree_cible: 45 min — découpage 15 concepts / 10 démo / 15 exo / 5 récap
+  variantes_timing:
+    si_en_retard: zapper bonus style queries + imbrication conteneurs
+    si_en_avance: faire trouver 3 composants candidats dans LEUR code actuel
+  points_a_marteler:
+    - "@container interroge LE CONTENEUR, pas le viewport"
+    - "container-type: inline-size 95% du temps — size casse layout"
+    - "container-name optionnel mais RECOMMANDÉ (lisibilité + scoping)"
+    - "cqi = 1% inline-size conteneur (vs vw = viewport)"
+    - "tester en resizant le CONTENEUR, pas le viewport — sinon démo ratée"
+  pieges_stagiaires:
+    - oublier container-type sur l'ancêtre → @container silencieux jamais déclenché
+    - mettre container-type: size "par sécurité" → conteneur perd hauteur intrinsèque
+    - penser cqw = viewport width (c'est conteneur)
+    - interroger un parent non déclaré → remonte au plus proche déclaré
+  questions_probables:
+    - q: "Quand utiliser Container vs Media Queries ?"
+      r: composant réutilisable dans plusieurs zones = container. Layout global = media.
+    - q: "Imbriquer plusieurs conteneurs ça marche ?"
+      r: oui — grille hôte → card hôte → metric hôte. Use container-name pour ciblage.
+    - q: "Style queries c'est utilisable ?"
+      r: Newly 2024 — éviter Dymasco si cible client variable.
+    - q: "Impact perf ?"
+      r: négligeable jusqu'à plusieurs centaines de conteneurs. Mesurer si doute.
+  transition_module_suivant: >
+    "Composants adaptatifs : OK. Maintenant identité visuelle. Hex statique → oklch
+    perceptuel + color-mix() dynamique. Module 7 : une teinte source, tout suit."
+---
+
 # Module 6 — Container Queries
 
 > ⏱️ **Durée** : 0h45 — **J2 matin**

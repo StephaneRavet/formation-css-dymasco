@@ -1,3 +1,53 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir écrire grid-template-areas + grid-area en live
+    - connaître les 4 conditions de position: sticky (offset, ancêtre scrollable, pas overflow:hidden, background)
+    - savoir expliquer display: contents (élément invisible au layout, enfants prennent sa place)
+    - différence auto-fit (collapse vides) vs auto-fill (conserve vides)
+    - Subgrid widely available mi-2024 — vérifié sur cible Dymasco
+  ressources_demo_a_preparer:
+    - checkpoint Module 3 ouvert
+    - DevTools panneau "Layout" pour montrer overlay Grid (areas en surimpression)
+    - tableau récap auto-fit/auto-fill imprimé
+    - gridbyexample.com en favori
+  pitch_ouverture: >
+    "Module le plus long de la formation, 2h15. Mais c'est celui qui débloque le plus
+    de douleurs quotidiennes : transformer un <table> qu'on subit, faire un sticky
+    header qui marche, et la cerise — Subgrid pour aligner des sous-éléments entre
+    composants."
+  energie_attendue: haute pour démarrer, prévoir mini-pause à mi-parcours (1h passé)
+  duree_cible: 135 min — découpage 45 concepts / 25 démo / 50 exo / 15 récap (avec démo Subgrid clôture 5 min)
+  variantes_timing:
+    si_en_retard: zapper bonus place-items + grid-auto-flow dense + min-content/max-content
+    si_en_avance: faire écrire un layout complet à voix haute par les stagiaires
+  points_a_marteler:
+    - "display: contents fait DISPARAÎTRE l'élément du flux layout (table → grid)"
+    - "position: sticky a 4 conditions strictes — manquer 1 = silence total"
+    - "JAMAIS de sticky sans background opaque (sinon transparent, contenu défile derrière)"
+    - "scrollbar-gutter: stable = layout qui ne saute plus à l'apparition scrollbar"
+    - "Subgrid : démo 5 min, sans exo — message c'est qu'il EXISTE"
+  pieges_stagiaires:
+    - display: contents qui casse styles hérités (bordures, bg du <table> perdus)
+    - sticky qui ne colle nulle part → ancêtre overflow: hidden quelque part
+    - confondre auto-fit (vide collapse) et auto-fill (vide conservé) → items étirés non voulu
+    - 1fr sans minmax(min, 1fr) → cards illisibles à très petit écran
+    - oublier le background sur sticky → contenu défile derrière, illisible
+  questions_probables:
+    - q: "display: contents et accessibilité ?"
+      r: bug arbre a11y corrigé depuis 2023. Vérifier sur cible client (Module 0).
+    - q: "Grid vs Flex pour une grille de cards ?"
+      r: Grid si alignement strict colonnes. Flex pour wrap libre tags/breadcrumbs.
+    - q: "Subgrid quand vraiment ?"
+      r: aligner sous-éléments (header/metrics/footer) ENTRE cards. Rare mais magique.
+    - q: "Combien de sticky dans une même page ?"
+      r: pas de limite tech. Empilable via top: 0 puis top: 32px.
+  transition_module_suivant: >
+    "Layout maîtrisé. Mais le code commence à charger — sélecteurs longs, répétitions.
+    Module 5 : sélecteurs modernes :is() :where() :has() — moins de code, plus de
+    puissance. Et propriétés logiques bonus i18n."
+---
+
 # Module 4 — Grid Layout & layouts denses
 
 > ⏱️ **Durée** : 2h15 — **J1 après-midi, gros bloc**
@@ -141,6 +191,10 @@ Cas Apriso : le KPI Board est un vrai `<table>`, on n'a pas la main sur le HTML.
 - `<table>` et `<tbody>` "disparaissent". Le `<tr>` devient le conteneur grid direct, ses `<td>` deviennent les items.
 
 ⚠️ **Piège accessibilité** : `display: contents` retire l'élément de l'**arbre d'accessibilité** dans certains navigateurs anciens. Bug largement corrigé depuis 2023, mais à vérifier sur la cible client (Module 0). Pour un `<table>` sémantique critique → préférer `role="presentation"` côté HTML, mais ce n'est pas notre sujet ici (KPI = présentation, pas un tableau de données).
+
+> 🚫 **Quand refuser `display: contents` sur `<table>`** : si le tableau porte de **vraies données tabulaires** (export CSV, lecture lecteur d'écran ligne par ligne, tri colonne) → ne **jamais** casser la sémantique table. Réservé aux tableaux purement présentationnels (KPI board, layout détourné). En cas de doute → garder `<table>` natif et styler avec `border-collapse` / `table-layout: fixed`.
+
+<!-- -->
 
 > 💡 **Note pédagogique — Subgrid** : la propriété `subgrid` (aligner les enfants d'une card sur la grille du parent) est **volontairement sortie du tronc commun**. Le module est déjà dense (Grid + areas + auto-fit + display:contents + sticky + scrollbar-gutter + tableaux denses). Subgrid est traité en **démo de clôture de 5 min**, sans exercice — voir § *Pour aller plus loin* en bas de module.
 

@@ -1,3 +1,45 @@
+---
+formateur:
+  prerequis_formateur:
+    - lire clamp(min, ideal, max) sans hésiter
+    - savoir donner 3 exemples concrets clamp / min / max sans préparer
+    - connaître différence vh / dvh (bug barre adresse tablette)
+    - connaître statut Baseline aspect-ratio et text-wrap (balance widely / pretty newly)
+  ressources_demo_a_preparer:
+    - DevTools mode responsive prêt — 3 presets 800 / 1440 / 2560 sauvegardés
+    - checkpoint Module 1 ouvert (point de départ)
+    - utopia.fyi en favori (générateur d'échelle typo)
+  pitch_ouverture: >
+    "Combien de fois vous avez livré 3 fichiers CSS — dashboard-tablette, dashboard-PC,
+    dashboard-mural ? Dans 45 minutes, vous saurez n'en livrer qu'UN."
+  energie_attendue: posée mais énergique — clôture J1 matin, juste avant le déjeuner
+  duree_cible: 45 min — découpage 15 concepts / 10 démo / 15 exo / 5 récap
+  variantes_timing:
+    si_en_retard: zapper text-wrap pretty (juste citer le nom) + bonus échelle complète
+    si_en_avance: faire calculer clamp() pour 3 cas à la volée avec les stagiaires
+  points_a_marteler:
+    - "clamp() jamais sans borne min ET max — vw seul = piège mobile/mural"
+    - "min() = plafonne, max() = plancher — mnémo : min RENVOIE la plus petite"
+    - "aspect-ratio remplace tous les hacks padding-top: 56.25%"
+    - "dvh > vh sur tablette (barre adresse mobile bugue vh)"
+  pieges_stagiaires:
+    - mettre vw sans clamp → texte microscopique sur mobile, démesuré sur mural
+    - confondre min() (plafonne) et max() (plancher) — toujours hésiter
+    - cumuler aspect-ratio + width + height → conflit, l'un ignoré
+    - oublier que 1vw = % viewport, PAS conteneur (anticipe Module 6)
+  questions_probables:
+    - q: "Pourquoi rem plutôt que px pour les font-size ?"
+      r: respecte zoom utilisateur et préférence taille texte navigateur.
+    - q: "text-wrap pretty c'est safe en prod ?"
+      r: Newly availble — OK Dymasco, vérifier cible client si conservateur.
+    - q: "calc() dans clamp(), ça marche ?"
+      r: oui — clamp(14px, calc(1rem + 0.2vw), 22px) parfaitement valide.
+  transition_module_suivant: >
+    "Dimensions fluides : OK. Mais maintenant on a un problème nouveau — quand le
+    titre d'une machine est trop long, il casse la grille. Direction module 3 :
+    Flexbox avancé + dompter les textes débordants."
+---
+
 # Module 2 — Typographie & dimensions fluides
 
 > ⏱️ **Durée** : 0h45 — **J1 matin, clôture**
@@ -64,7 +106,7 @@ Un seul code, trois résultats raisonnables.
 `min()` renvoie **la plus petite** des valeurs. `max()` renvoie **la plus grande**. Très pratique pour combiner unités hétérogènes.
 
 ```css
-.apriso-dashboard { width: min(1440px, 100%); }   /* jamais plus large que 1440px, jamais plus que le viewport */
+.apriso-dashboard { width: min(1440px, 100%); }   /* plafonné à 1440px, sinon 100% du conteneur parent */
 .apriso-line-selector__select { width: max(180px, 14ch); } /* au moins 14 caractères de large */
 ```
 
@@ -248,7 +290,7 @@ padding-inline: max(16px, 5vw);   /* marges qui respirent sur grand écran */
 ## 📝 Récap & checklist
 
 - [ ] Je sais lire `clamp(min, ideal, max)`
-- [ ] Je sais quand utiliser `min()` (plafonner) vs `max()` (planchonner)
+- [ ] Je sais quand utiliser `min()` (plafonner) vs `max()` (fixer un plancher)
 - [ ] Je remplace **toute** largeur figée en `px` par une expression fluide ou `min(value, 100%)`
 - [ ] Je définis les `font-size` des éléments-clés (KPI, titres) en `clamp()`
 - [ ] J'utilise `aspect-ratio` au lieu des hacks `padding-top`

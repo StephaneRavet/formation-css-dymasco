@@ -1,93 +1,101 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir color-mix(in oklab, ...) — espace par défaut recommandé
+    - savoir que color-mix marche avec SOURCE hex (pas besoin de stocker en oklch)
+    - distinguer color-scheme (UA hints) vs light-dark() (valeur conditionnelle)
+    - savoir basculer prefers-color-scheme dans DevTools (Rendering)
+    - oklch + color-mix widely 2023 / light-dark widely 2024 (vérifier au jour J)
+  ressources_demo_a_preparer:
+    - checkpoint Module 6 ouvert
+    - DevTools prêt pour modifier --ml-color-brand-primary à la volée
+    - DevTools Rendering prêt pour bascule prefers-color-scheme light/dark
+  pitch_ouverture: >
+    "Lulu vous appelle : 'le orange est trop agressif sur les écrans de nuit,
+    foncez-le un peu'. Avant : 47 occurrences hex à modifier. Après ce module :
+    UNE seule variable, tout suit. Et bonus : un bouton light/dark qui marche
+    en 3 lignes."
+  energie_attendue: posée — clôture J2 matin, juste avant déjeuner
+  duree_cible: 45 min — découpage 20 concepts / 12 démo / 10 exo / 3 récap
+  variantes_timing:
+    si_en_retard: zapper bonus échelle hue + tokens primitifs/intentionnels
+    si_en_avance: faire dériver palette hover/active sur LEUR charte client réelle
+  points_a_marteler:
+    - "color-mix(in oklab, HEX, ...) — pas besoin d'oklch côté source, ça marche avec ta charte client"
+    - "TOUJOURS préciser l'espace : color-mix(in oklab, ...) — sans 'in X' c'est ignoré silencieusement"
+    - "5-10 couleurs SOURCES (hex client), tout le reste DÉRIVÉ via color-mix"
+    - "light-dark() + color-scheme = theme switcher complet en 2 lignes"
+    - "oklch côté SOURCE = construction palette from scratch (rare). Côté MIX = oui (in oklab)"
+  pieges_stagiaires:
+    - color-mix sans "in oklab" → erreur silencieuse, valeur ignorée
+    - color-mix inline partout au lieu de tokeniser → perd avantage centralisé
+    - light-dark() sans color-scheme déclaré → fonctionne mais pas optimal côté UA
+    - confondre prefers-color-scheme (préférence user) et color-scheme (déclaration app)
+  questions_probables:
+    - q: "Pourquoi pas tout en oklch côté source ?"
+      r: ça marche, mais charte client = hex 99% du temps. color-mix(in oklab, hex…) suffit. oklch utile QUAND tu construis la palette toi-même.
+    - q: "color-mix vs sass mix(), différence ?"
+      r: runtime + perceptual (oklab). Sass = build-time, espace RGB classique. Pas de pipeline build chez Dymasco → color-mix natif gagne.
+    - q: "P3 / gamut large, on en bénéficie quand ?"
+      r: bonus écrans modernes. Hors sujet écran atelier industriel sRGB.
+    - q: "color-contrast() utilisable ?"
+      r: Limited availability. Trop tôt pour Dymasco.
+    - q: "Combien de tokens primitifs ?"
+      r: 5-10 max. Au-delà = redondance, signal qu'il faut dériver via color-mix.
+  transition_module_suivant: >
+    "Couleurs + theme switcher : système posé. Module 8 : on adapte aux conditions
+    RÉELLES — équipe nuit, opérateurs gants tactiles, sensibilités visuelles,
+    Windows High Contrast. Les media queries fonctionnelles transforment 'qui
+    marche' en 'respectueux'."
+---
+
 # Module 7 — Couleurs modernes & thèmes
 
-> ⏱️ **Durée** : 1h00 — **J2 matin, clôture**
-> 🧭 **Type** : module identité visuelle
+> ⏱️ **Durée** : 0h45 — **J2 matin, clôture**
+> 🧭 **Type** : module identité visuelle + theme switcher
 > 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/07-couleurs/overrides.css`
 
 ---
 
 ## 🎯 Objectif (en 1 phrase)
 
-Passer la palette de **hex statique** à **`oklch` perceptuel + `color-mix()` dynamique**, et préparer le terrain `color-scheme` pour le mode sombre (Module 8).
+Passer la palette de **hex éparpillé** à **5-10 sources hex + dérivations dynamiques `color-mix()`**, et préparer un **theme switcher light/dark** via `color-scheme` + `light-dark()`.
 
 ---
 
 ## ⚙️ Pour qui c'est utile chez Dymasco
 
-L'identité Mamie Lulu n'est pas finalisée. Demain Lulu va dire "le orange est un peu agressif sur les écrans de nuit, on peut foncer un peu ?". Aujourd'hui : vous repassez sur **N occurrences hex**, vous créez 3 variantes hover, 3 variantes alert, etc.
+Réalité quotidienne intégrateur Apriso :
 
-Avec `oklch` et `color-mix()` :
-- **Une variable `--ml-color-brand-primary`** pilote tout.
-- Les variantes (hover, focus, alert background) sont **dérivées dynamiquement**.
-- Modifier la teinte = changer un seul nombre, tout suit **avec une luminance perceptive cohérente**.
+- Le client envoie sa charte en **hex** (`#c2410c`, `#2e7d32`…). Jamais en oklch. Vous le saviez.
+- Vous devez en tirer : variantes hover, active, disabled, backgrounds atténués, états alert…
+- Aujourd'hui : 3 verts différents pour "running" (`#4caf50`, `#2e7d32`, `#1b5e20`) parce qu'on a tâtonné. Pas de système.
+- Demain Lulu dit "fonce l'orange de 10%" → 47 occurrences à toucher.
 
-Aujourd'hui vous avez aussi :
-- 3 verts différents pour "running" (`#4caf50`, `#2e7d32`, `#1b5e20`) parce qu'on a tâtonné.
-- Pas de système, pas de cohérence, refactor pénible.
+**`color-mix()` règle 95 % du problème** — et accepte directement votre hex client en entrée. Pas besoin de tout convertir en oklch (l'espace de **mélange** est `in oklab`, mais les **sources** restent vos hex).
+
+`light-dark()` règle l'autre 5 % : theme switcher complet en 2 lignes.
+
+`oklch()` est une option pour construire une palette **from scratch** — citée, pas centrale.
 
 ---
 
-## 📚 Concepts (25 min)
+## 📚 Concepts (20 min)
 
-### 1. Pourquoi `oklch` plutôt que `#hex` / `rgb` / `hsl` ? (8 min)
-
-Trois problèmes des espaces colorimétriques classiques :
-
-#### a) Luminance perçue ≠ luminance calculée
-
-En `hsl`, deux couleurs avec **la même `lightness`** peuvent avoir des luminances perçues très différentes. Ex : `hsl(60, 100%, 50%)` (jaune vif) paraît **bien plus clair** que `hsl(240, 100%, 50%)` (bleu sombre), alors que la valeur `lightness` est identique.
-
-Conséquence : impossible de bâtir une échelle "claire → foncée" cohérente sans tâtonner.
-
-#### b) Mauvaise interpolation
-
-Mélanger deux couleurs hex (ex : pour générer un hover) donne souvent **du gris** ou des teintes ternes au passage. Le mix passe par l'espace RGB qui n'est pas perceptuel.
-
-#### c) Gamut limité
-
-`hex` / `rgb` ne savent décrire que les couleurs sRGB. Les écrans modernes (P3) en affichent davantage. `oklch` accède à tout le gamut.
-
-#### `oklch` en pratique
-
-```css
-oklch(L C H / alpha)
-```
-
-| Paramètre | Sens | Plage |
-|---|---|---|
-| `L` (lightness) | Luminance **perceptive** | 0% (noir) → 100% (blanc) |
-| `C` (chroma) | Saturation, sans plafond fixe | 0 (gris) → ~0.4 (très saturé) |
-| `H` (hue) | Teinte | 0 → 360 (degrés) |
-
-Exemple :
-
-```css
-:root {
-  --ml-color-brand-primary: oklch(58% 0.18 35);    /* tomate Mamie Lulu */
-  --ml-color-brand-accent:  oklch(78% 0.16 80);    /* jaune œuf */
-}
-```
-
-→ Si je veux une **variante plus claire** : je change juste `L` (`72%` au lieu de `58%`). Si je veux une **teinte voisine** : je change juste `H`.
-
-#### Cible Baseline
-
-`oklch` : **Widely available** depuis 2023 (Chrome/Edge 111+, Safari 15.4+, Firefox 113+). Pour Dymasco : ✅.
-
-### 2. `color-mix()` — la dérivation dynamique (10 min)
+### 1. `color-mix()` — la dérivation dynamique (10 min)
 
 ```css
 color-mix(in <color-space>, <color-1> <pct?>, <color-2> <pct?>)
 ```
 
-Génère une couleur intermédiaire entre deux couleurs.
+Génère une couleur intermédiaire entre deux couleurs, **avec n'importe quel format de source** (hex, rgb, hsl, oklch, named colors…).
 
 ```css
 :root {
-  --ml-color-brand-primary: oklch(58% 0.18 35);
+  --ml-color-brand-primary: #c2410c;   /* charte client en hex, tel quel */
 }
 
-/* Variantes dérivées */
+/* Variantes dérivées — sources hex, mix en oklab */
 .btn:hover {
   background: color-mix(in oklab, var(--ml-color-brand-primary), black 12%);
   /* 88% de la couleur + 12% de noir → version assombrie */
@@ -103,21 +111,52 @@ Génère une couleur intermédiaire entre deux couleurs.
 }
 ```
 
+#### Pourquoi `in oklab` et pas `in srgb` ?
+
+Le **mix** en RGB classique passe souvent par des teintes ternes / grisâtres au milieu (artefact mathématique de l'espace RGB non-perceptuel). En `oklab`, l'interpolation est perceptuellement uniforme : le milieu **ressemble** à un milieu. Différence visible surtout sur les mélanges entre couleurs saturées.
+
 #### Espaces de mix utiles
 
 | Espace | Usage |
-|---|---|
+| --- | --- |
 | `in oklab` | Le plus perceptuellement correct. **Défaut recommandé.** |
-| `in oklch` | Idem, mais en coordonnées polaires (utile pour interpoler la teinte) |
-| `in srgb` | Mix RGB classique — moins joli, mais plus rapide |
+| `in oklch` | Idem, coordonnées polaires (utile pour interpoler la teinte sur un cercle chromatique) |
+| `in srgb` | Mix RGB classique — moins joli, à éviter sauf raison spécifique |
 
-> 🎯 **Pattern Mamie Lulu** : tous les hover/active/alert/disabled sont dérivés via `color-mix()` à partir des **5 couleurs de base**. Aucune variante hex en dur.
+> ⚠️ **Piège** : oublier `in <space>` → `color-mix(var(--a), var(--b))` est **invalide** et la propriété est ignorée silencieusement. Toujours préciser.
+
+#### Pattern Mamie Lulu
+
+```css
+@layer overrides {
+  :root {
+    /* SOURCES — charte client (hex tel quel) */
+    --ml-color-brand-primary:      #c2410c;
+    --ml-color-brand-accent:       #f59e0b;
+    --ml-color-status-running:     #2e7d32;
+    --ml-color-status-alert:       #f57c00;
+    --ml-color-status-maintenance: #1976d2;
+
+    /* DÉRIVÉS — color-mix tokenisé (pas inline dispersé) */
+    --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
+    --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
+    --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
+
+    --ml-color-status-alert-bg:        color-mix(in oklab, var(--ml-color-status-alert), white 90%);
+    --ml-color-status-running-bg:      color-mix(in oklab, var(--ml-color-status-running), white 92%);
+  }
+}
+```
+
+→ 5 couleurs sources, ~10 dérivées. **Tout le reste de l'app utilise ces tokens.** Modifier `--ml-color-brand-primary` = tout suit (variantes incluses).
 
 #### Cible Baseline
 
 `color-mix()` : **Widely available** depuis 2023. ✅.
 
-### 3. `color-scheme` — préparation mode sombre (4 min)
+### 2. `color-scheme` + `light-dark()` — theme switcher (8 min)
+
+#### `color-scheme` — annonce au navigateur
 
 ```css
 :root {
@@ -125,98 +164,165 @@ Génère une couleur intermédiaire entre deux couleurs.
 }
 ```
 
-→ Le navigateur :
-- Adapte les **scrollbars natives** (claires en light, sombres en dark).
-- Adapte les **inputs natifs** par défaut.
-- Permet à `prefers-color-scheme` de prendre effet sur les composants UA.
+Effets immédiats :
 
-Ce module **annonce** le sujet, **Module 8** l'implémente avec `@media (prefers-color-scheme: dark)`.
+- Les **scrollbars natives** suivent (claires en light, sombres en dark).
+- Les **inputs natifs** (select, date picker…) adaptent leur thème UA.
+- `prefers-color-scheme` peut prendre effet sur les composants navigateur sans CSS supplémentaire.
 
-### 4. Les `light-dark()` — le pattern moderne (3 min)
+Coût : **1 ligne**. Toujours la mettre.
+
+#### `light-dark()` — valeur conditionnelle
 
 ```css
 :root {
   color-scheme: light dark;
-  --ml-color-bg-app: light-dark(#faf3e0, #1a1815);
+  --ml-color-bg-app:  light-dark(#faf3e0, #1a1815);
+  --ml-color-text:    light-dark(#1f1f1f, #f3eada);
+  --ml-color-surface: light-dark(#ffffff, #25201c);
+  --ml-color-border:  light-dark(#e5d4b1, #3a3530);
 }
 ```
 
-→ Une seule déclaration, le navigateur choisit selon le mode courant.
+Pattern complet : redéfinir **uniquement les tokens** en `light-dark()`, le reste du CSS reste identique (il consomme `var(--ml-color-bg-app)` sans savoir si on est light ou dark).
+
+Bascule automatique selon `prefers-color-scheme` du système d'exploitation. Pas de `@media`, pas de duplication.
+
+#### Bascule manuelle (toggle bouton)
+
+Pour un theme switcher contrôlé utilisateur (au-delà de la préférence OS) :
+
+```css
+:root { color-scheme: light dark; }
+
+/* Override via attribut data sur <html> */
+:root[data-theme="dark"]  { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+```
+
+```javascript
+// 3 lignes JS — pas besoin de framework
+document.documentElement.dataset.theme = 'dark';
+```
+
+Le navigateur recompose `light-dark()` automatiquement → toute l'app bascule sans rechargement.
 
 #### Cible Baseline
 
-`light-dark()` : **Newly available** (2024). À utiliser avec `@supports` si cible mixte.
+- `color-scheme` : **Widely available** depuis 2022. ✅.
+- `light-dark()` : **Widely available** depuis fin 2024 (Chrome/Edge 123+, Safari 17.5+, Firefox 120+). Vérifier au jour J pour cible client conservateur, mais OK Dymasco interne.
+
+> 💡 **Si cible client conservateur** : fallback via `@media (prefers-color-scheme: dark) { :root { --ml-color-bg-app: #1a1815; ... } }` (cf. Module 8). Plus verbeux mais widely supporté depuis 2020.
+
+### 3. `oklch()` — citation, pas central (2 min)
+
+Pour les curieux et les rares cas où vous **construisez** une palette from scratch (pas reçue d'un client) :
+
+```css
+oklch(L C H)
+/* L = lightness perceptive 0-100%
+   C = chroma (saturation) 0 - ~0.4
+   H = hue 0-360° */
+
+--ml-color-brand-500: oklch(58% 0.18 35);   /* tomate */
+```
+
+Avantages **quand on construit** :
+
+- Échelle "claire → foncée" cohérente en faisant varier L seul
+- Famille de teintes harmonieuses en faisant varier H, L+C fixes
+- Accès au gamut P3 (écrans modernes)
+
+Outil : [oklch.com](https://oklch.com) — picker visuel hex ↔ oklch.
+
+**Chez Dymasco** : votre charte client arrive en hex. La convertir en oklch n'apporte rien si `color-mix(in oklab, …)` fait déjà le boulot de dérivation. À garder sous le coude pour les rares missions où vous **définissez** la palette (rebrand from scratch, projet pilote interne).
+
+#### Cible Baseline
+
+`oklch()` : **Widely available** depuis 2023. ✅ si besoin.
 
 ---
 
-## 🔍 Démonstration (15 min)
+## 🔍 Démonstration (12 min)
 
-**Live** : refondre les tokens couleurs Mamie Lulu en oklch + color-mix.
+**Live** : refonder la palette Mamie Lulu en sources hex + dérivés color-mix + theme switcher light-dark.
 
-### Étape 1 — Convertir hex → oklch (5 min)
+### Étape 1 — Sources hex + dérivés color-mix (5 min)
 
-Outil : [oklch.com](https://oklch.com) (picker visuel). Coller `#c2410c` → obtient `oklch(54% 0.17 38)`. Expliquer chaque paramètre.
-
-### Étape 2 — Dériver les variantes (5 min)
+Reprendre `:root` du checkpoint M06. Garder les sources hex telles quelles, ajouter les dérivés :
 
 ```css
-@layer overrides {
-  :root {
-    --ml-color-brand-primary: oklch(54% 0.17 38);
-    --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
-    --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
-    --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
-  }
+:root {
+  --ml-color-brand-primary: #c2410c;
+  --ml-color-brand-primary-hover:  color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
+  --ml-color-brand-primary-active: color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
 }
 ```
 
-→ DevTools : modifier la valeur de `--ml-color-brand-primary` à la volée → tout suit.
+DevTools : modifier `--ml-color-brand-primary` à la volée → hover/active suivent. **Effet "wow"** = changement d'une seule valeur, toute l'app re-harmonisée.
 
-### Étape 3 — `color-scheme` sur `:root` (2 min)
+### Étape 2 — Theme switcher light-dark (5 min)
 
-Ajouter `color-scheme: light dark`. Observer dans DevTools → scrollbar de la sidebar passe en sombre quand on bascule la préférence OS.
-
-### Étape 4 — Surfaces dérivées (3 min)
-
-Showcase : générer toute la palette de surfaces depuis 1 brand color :
+Ajouter `color-scheme: light dark;` sur `:root`. Convertir 4-5 tokens clés en `light-dark()` :
 
 ```css
---ml-color-surface-1: color-mix(in oklab, var(--ml-color-brand-primary), white 96%);
---ml-color-surface-2: color-mix(in oklab, var(--ml-color-brand-primary), white 90%);
---ml-color-surface-3: color-mix(in oklab, var(--ml-color-brand-primary), white 80%);
+:root {
+  color-scheme: light dark;
+  --ml-color-bg-app:  light-dark(#faf3e0, #1a1815);
+  --ml-color-text:    light-dark(#1f1f1f, #f3eada);
+  --ml-color-surface: light-dark(#ffffff, #25201c);
+}
 ```
 
-→ Trois fonds chauds Mamie Lulu, déduits, parfaitement harmonisés.
+DevTools → Rendering → `prefers-color-scheme: dark` → toute l'app bascule. **0 `@media`, 0 duplication.**
+
+### Étape 3 — Toggle data-theme (2 min)
+
+Console DevTools :
+
+```javascript
+document.documentElement.dataset.theme = 'dark';
+document.documentElement.dataset.theme = 'light';
+```
+
+Pour montrer que la bascule manuelle marche aussi (au cas où le client veut un bouton).
 
 ---
 
-## 🛠️ Exercice fil rouge (15 min)
+## 🛠️ Exercice fil rouge (10 min)
 
 ### Consigne
 
 Reprendre le checkpoint Module 6 et :
 
-1. **Convertir tous les `--ml-color-*` en `oklch()`**. Outil : oklch.com pour la conversion. Approximations OK pour l'exercice.
+1. **Garder les sources hex** (`--ml-color-brand-primary: #c2410c` etc.) — ne pas convertir en oklch.
 
 2. **Créer les variantes dérivées** pour `--ml-color-brand-primary` :
-   - `--ml-color-brand-primary-hover` (assombrie 10%)
-   - `--ml-color-brand-primary-active` (assombrie 20%)
+   - `--ml-color-brand-primary-hover` (color-mix, black 10%)
+   - `--ml-color-brand-primary-active` (color-mix, black 20%)
+   - `--ml-color-brand-primary-disabled` (color-mix, white 50%)
 
-3. **Backgrounds dérivés** pour les statuts alert et critical :
-   - `--ml-color-status-alert-bg` = mix avec white 90%.
-   - `--ml-color-status-critical-bg` = mix avec white 92%.
-   - **Remplacer** les `color-mix()` inline qui traînent dans le checkpoint Module 6 par ces tokens.
+3. **Backgrounds dérivés** pour les statuts :
+   - `--ml-color-status-alert-bg` = `color-mix(in oklab, var(--ml-color-status-alert), white 90%)`
+   - `--ml-color-status-running-bg` = idem avec running, white 92%
+   - **Remplacer** les `color-mix()` inline qui traînent dans le checkpoint M06 par ces tokens.
 
-4. **`color-scheme`** sur `:root` : `color-scheme: light dark`.
+4. **`color-scheme: light dark`** sur `:root`.
 
-5. **Bonus** : token `--ml-color-bg-app` en `light-dark(#faf3e0, oklch(20% 0.02 60))` (préparation Module 8).
+5. **Theme switcher light-dark()** sur 4 tokens minimum :
+   - `--ml-color-bg-app`
+   - `--ml-color-text`
+   - `--ml-color-surface`
+   - `--ml-color-border`
+
+6. **Vérifier** dans DevTools → Rendering → `prefers-color-scheme: dark` que la bascule fonctionne sans rien d'autre à modifier.
 
 ### Pièges fréquents
 
-- ❌ Convertir mal de hex à oklch → différence visible. Toujours vérifier visuellement.
-- ❌ Mettre `color-mix()` inline partout (oubli de tokenisation) → on perd l'avantage centralisé.
-- ❌ Oublier l'espace de mix (`color-mix(<color-1>, <color-2>)` sans `in oklab`) → erreur silencieuse, valeur ignorée.
-- ❌ `oklch()` avec L > 100% ou C négatif → valeur invalide, propriété ignorée silencieusement.
+- ❌ Mettre `color-mix()` inline partout (oubli de tokenisation) → on perd l'avantage centralisé. **Tokeniser dès qu'un dérivé est utilisé ≥ 2 fois.**
+- ❌ Oublier l'espace de mix (`color-mix(<color-1>, <color-2>)` sans `in oklab`) → erreur silencieuse, valeur ignorée. **DevTools n'alerte pas, vérifier visuellement.**
+- ❌ `light-dark()` sans `color-scheme: light dark` déclaré → fonctionne, mais les composants UA (scrollbars, inputs) ne suivent pas. Toujours déclarer les deux.
+- ❌ Vouloir convertir toute la charte client en oklch "pour faire moderne" → perte de temps. Garder hex sources, mix en oklab.
 
 ### Corrigé attendu
 
@@ -226,7 +332,7 @@ Voir `projet-fil-rouge/checkpoints/07-couleurs/overrides.css`.
 
 ## 🚀 Pour aller plus loin
 
-### Bonus 1 — Échelle complète depuis une teinte
+### Bonus 1 — Échelle complète depuis une teinte (si vous CONSTRUISEZ la palette)
 
 ```css
 :root {
@@ -239,41 +345,56 @@ Voir `projet-fil-rouge/checkpoints/07-couleurs/overrides.css`.
 }
 ```
 
-→ Toute la gamme depuis **un seul angle de teinte**. Changer `--hue: 220` → tout devient bleu.
+→ Toute la gamme depuis **un seul angle de teinte**. Changer `--hue: 220` → tout devient bleu. Cas typique : projet pilote interne où Dymasco choisit la palette, pas le client.
 
-### Bonus 2 — `color-contrast()`
-
-```css
-color: color-contrast(var(--bg) vs white, black);
-```
-
-→ Sélectionne automatiquement la couleur la plus contrastée parmi une liste. **Limited availability** aujourd'hui, à surveiller.
-
-### Bonus 3 — Tokens "intentionnels" vs "primitifs"
+### Bonus 2 — Tokens "primitifs" vs "intentionnels"
 
 Pattern à 2 niveaux :
-- **Primitifs** : `--ml-orange-500`, `--ml-cream-100` (palette brute)
-- **Intentionnels** : `--ml-color-brand-primary` → `var(--ml-orange-500)`
 
-Permet de changer la palette sans toucher au code applicatif.
+- **Primitifs** : `--ml-orange-500: #c2410c`, `--ml-cream-100: #fef6e4` (palette brute)
+- **Intentionnels** : `--ml-color-brand-primary: var(--ml-orange-500)` (sémantique métier)
+
+Permet de changer la palette sans toucher au code applicatif (les composants consomment uniquement l'intentionnel).
+
+### Bonus 3 — Fallback `light-dark()` pour cible conservateur
+
+```css
+:root {
+  color-scheme: light dark;
+  --ml-color-bg-app: #faf3e0;
+}
+
+@supports (color: light-dark(#fff, #000)) {
+  :root { --ml-color-bg-app: light-dark(#faf3e0, #1a1815); }
+}
+
+@supports not (color: light-dark(#fff, #000)) {
+  @media (prefers-color-scheme: dark) {
+    :root { --ml-color-bg-app: #1a1815; }
+  }
+}
+```
+
+À utiliser uniquement si la cible client coupe avant fin 2024.
 
 ### Ressources
 
-- [oklch.com](https://oklch.com) — picker visuel
-- [MDN — oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch)
 - [MDN — color-mix()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix)
 - [MDN — color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme)
-- Andrey Sitnik, [Better than HSL: Oklch in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
+- [MDN — light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark)
+- [MDN — oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch)
+- [oklch.com](https://oklch.com) — picker visuel (si construction palette)
+- Andrey Sitnik, [Better than HSL: Oklch in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl) — lecture optionnelle
 
 ---
 
 ## 📝 Récap & checklist
 
-- [ ] Je sais lire `oklch(L C H)` et expliquer chaque paramètre
-- [ ] Je sais que `oklch` est **perceptuellement uniforme** (changements visibles cohérents)
-- [ ] Je dérive mes variantes hover/active/disabled via `color-mix()`
-- [ ] Je précise toujours l'espace de mix : `in oklab` (recommandé)
-- [ ] Je déclare `color-scheme: light dark` sur `:root`
-- [ ] Mes tokens couleurs sont **5-10 valeurs sources**, tout le reste est dérivé
+- [ ] Je dérive mes variantes hover/active/disabled via `color-mix()` à partir des sources hex client
+- [ ] Je précise **toujours** l'espace de mix : `in oklab` (recommandé) — pas d'oubli silencieux
+- [ ] Mes tokens couleurs = **5-10 sources hex** + dérivés `color-mix` tokenisés, pas de hex éparpillé
+- [ ] Je déclare `color-scheme: light dark` sur `:root` (1 ligne, gratuit)
+- [ ] Je sais faire un theme switcher complet via `light-dark()` sur les tokens
+- [ ] Je sais que `oklch()` côté SOURCE = pour construire une palette from scratch (rare chez Dymasco). Côté MIX (`in oklab`) = oui, toujours.
 
-> 🎯 **Mantra du module** : *"Une teinte source. Un nombre à changer. Tout suit."*
+> 🎯 **Mantra du module** : *"Charte client en hex. Dérivés en color-mix. Themes en light-dark. Pas besoin d'oklch."*

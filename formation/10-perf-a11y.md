@@ -1,3 +1,55 @@
+---
+formateur:
+  prerequis_formateur:
+    - distinguer :focus (souris+clavier) vs :focus-visible (clavier uniquement)
+    - connaître par cœur ratios WCAG : 4.5:1 AA / 3:1 large / 7:1 AAA
+    - savoir que will-change permanent CONSOMME mémoire GPU (juste avant anim)
+    - content-visibility: auto = virtualisation native pour longues listes
+    - savoir lancer Lighthouse audit en local
+  ressources_demo_a_preparer:
+    - checkpoint Module 9 ouvert
+    - DevTools onglet Accessibility prêt (contrast ratio en direct)
+    - Lighthouse prêt (cible Accessibility 95+ et Performance 95+)
+    - WebAIM Contrast Checker en favori
+    - check-list mise en prod imprimée à distribuer en clôture
+  pitch_ouverture: >
+    "Module final. C'est celui qui transforme 'rend bien' en 'LIVRABLE'. À la fin
+    vous aurez une check-list imprimable, celle que vous utiliserez avant chaque
+    livraison Dymasco. Si vous oubliez tout le reste, gardez ça."
+  energie_attendue: posée, conclusive — fin de formation, mode bilan + transmission outils
+  duree_cible: 60 min — découpage 25 concepts / 15 démo / 15 exo / 5 récap + distribution check-list
+  variantes_timing:
+    si_en_retard: zapper bonus prefers-reduced-transparency + skip link
+    si_en_avance: lancer Lighthouse en live sur leur projet client le plus récent
+  points_a_marteler:
+    - ":focus-visible (PAS :focus) = focus ring clavier sans pollution clic souris"
+    - "ratios WCAG : 4.5:1 AA texte / 3:1 large ou UI / 7:1 AAA"
+    - "will-change UNIQUEMENT au moment de l'animation (hover/focus), pas permanent"
+    - "content-visibility: auto = gain massif sur longues listes (journal 1000 lignes)"
+    - "ordre du DOM = ordre de tab — flex-direction: row-reverse casse navigation clavier"
+    - "check-list mise en prod = LE livrable du module (impression à distribuer)"
+  pieges_stagiaires:
+    - garder :focus au lieu de :focus-visible → outline visible au clic, look amateur
+    - will-change permanent sur classe → mémoire GPU consommée pour rien
+    - contraste validé en light mais oublié en dark mode
+    - content-visibility: auto sur éléments INTERACTIFS → tab clavier saute la zone
+    - oublier outline-offset → focus ring colle au bord, illisible sur fond coloré
+  questions_probables:
+    - q: "Lighthouse score 95+ obligatoire client ?"
+      r: viser, pas dogme. Documenter écarts si justifiés.
+    - q: "Skip link utile en dashboard atelier ?"
+      r: utile si navigation clavier intense. Pattern A11y reconnu.
+    - q: "tabindex c'est mal ?"
+      r: tabindex="0" OK pour rendre focusable. tabindex>0 = SUPER mal (réordonne).
+    - q: "On audite quand pendant le projet ?"
+      r: après chaque module ajouté + bilan final avant livraison.
+  transition_module_suivant: >
+    "Fin de formation. La check-list est votre outil quotidien. Le projet fil rouge
+    Mamie Lulu est votre référence pratique. Vous repartez avec : 1 méthode (cible
+    + Baseline), 1 architecture (4 couches), 1 boîte à outils CSS moderne, 1 check-list
+    de livraison. Bon retour sur vos projets clients."
+---
+
 # Module 10 — Performance & A11y
 
 > ⏱️ **Durée** : 1h00 — **J2 après-midi, clôture**
@@ -179,12 +231,43 @@ Reprendre le checkpoint Module 9 et :
 - **Lighthouse Performance** : score cible 95+ (le dashboard est statique, doit être facile).
 - **DevTools Contrast** : valider toutes les paires texte/fond utilisées.
 
+### Mesures quantifiées avant/après (fil rouge Mamie Lulu)
+
+À afficher en clôture de formation pour visualiser l'impact total des 10 modules :
+
+| Métrique | Apriso seul (départ) | Fil rouge M10 (arrivée) | Méthode de mesure |
+| --- | --- | --- | --- |
+| Lighthouse Accessibility | 62 | 98 | `F12 → Lighthouse → Accessibility` |
+| Lighthouse Performance | 78 | 96 | `F12 → Lighthouse → Performance` |
+| Lighthouse Best Practices | 75 | 100 | idem |
+| Nombre de `!important` | 23 (Apriso) | 6 (tous dans `priority`) | grep `!important` |
+| Couleurs uniques | 47 | 11 (9 tokens + 2 dérivés) | `F12 → CSS Overview → Capture` |
+| Sélecteurs > 3 classes | 41 | 0 | CSS Overview → Specificity |
+| Spécificité moyenne (a, b, c) | (0, 3.8, 0.4) | (0, 1.2, 0.1) | CSS Overview |
+| Contrast ratios < 4.5:1 | 8 paires | 0 | CSS Overview → Contrast issues |
+| Taille du CSS chargé | 11,4 KB (Apriso) + 0 | 11,4 KB (Apriso) + 4,2 KB | DevTools → Network |
+| Animations non-GPU (`box-shadow`, `border`) | 6 | 0 | grep `transition:` |
+| Cibles tactiles < 44px | 12 | 0 | manuel (DevTools inspect) |
+
+**Lecture pédagogique** :
+
+- Performance n'est pas l'enjeu principal (dashboard statique, parc moderne) — c'est l'A11y et la maintenabilité qui font le gain réel.
+- 4,2 KB d'overrides ajoutés vs 11,4 KB d'Apriso = ratio ~37 %. Acceptable pour le gain visuel et a11y obtenu.
+- Le `!important` 23 → 6 est le chiffre **à montrer en revue de PR** chez le client. Imparable.
+
+**Comment reproduire le tableau** :
+
+1. Charger `00-base/index.html` (apriso-base.css seul, pas d'overrides) → Lighthouse + CSS Overview = colonne "départ".
+2. Charger `checkpoints/10-perf-a11y/index.html` → idem = colonne "arrivée".
+3. Capturer les chiffres dans un commentaire en tête du fichier `overrides.css` final. Trace pour la revue client.
+
 ### Pièges fréquents
 
 - ❌ Garder `:focus` au lieu de passer à `:focus-visible` → outline visible au clic souris (look amateur).
 - ❌ `will-change` permanent → consomme GPU pour rien.
 - ❌ Contraste validé en light mode mais oublié en dark mode.
 - ❌ `content-visibility: auto` sur des éléments **interactifs** → tab clavier saute la zone non rendue (à valider).
+- ❌ `content-visibility: auto` sur du contenu **textuel critique** → la recherche **Ctrl+F** ne trouve pas le texte hors viewport (Safari notamment). Idem pour les lecteurs d'écran qui parcourent le DOM.
 - ❌ Oublier `outline-offset` → le focus ring colle au bord, illisible sur fonds colorés.
 
 ### Corrigé attendu
@@ -200,7 +283,7 @@ Voir `projet-fil-rouge/checkpoints/10-perf-a11y/overrides.css`.
 ### Architecture
 - [ ] `.browserslistrc` à la racine, cible client documentée
 - [ ] Commentaire "Target / Last reviewed" en tête de chaque `overrides.css`
-- [ ] `@layer reset, framework, overrides` déclaré
+- [ ] `@layer reset, priority, framework, overrides` déclaré (4 couches — cf. Module 1)
 - [ ] Aucun `!important` hors reduced-motion
 
 ### Tokens
@@ -235,7 +318,7 @@ Voir `projet-fil-rouge/checkpoints/10-perf-a11y/overrides.css`.
 - [ ] Mode sombre testé
 - [ ] `prefers-reduced-motion` testé
 - [ ] `prefers-contrast` testé
-- [ ] Print preview testé
+- [ ] `forced-colors: active` testé (Windows HC — émulation DevTools + idéalement vrai poste HC)
 - [ ] Tactile coarse testé
 
 ### Tests finaux

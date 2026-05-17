@@ -62,25 +62,26 @@
     :root {
         color-scheme: light dark;
 
-        --ml-color-brand-primary: oklch(54% 0.17 38);
-        --ml-color-brand-accent:  oklch(78% 0.16 80);
+        /* Sources hex (charte client telle quelle — pas de conversion oklch) */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
 
         --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
         --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
         --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
         --ml-color-brand-primary-darker:   color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
 
-        --ml-color-bg-app:     oklch(96% 0.02 80);
-        --ml-color-bg-cream:   oklch(97% 0.04 80);
-        --ml-color-surface:    oklch(100% 0 0);
-        --ml-color-text:       oklch(22% 0.02 60);
-        --ml-color-text-muted: oklch(48% 0.02 60);
-        --ml-color-border:     oklch(88% 0.05 80);
+        --ml-color-bg-app:     #faf3e0;
+        --ml-color-bg-cream:   #fef6e4;
+        --ml-color-surface:    #ffffff;
+        --ml-color-text:       #1f1f1f;
+        --ml-color-text-muted: #6b5d4f;
+        --ml-color-border:     #e5d4b1;
 
-        --ml-color-status-running:     oklch(52% 0.16 145);
-        --ml-color-status-idle:        oklch(56% 0.02 60);
-        --ml-color-status-alert:       oklch(70% 0.16 60);
-        --ml-color-status-maintenance: oklch(56% 0.16 250);
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
 
         --ml-color-status-alert-bg:    color-mix(in oklab, var(--ml-color-status-alert), white 88%);
         --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), white 92%);

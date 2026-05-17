@@ -6,11 +6,13 @@
    Last reviewed : 2026-05-18
    ----------------------------------------------------------------------------
    Ajouts vs checkpoint Module 6 :
-   - Toute la palette en oklch() perceptuel
-   - Variantes hover/active dérivées via color-mix()
+   - Sources palette en hex (charte client telle quelle, jamais convertie)
+   - Variantes hover/active dérivées via color-mix(in oklab, ...) — sources hex
    - Backgrounds alert/critical tokenisés (--ml-color-status-*-bg)
-   - color-scheme: light dark sur :root
-   - --ml-color-bg-app utilise light-dark() (préparation Module 8)
+   - color-scheme: light dark sur :root (annonce au navigateur)
+   - Surfaces et text en light-dark() — theme switcher complet
+   - oklch() utilisé UNIQUEMENT en dark mode (construction palette from scratch
+     pour les surfaces sombres qui n'existent pas dans la charte light)
    ============================================================================
 */
 
@@ -56,36 +58,39 @@
 
 @layer overrides {
 
-    /* --- TOKENS — palette en oklch + dérivations color-mix --------------- */
+    /* --- TOKENS — sources hex (charte client) + dérivations color-mix ---- */
 
     :root {
         color-scheme: light dark;
 
-        /* --- Brand (5 sources) --- */
-        --ml-color-brand-primary: oklch(54% 0.17 38);     /* tomate */
-        --ml-color-brand-accent:  oklch(78% 0.16 80);     /* jaune œuf */
+        /* --- Brand (2 sources hex — charte client telle quelle) --- */
+        --ml-color-brand-primary: #c2410c;     /* tomate */
+        --ml-color-brand-accent:  #f59e0b;     /* jaune œuf */
 
-        /* Variantes brand dérivées */
+        /* Variantes brand dérivées via color-mix (sources hex, mix en oklab) */
         --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
         --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
         --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
         --ml-color-brand-primary-darker:   color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
 
-        /* --- Surfaces — light-dark() prépare Module 8 --- */
-        --ml-color-bg-app:     light-dark(oklch(96% 0.02 80), oklch(20% 0.02 60));
-        --ml-color-bg-cream:   light-dark(oklch(97% 0.04 80), oklch(24% 0.02 60));
-        --ml-color-surface:    light-dark(oklch(100% 0 0),    oklch(28% 0.02 60));
-        --ml-color-text:       light-dark(oklch(22% 0.02 60), oklch(95% 0.01 80));
-        --ml-color-text-muted: light-dark(oklch(48% 0.02 60), oklch(72% 0.01 80));
-        --ml-color-border:     light-dark(oklch(88% 0.05 80), oklch(40% 0.02 60));
+        /* --- Surfaces — theme switcher light/dark via light-dark() ---
+           Light : valeurs charte client (hex).
+           Dark : oklch utilisé ICI (cas légitime — palette dark à construire
+                  from scratch, jamais fournie par le client). */
+        --ml-color-bg-app:     light-dark(#faf3e0, oklch(20% 0.02 60));
+        --ml-color-bg-cream:   light-dark(#fef6e4, oklch(24% 0.02 60));
+        --ml-color-surface:    light-dark(#ffffff, oklch(28% 0.02 60));
+        --ml-color-text:       light-dark(#1f1f1f, oklch(95% 0.01 80));
+        --ml-color-text-muted: light-dark(#6b5d4f, oklch(72% 0.01 80));
+        --ml-color-border:     light-dark(#e5d4b1, oklch(40% 0.02 60));
 
-        /* --- Status (4 sources) --- */
-        --ml-color-status-running:     oklch(52% 0.16 145);
-        --ml-color-status-idle:        oklch(56% 0.02 60);
-        --ml-color-status-alert:       oklch(70% 0.16 60);
-        --ml-color-status-maintenance: oklch(56% 0.16 250);
+        /* --- Status (4 sources hex — alignées sur modifiers Apriso) --- */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
 
-        /* Backgrounds dérivés des statuts */
+        /* Backgrounds dérivés des statuts via color-mix */
         --ml-color-status-alert-bg:    color-mix(in oklab, var(--ml-color-status-alert), white 88%);
         --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), white 92%);
         --ml-color-row-zebra:          color-mix(in oklab, var(--ml-color-bg-cream), white 30%);

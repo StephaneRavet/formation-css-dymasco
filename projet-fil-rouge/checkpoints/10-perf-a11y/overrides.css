@@ -72,27 +72,28 @@
     :root {
         color-scheme: light dark;
 
-        --ml-color-brand-primary: oklch(54% 0.17 38);
-        --ml-color-brand-accent:  oklch(78% 0.16 80);
+        /* Sources hex (charte client) — pas de conversion oklch */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
 
         --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
         --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
         --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
         --ml-color-brand-primary-darker:   color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
 
-        --ml-color-bg-app:     oklch(96% 0.02 80);
-        --ml-color-bg-cream:   oklch(97% 0.04 80);
-        --ml-color-surface:    oklch(100% 0 0);
-        /* text-muted assombri en M10 pour AA sur bg-cream */
-        --ml-color-text:       oklch(22% 0.02 60);
-        --ml-color-text-muted: oklch(40% 0.02 60);
-        --ml-color-border:     oklch(80% 0.05 80);
+        --ml-color-bg-app:     #faf3e0;
+        --ml-color-bg-cream:   #fef6e4;
+        --ml-color-surface:    #ffffff;
+        /* text-muted et border assombris en M10 pour AA sur bg-cream */
+        --ml-color-text:       #1f1f1f;
+        --ml-color-text-muted: #5b5246;
+        --ml-color-border:     #d4c294;
 
         /* status-* assombris en M10 pour AA texte sur bg-cream */
-        --ml-color-status-running:     oklch(45% 0.16 145);
-        --ml-color-status-idle:        oklch(48% 0.02 60);
-        --ml-color-status-alert:       oklch(58% 0.18 50);
-        --ml-color-status-maintenance: oklch(48% 0.16 250);
+        --ml-color-status-running:     #1b5e20;
+        --ml-color-status-idle:        #495057;
+        --ml-color-status-alert:       #c25e00;
+        --ml-color-status-maintenance: #0d47a1;
 
         --ml-color-status-alert-bg:    color-mix(in oklab, var(--ml-color-status-alert), white 88%);
         --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), white 92%);

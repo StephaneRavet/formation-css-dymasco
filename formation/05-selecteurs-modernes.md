@@ -1,3 +1,50 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir que :has() prend la spécificité du PLUS SPÉCIFIQUE dans sa liste (idem :is())
+    - connaître coût perf :has() (recalcule à chaque mutation DOM)
+    - avoir testé :has() sur navigateur cible (widely 2024)
+    - savoir basculer dir="rtl" dans DevTools (Elements → html → ajouter attr)
+    - liste mapping physique → logique en tête (margin-left → margin-inline-start)
+  ressources_demo_a_preparer:
+    - checkpoint Module 4 ouvert
+    - HTML avec card alerte Laminoir Léon visible
+    - DevTools prêt pour basculer html lang="ar" dir="rtl"
+    - tableau mapping logique imprimé
+  pitch_ouverture: >
+    "Levez la main si vous avez écrit du JS pour 'si la card contient un badge alert,
+    colorier le parent'. C'est fini. Une ligne de CSS suffit. Bienvenue dans :has()."
+  energie_attendue: haute — démarrage J2, café, effet "wow" :has() garanti
+  duree_cible: 105 min — découpage 40 concepts / 20 démo / 35 exo / 10 récap
+  variantes_timing:
+    si_en_retard: zapper bonus :user-invalid + inset shorthand, condenser :not() en 1 min
+    si_en_avance: faire chercher 3 cas :has() dans LEUR base code actuelle (mental)
+  points_a_marteler:
+    - ":has() = sélecteur PARENT, ENFIN possible — sans JS"
+    - "spécificité :is() / :has() = celle du plus spécifique dans la liste"
+    - ":where() = spécificité ZÉRO (rappel Module 1) — idéal resets/utilities"
+    - "propriétés logiques = i18n RTL gratuite + writing-mode"
+    - "tester :has() côté perf si DOM mute beaucoup (rare en dashboard)"
+  pieges_stagiaires:
+    - croire :has() = ralenti TOUJOURS — non, recalcule à mutation, mesurer avant optim
+    - :is(#x, .y) = spécificité 1,0,0 (id) — surprise garantie
+    - mélanger physique + logique sur même élément → cascade imprévisible
+    - oublier que logique dépend de writing-mode ET direction (les deux)
+  questions_probables:
+    - q: ":has() coûte combien en perf ?"
+      r: négligeable sur 20-100 éléments. À mesurer si DOM mute 10×/sec sur 10k lignes.
+    - q: "Pas de :contains() en CSS ?"
+      r: non — uniquement jQuery. Passer par classe métier sur l'élément.
+    - q: "RTL en industrie, on en a vraiment besoin ?"
+      r: clients export Maghreb, suisse italien, futur. Coût zéro, hygiène pro.
+    - q: ":is() vs :where() je prends lequel par défaut ?"
+      r: :where() pour base/reset/utility. :is() quand spé assumée nécessaire.
+  transition_module_suivant: >
+    "Sélecteurs OK. Maintenant pivot conceptuel : nos composants doivent réagir à leur
+    CONTENEUR, pas au viewport. Direction Container Queries — le Saint Graal du composant
+    réutilisable, 45 minutes effet wow."
+---
+
 # Module 5 — Sélecteurs modernes & propriétés logiques
 
 > ⏱️ **Durée** : 1h45 — **J2 matin, ouverture**
@@ -211,17 +258,12 @@ Le HTML pour Laminoir Léon contient déjà `<span class="apriso-machine-card__s
 
 → La card alerte est **immédiatement** visible. Aucun JS, aucun modifier supplémentaire à propager.
 
-Bonus : `:has()` sur le tableau d'événements pour surligner les lignes critiques :
+Bonus : `:has()` sur le tableau d'événements pour surligner les lignes critiques.
 
-```css
-.apriso-event:has(td:last-child:is(:contains("Critique"))) { ... }
-```
-
-⚠️ Pas de `:contains()` côté CSS (uniquement jQuery). Pour le critère textuel, on utilise une classe (`.apriso-event--critical` qui existe déjà). Démo `:has()` du coup :
+> ⚠️ **Pas de `:contains()` en CSS** (uniquement jQuery / Sizzle). Pour cibler une ligne d'après son contenu textuel → on ne **peut pas** écrire `tr:has(td:contains("Critique"))`. Solution : faire poser une classe métier (`.apriso-event--critical`) côté HTML/back, puis `:has()` sur cette classe.
 
 ```css
 .apriso-event--critical:has(td) td {
-  /* tous les td de ligne critique */
   background: color-mix(in oklab, var(--ml-color-status-alert), white 92%);
 }
 ```

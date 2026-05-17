@@ -1,3 +1,52 @@
+---
+formateur:
+  prerequis_formateur:
+    - savoir que SEULES transform + opacity sont GPU-accelerated (pas de repaint)
+    - savoir pourquoi transition: all = paresseux ET coûteux (recalcule layout)
+    - currentColor + fill="currentColor" = 1 SVG asset, N teintes
+    - aria-hidden="true" sur picto décoratif redondant (lecteur écran)
+    - durées recommandées : hover 100-200ms / apparition 200-300ms
+  ressources_demo_a_preparer:
+    - checkpoint Module 8 ouvert
+    - lucide.dev ouvert pour copier-coller icônes
+    - DevTools Performance prêt (enregistrement frame rate)
+    - 1 SVG triangle-alert prêt à coller dans HTML Laminoir Léon
+  pitch_ouverture: >
+    "Opérateur lit en 0,5 seconde. Badge texte 'Alerte' = trop lent. Picto rouge
+    pulsé doucement = instantané. Et on tue transition: all qui sature les CPU
+    tablette — uniquement transform + opacity, propre, performant."
+  energie_attendue: posée — fin J2, finition visuelle = plaisir esthétique partagé
+  duree_cible: 60 min — découpage 25 concepts / 15 démo / 15 exo / 5 récap
+  variantes_timing:
+    si_en_retard: zapper bonus @property + view-timeline (citer noms juste)
+    si_en_avance: faire choisir pictos pour leur cas client dans lucide.dev
+  points_a_marteler:
+    - "JAMAIS transition: all — toujours cibler propriétés précises"
+    - "transform + opacity = GPU-accelerated, pas de repaint"
+    - "currentColor = magie SVG inline — 1 asset, N teintes contextuelles"
+    - "animation pulse sobre — opacité picto SEUL, pas card entière"
+    - "aria-hidden='true' sur picto décoratif (sinon lecteur écran double l'info)"
+  pieges_stagiaires:
+    - animer box-shadow ou border au :hover → repaints, tablette saccade
+    - oublier currentColor → fill="#xxx" hardcodé, perd teinte contexte
+    - animer card ENTIÈRE au lieu du picto → distrayant, perf dégradée
+    - durées > 300ms hover → impression de lourdeur
+    - oublier que animation pulse héritera du prefers-reduced-motion Module 8
+  questions_probables:
+    - q: "SVG inline vs <img src.svg> ?"
+      r: inline = stylable CSS (currentColor). External = cacheable, pas stylable.
+    - q: "Sprite SVG sans pipeline build ?"
+      r: possible mais lourd. Préférer inline ou Web Component (hors scope).
+    - q: "@property pour animer variables, utilisable ?"
+      r: Newly. OK Dymasco. Vérifier cible client.
+    - q: "view-timeline scroll-driven ?"
+      r: Newly. Joli mais pas critique. Citer, garder pour plus tard.
+  transition_module_suivant: >
+    "Visuel : posé. Module 10, dernier : on rend le dashboard LIVRABLE. Focus clavier
+    visible, contrastes WCAG, perf optimisée. Et une check-list mise en prod à
+    imprimer — celle que vous utiliserez avant chaque livraison."
+---
+
 # Module 9 — SVG & micro-animations d'état
 
 > ⏱️ **Durée** : 1h00 — **J2 après-midi**
