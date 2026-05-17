@@ -227,7 +227,7 @@ Vérification :
 > /* Architecture: Plan B (!important dans priority) — Apriso runtime injection non-contournable, vérifié 2026-05-19 */
 > ```
 >
-> Ainsi le prochain dev qui ouvre le fichier sait pourquoi tout est en `!important` et n'essaie pas de "nettoyer".
+#### Anti-pattern
 
 ### 4. `:where()` — la spécificité zéro (5 min)
 
@@ -335,14 +335,6 @@ Les **custom properties** (`--ma-variable`) sont la couche **identité visuelle*
 ```
 
 #### Convention de nommage (à imposer en équipe)
-
-| Préfixe | Type | Exemple |
-| --- | --- | --- |
-| `--ml-color-*` | couleurs | `--ml-color-brand-primary` |
-| `--ml-spacing-*` | espacements | `--ml-spacing-3` |
-| `--ml-fs-*` | font-size | `--ml-fs-card-title` |
-| `--ml-radius-*` | rayons | `--ml-radius-pill` |
-| `--ml-shadow-*` | ombres | `--ml-shadow-2` |
 
 > 💡 Préfixe **projet** (`--ml-` ici pour Mamie Lulu) ou **éditeur** (`--apriso-`). Jamais de variable nue (`--primary`) → collisions garanties à terme.
 
