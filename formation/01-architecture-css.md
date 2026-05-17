@@ -24,6 +24,7 @@ formateur:
     - "pour les !important l'ordre des couches est INVERSÉ"
     - "priority est AVANT framework dans la déclaration (donc gagne en !important)"
     - "retirer le <link> vers apriso-base.css du HTML, sinon Apriso chargé 2 fois"
+    - "Plan B si CSS Apriso injecté au runtime non-contournable : tout en !important dans priority (cf. encadré §3)"
   pieges_stagiaires:
     - croire que @layer surclasse tout, sans @import → démo étape 2 essentielle
     - oublier de retirer le <link> HTML → Apriso unlayered reprend la main
@@ -225,6 +226,61 @@ Vérification :
 #### Cible Baseline
 
 `@import` avec `layer()` : **Widely available** depuis 2022 (même date que `@layer`). ✅.
+
+> 🚨 **Plan B — si Apriso injecte son CSS au runtime et vous n'avez pas la main sur le `<link>`**
+>
+> Le Plan A (ci-dessus) repose sur **retirer** le `<link rel="stylesheet" href="apriso-base.css">` du HTML rendu, pour que Apriso ne soit chargé qu'une fois via votre `@import layer(framework)`.
+>
+> Or **côté ScreenBuilder Apriso, ce n'est pas toujours possible** : la plateforme peut injecter ses propres feuilles de style au runtime (via `<head>` généré ASP, via JS, via une config IIS) sans exposer de point d'extension pour les retirer. À vérifier **mission par mission** : ouvrir DevTools → Network, filtrer `.css`, compter les occurrences de `apriso-base.css`. Si vous le voyez chargé en `<link>` que vous ne pouvez pas supprimer côté HTML Layout Editor → **Plan A impossible**.
+>
+> **Conséquence** : Apriso reste **unlayered** côté navigateur, peu importe ce que vous écrivez côté overrides. La règle "unlayered = couche implicite finale = bat tous les layered normaux" s'applique → vos `@layer overrides { … }` perdent silencieusement.
+>
+> **Plan B — `!important` partout dans `@layer priority`**
+>
+> Bonne nouvelle malgré tout : pour les `!important`, l'ordre des couches est **inversé**, et `!important` **layered bat `!important` unlayered**. Donc une déclaration `!important` dans n'importe quelle couche nommée bat **tout** ce que fait Apriso (normal ET `!important`).
+>
+> Stratégie de repli :
+>
+> ```css
+> /* Plan B — Apriso unlayered subi, on passe TOUT en !important dans priority */
+> @layer priority;
+>
+> @layer priority {
+>   .apriso-machine-card        { background: var(--ml-color-bg-cream) !important; }
+>   .apriso-machine-card__title { color:      var(--ml-color-text)     !important; }
+>   .apriso-header              { background: var(--ml-color-brand-primary) !important; }
+>   /* … toute l'identité visuelle, !important obligatoire */
+> }
+>
+> /* Tokens dans :root — l'héritage fonctionne toujours, pas concerné par les couches */
+> :root {
+>   --ml-color-brand-primary: #c2410c;
+>   --ml-color-bg-cream:      #fef6e4;
+>   /* … */
+> }
+> ```
+>
+> **Conséquences** :
+>
+> - **Une seule couche utile** (`priority`). Plus de distinction `overrides` cosmétique vs `priority` escalade — tout est dans la même boîte. Lisibilité réduite, mais pas catastrophique si on garde une discipline (commentaire de section par composant).
+> - **`@layer reset` ne sert plus à rien** (perd contre Apriso unlayered). À supprimer du Plan B. Si reset nécessaire → l'écrire en `!important` dans `priority`, à utiliser avec parcimonie.
+> - **`:root` + tokens fonctionnent normalement** (l'héritage des custom properties n'est pas affecté par les couches — seul l'override de la **valeur** doit éventuellement passer par `!important`).
+> - **Plus de "discipline `!important`" possible** : tout est `!important`. Difficile de signaler au lecteur "ici c'est une escalade exceptionnelle" → perdu côté maintenance.
+>
+> **Quand choisir Plan B** :
+>
+> - Apriso runtime injection vérifiée non-contournable
+> - OU projet pilote court (< 6 mois) où la dette technique du Plan B est acceptable
+> - OU politique IT cliente refuse toute modification du HTML rendu (rare mais existant)
+>
+> **Recommandation** : tenter **toujours Plan A en premier** (test 30 min : tenter de retirer le `<link>` dans ScreenBuilder + recharger). Bascule Plan B uniquement si Plan A confirmé impossible. Documenter le choix dans le commentaire en tête d'`overrides.css` :
+>
+> ```css
+> /* Target: <browserslist> — last reviewed: YYYY-MM-DD */
+> /* Architecture: Plan B (!important dans priority) — Apriso runtime injection non-contournable, vérifié 2026-05-19 */
+> ```
+>
+> Ainsi le prochain dev qui ouvre le fichier sait pourquoi tout est en `!important` et n'essaie pas de "nettoyer".
 
 ### 4. `:where()` — la spécificité zéro (5 min)
 
@@ -700,5 +756,6 @@ Pour des overrides cosmétiques (couleurs, espacements) : sélecteur Apriso nati
 - [ ] Je centralise toute couleur / espacement / rayon dans **`:root` + tokens préfixés**
 - [ ] Je documente la cible navigateur en tête de fichier
 - [ ] Je vérifie dans **DevTools → Network** que `apriso-base.css` n'est chargé qu'**une seule fois** (via `@import`, pas via `<link>`)
+- [ ] Je connais le **Plan B** si Apriso injecte son CSS au runtime sans point d'extension : tout en `!important` dans `@layer priority` (cf. encadré §3), et je le documente en tête d'`overrides.css`
 
 > 🎯 **Mantra du module** : *"`@layer` ne bat pas un framework non layered. Il faut d'abord le ramener dans la cascade via `@import url() layer()`."*
