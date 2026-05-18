@@ -25,7 +25,7 @@ formateur:
     - "priority est AVANT framework dans la déclaration (donc gagne en !important)"
     - "retirer le <link> vers apriso-base.css du HTML, sinon Apriso chargé 2 fois"
     - "Plan B si CSS Apriso injecté au runtime non-contournable : tout en !important dans priority (cf. encadré §3)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - croire que @layer surclasse tout, sans @import → démo étape 2 essentielle
     - oublier de retirer le <link> HTML → Apriso unlayered reprend la main
     - mettre :where() autour de la cible au lieu du scope → cible à spé 0
@@ -58,9 +58,6 @@ formateur:
 Reprendre la **main sur la cascade** d'un framework hostile (`apriso-base.css`) sans escalader la spécificité ni empiler des `!important`.
 
 ---
-
-## ⚙️ Pour qui c'est utile chez Dymasco
-
 C'est **le** module qui va définir votre rapport quotidien à Apriso. Aujourd'hui, votre `overrides.css` ressemble probablement à ça :
 
 ```css
@@ -179,7 +176,9 @@ Vérification :
 
 `@import` avec `layer()` : **Widely available** depuis 2022 (même date que `@layer`). ✅.
 
-> 🚨 **Plan B — si Apriso injecte son CSS au runtime et vous n'avez pas la main sur le** `<link>`
+#### Plan B — Apriso injection runtime (non-contournable)
+
+> 🚨 **Quand le Plan A est impossible**
 >
 > Le Plan A (ci-dessus) repose sur **retirer** le `<link rel="stylesheet" href="apriso-base.css">` du HTML rendu, pour que Apriso ne soit chargé qu'une fois via votre `@import layer(framework)`.
 >
@@ -226,8 +225,6 @@ Vérification :
 > /* Target: <browserslist> — last reviewed: YYYY-MM-DD */
 > /* Architecture: Plan B (!important dans priority) — Apriso runtime injection non-contournable, vérifié 2026-05-19 */
 > ```
->
-#### Anti-pattern
 
 ### 4. `:where()` — la spécificité zéro (5 min)
 
@@ -547,7 +544,7 @@ Inspecter un sélecteur Apriso à 5 classes dans Styles → DevTools affiche le 
 
 ---
 
-## 🛠️ Exercice alternatif — Migration legacy "vrai monde sale" (45 min, variant pour stagiaires avancés)
+## 🛠️ Exercice alternatif — Migration legacy "vrai monde sale" (45 min, variant pour apprenants avancés)
 
 > 🎯 **Pourquoi** : le fil rouge Mamie Lulu part d'un `overrides.css` vide. La réalité Dymasco = vous héritez d'un fichier de 600-1200 lignes accumulé sur 3 ans, chaînes 5 classes + `!important` partout, 0 token. Cet exo simule **ce vrai cas**.
 

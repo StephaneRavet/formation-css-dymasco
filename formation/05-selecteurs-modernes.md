@@ -25,7 +25,7 @@ formateur:
     - ":where() = spécificité ZÉRO (rappel Module 1) — idéal resets/utilities"
     - "propriétés logiques = i18n RTL gratuite + writing-mode"
     - "tester :has() côté perf si DOM mute beaucoup (rare en dashboard)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - croire :has() = ralenti TOUJOURS — non, recalcule à mutation, mesurer avant optim
     - :is(#x, .y) = spécificité 1,0,0 (id) — surprise garantie
     - mélanger physique + logique sur même élément → cascade imprévisible

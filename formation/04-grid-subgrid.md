@@ -20,14 +20,14 @@ formateur:
   duree_cible: 135 min — découpage 45 concepts / 25 démo / 50 exo / 15 récap (avec démo Subgrid clôture 5 min)
   variantes_timing:
     si_en_retard: zapper bonus place-items + grid-auto-flow dense + min-content/max-content
-    si_en_avance: faire écrire un layout complet à voix haute par les stagiaires
+    si_en_avance: faire écrire un layout complet à voix haute par les apprenants
   points_a_marteler:
     - "display: contents fait DISPARAÎTRE l'élément du flux layout (table → grid)"
     - "position: sticky a 4 conditions strictes — manquer 1 = silence total"
     - "JAMAIS de sticky sans background opaque (sinon transparent, contenu défile derrière)"
     - "scrollbar-gutter: stable = layout qui ne saute plus à l'apparition scrollbar"
     - "Subgrid : démo 5 min, sans exo — message c'est qu'il EXISTE"
-  pieges_stagiaires:
+  pieges_apprenants:
     - display: contents qui casse styles hérités (bordures, bg du <table> perdus)
     - sticky qui ne colle nulle part → ancêtre overflow: hidden quelque part
     - confondre auto-fit (vide collapse) et auto-fill (vide conservé) → items étirés non voulu

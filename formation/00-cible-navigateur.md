@@ -22,7 +22,7 @@ formateur:
     - browserslist = document d'arbitrage écrit, pas un outil de build
     - "@supports teste la syntaxe, pas le bon fonctionnement"
     - décision = 3 sources (Baseline + caniuse + CDC) + écrit dans le code
-  pieges_stagiaires:
+  pieges_apprenants:
     - confondre cible Dymasco (Edge récent, tout passe) et cible CLIENT (variable)
     - vouloir un fallback "au cas où" même quand Baseline widely OK → surcoût inutile
     - lire caniuse uniquement (manquer le statut Baseline)
@@ -209,7 +209,7 @@ Pour chaque CDC : produire **(a)** un `.browserslistrc` argumenté (versions fix
 **Découpage** :
 
 - **Exercice 1** — démonstration faite **ensemble** au tableau (15 min).
-- **Exercices 2 et 3** — chaque stagiaire seul **5 min** sur sa feuille, puis correction **dérouée en live** (~5 min) — même format que l'exercice 1.
+- **Exercices 2 et 3** — chaque apprenant seul **5 min** sur sa feuille, puis correction **dérouée en live** (~5 min) — même format que l'exercice 1.
 
 ---
 

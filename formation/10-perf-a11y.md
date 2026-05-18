@@ -28,7 +28,7 @@ formateur:
     - "content-visibility: auto = gain massif sur longues listes (journal 1000 lignes)"
     - "ordre du DOM = ordre de tab — flex-direction: row-reverse casse navigation clavier"
     - "check-list mise en prod = LE livrable du module (impression à distribuer)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - garder :focus au lieu de :focus-visible → outline visible au clic, look amateur
     - will-change permanent sur classe → mémoire GPU consommée pour rien
     - contraste validé en light mais oublié en dark mode

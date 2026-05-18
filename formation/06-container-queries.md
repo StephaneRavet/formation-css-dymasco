@@ -24,7 +24,7 @@ formateur:
     - "container-name optionnel mais RECOMMANDÉ (lisibilité + scoping)"
     - "cqi = 1% inline-size conteneur (vs vw = viewport)"
     - "tester en resizant le CONTENEUR, pas le viewport — sinon démo ratée"
-  pieges_stagiaires:
+  pieges_apprenants:
     - oublier container-type sur l'ancêtre → @container silencieux jamais déclenché
     - mettre container-type: size "par sécurité" → conteneur perd hauteur intrinsèque
     - penser cqw = viewport width (c'est conteneur)

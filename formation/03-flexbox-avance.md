@@ -24,7 +24,7 @@ formateur:
     - "le piège ellipsis n'est presque JAMAIS l'élément, c'est le PARENT flex"
     - "triptyque overflow : ellipsis (1 ligne) / line-clamp (N lignes) / overflow-wrap (mot)"
     - "tester avec un nom long AVANT de livrer, toujours"
-  pieges_stagiaires:
+  pieges_apprenants:
     - écrire flex: 1 (raccourci ambigu = 1 1 0%) au lieu de 1 1 auto
     - oublier min-width: 0 sur les ancêtres flex de l'élément ellipsé
     - utiliser word-break: break-all → texte illisible (préférer overflow-wrap: anywhere)

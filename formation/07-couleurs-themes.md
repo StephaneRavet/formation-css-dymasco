@@ -26,7 +26,7 @@ formateur:
     - "5-10 couleurs SOURCES (hex client), tout le reste DÉRIVÉ via color-mix"
     - "light-dark() + color-scheme = theme switcher complet en 2 lignes"
     - "oklch côté SOURCE = construction palette from scratch (rare). Côté MIX = oui (in oklab)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - color-mix sans "in oklab" → erreur silencieuse, valeur ignorée
     - color-mix inline partout au lieu de tokeniser → perd avantage centralisé
     - light-dark() sans color-scheme déclaré → fonctionne mais pas optimal côté UA

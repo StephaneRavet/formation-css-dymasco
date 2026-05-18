@@ -26,7 +26,7 @@ formateur:
     - "currentColor = magie SVG inline — 1 asset, N teintes contextuelles"
     - "animation pulse sobre — opacité picto SEUL, pas card entière"
     - "aria-hidden='true' sur picto décoratif (sinon lecteur écran double l'info)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - animer box-shadow ou border au :hover → repaints, tablette saccade
     - oublier currentColor → fill="#xxx" hardcodé, perd teinte contexte
     - animer card ENTIÈRE au lieu du picto → distrayant, perf dégradée

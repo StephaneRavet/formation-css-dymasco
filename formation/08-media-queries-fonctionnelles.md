@@ -13,7 +13,7 @@ formateur:
     - poste Windows avec profil HC prêt (idéal — fallback DevTools sinon)
   pitch_ouverture: >
     "Équipe nuit qui prend la lumière en pleine figure. Opérateur avec gants tactiles
-    qui galère sur un select de 32px. Stagiaire sensible aux animations. Site qui
+    qui galère sur un select de 32px. apprenant sensible aux animations. Site qui
     impose Windows High Contrast pour l'accessibilité — badge alerte rouge devient
     rectangle noir indiscernable. Ce module = passer de 'dashboard qui marche' à
     'dashboard respectueux'."
@@ -28,7 +28,7 @@ formateur:
     - "!important justifié dans reset reduced-motion (override toutes couches)"
     - "hover: hover ET pointer: fine — combiner strict pour tablettes hybrides Surface"
     - "forced-colors: HC Windows écrase couleurs → restituer bordures via CanvasText + forced-color-adjust ciblé sur badges"
-  pieges_stagiaires:
+  pieges_apprenants:
     - dark mode = inverser juste bg/color → bordures et ombres invisibles
     - hover:hover sans pointer:fine → tablettes hybrides matchent les deux
     - forced-color-adjust: none en wildcard → HC ne sert plus à rien
@@ -71,7 +71,7 @@ Vos dashboards tournent dans des environnements **très variés** :
 |---|---|
 | Équipe 3×8, équipe de nuit prend la lumière en pleine figure | `prefers-color-scheme: dark` |
 | Opérateur avec gants → souris imprécise / tap pataud | `(hover: none) and (pointer: coarse)` |
-| Stagiaire sensible aux animations, flicker disturbing | `prefers-reduced-motion: reduce` |
+| apprenant sensible aux animations, flicker disturbing | `prefers-reduced-motion: reduce` |
 | Daltonien, contraste insuffisant | `prefers-contrast: more` |
 | Site qui impose Windows High Contrast (DSI accessibilité) — badges status écrasés | `(forced-colors: active)` |
 

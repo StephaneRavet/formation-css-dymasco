@@ -16,13 +16,13 @@ formateur:
   duree_cible: 45 min — découpage 15 concepts / 10 démo / 15 exo / 5 récap
   variantes_timing:
     si_en_retard: zapper text-wrap pretty (juste citer le nom) + bonus échelle complète
-    si_en_avance: faire calculer clamp() pour 3 cas à la volée avec les stagiaires
+    si_en_avance: faire calculer clamp() pour 3 cas à la volée avec les apprenants
   points_a_marteler:
     - "clamp() jamais sans borne min ET max — vw seul = piège mobile/mural"
     - "min() = plafonne, max() = plancher — mnémo : min RENVOIE la plus petite"
     - "aspect-ratio remplace tous les hacks padding-top: 56.25%"
     - "dvh > vh sur tablette (barre adresse mobile bugue vh)"
-  pieges_stagiaires:
+  pieges_apprenants:
     - mettre vw sans clamp → texte microscopique sur mobile, démesuré sur mural
     - confondre min() (plafonne) et max() (plancher) — toujours hésiter
     - cumuler aspect-ratio + width + height → conflit, l'un ignoré
