@@ -126,7 +126,14 @@ Identique à `:is()`, **mais spécificité forcée à 0**. Idéal pour resets et
 ```css
 /* Form qui contient un champ invalide */
 form:has(input:invalid) .submit { opacity: 0.5; pointer-events: none; }
+```
 
+> 📌 **`input:invalid` — la condition d'erreur**
+> Le navigateur possède un **moteur de validation HTML5 natif** (activé dès que tu utilises des attributs comme `required`, `type="email"`, `pattern="..."`, etc.).
+>
+> Dès qu'un champ est vide alors qu'il est obligatoire, ou mal rempli (ex : un email sans le `@`), le navigateur lui attribue automatiquement l'état `:invalid`. Aucun JS requis — `:has(input:invalid)` réagit à cet état dès le rendu.
+
+```css
 /* Ligne de tableau dont la sévérité est critique */
 .apriso-event:has(.apriso-event__severity--critical) td {
   background: color-mix(in oklab, var(--ml-color-status-alert), white 92%);
