@@ -233,7 +233,7 @@ Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/over
 
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/06-container-queries/overrides.css`.
+Voir [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet-fil-rouge/checkpoints/06-container-queries/overrides.css).
 
 ---
 

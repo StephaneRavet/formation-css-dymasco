@@ -261,7 +261,7 @@ Reprendre le checkpoint Module 4 et :
 
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/05-selecteurs/overrides.css`.
+Voir [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css).
 
 ---
 
