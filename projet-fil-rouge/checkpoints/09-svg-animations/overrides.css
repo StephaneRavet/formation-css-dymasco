@@ -450,6 +450,7 @@
         height: 1em;
         flex: 0 0 auto;
         vertical-align: -0.125em;
+        margin-inline-end: 0.35em;
         /* fill="currentColor" côté SVG inline → suit la couleur du parent */
     }
 
