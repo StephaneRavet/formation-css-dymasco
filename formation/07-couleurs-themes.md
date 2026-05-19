@@ -6,17 +6,17 @@ formateur:
     - distinguer color-scheme (UA hints) vs light-dark() (valeur conditionnelle)
     - savoir basculer prefers-color-scheme dans DevTools (Rendering)
     - oklch + color-mix widely 2023 / light-dark widely 2024 (vérifier au jour J)
-  ressources_demo_a_preparer:
+  ressources_a_preparer:
     - checkpoint Module 6 ouvert
-    - DevTools prêt pour modifier --ml-color-brand-primary à la volée
-    - DevTools Rendering prêt pour bascule prefers-color-scheme light/dark
+    - rappeler aux apprenants : DevTools pour modifier --ml-color-brand-primary à la volée
+    - rappeler : DevTools Rendering pour bascule prefers-color-scheme light/dark
   pitch_ouverture: >
     "Lulu vous appelle : 'le orange est trop agressif sur les écrans de nuit,
     foncez-le un peu'. Avant : 47 occurrences hex à modifier. Après ce module :
     UNE seule variable, tout suit. Et bonus : un bouton light/dark qui marche
     en 3 lignes."
   energie_attendue: posée — clôture J2 matin, juste avant déjeuner
-  duree_cible: 45 min — découpage 20 concepts / 12 démo / 10 exo / 3 récap
+  duree_cible: 45 min — découpage 20 concepts / 22 exo (pas de démo séparée, ils testent direct) / 3 récap
   variantes_timing:
     si_en_retard: zapper bonus échelle hue + tokens primitifs/intentionnels
     si_en_avance: faire dériver palette hover/active sur LEUR charte client réelle
@@ -220,9 +220,9 @@ Pour les curieux et les rares cas où vous **construisez** une palette from scra
 
 ```css
 oklch(L C H)
-/* L = lightness perceptive 0-100%
-   C = chroma (saturation) 0 - ~0.4
-   H = hue 0-360° */
+/* L = lightness perceptive (luminosité) 0-100%
+   C = chroma (saturation ou intensité) 0 - ~0.4
+   H = hue 0-360° (teinte) */
 
 --ml-color-brand-500: oklch(58% 0.18 35);   /* tomate */
 ```
@@ -243,53 +243,9 @@ Outil : [oklch.com](https://oklch.com) — picker visuel hex ↔ oklch.
 
 ---
 
-## 🔍 Démonstration (12 min)
+## 🛠️ Exercice fil rouge (22 min)
 
-**Live** : refonder la palette Mamie Lulu en sources hex + dérivés color-mix + theme switcher light-dark.
-
-### Étape 1 — Sources hex + dérivés color-mix (5 min)
-
-Reprendre `:root` du checkpoint M06. Garder les sources hex telles quelles, ajouter les dérivés :
-
-```css
-:root {
-  --ml-color-brand-primary: #c2410c;
-  --ml-color-brand-primary-hover:  color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
-  --ml-color-brand-primary-active: color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
-}
-```
-
-DevTools : modifier `--ml-color-brand-primary` à la volée → hover/active suivent. **Effet "wow"** = changement d'une seule valeur, toute l'app re-harmonisée.
-
-### Étape 2 — Theme switcher light-dark (5 min)
-
-Ajouter `color-scheme: light dark;` sur `:root`. Convertir 4-5 tokens clés en `light-dark()` :
-
-```css
-:root {
-  color-scheme: light dark;
-  --ml-color-bg-app:  light-dark(#faf3e0, #1a1815);
-  --ml-color-text:    light-dark(#1f1f1f, #f3eada);
-  --ml-color-surface: light-dark(#ffffff, #25201c);
-}
-```
-
-DevTools → Rendering → `prefers-color-scheme: dark` → toute l'app bascule. **0 `@media`, 0 duplication.**
-
-### Étape 3 — Toggle data-theme (2 min)
-
-Console DevTools :
-
-```javascript
-document.documentElement.dataset.theme = 'dark';
-document.documentElement.dataset.theme = 'light';
-```
-
-Pour montrer que la bascule manuelle marche aussi (au cas où le client veut un bouton).
-
----
-
-## 🛠️ Exercice fil rouge (10 min)
+> 🎨 **Pas de démo séparée** — les couleurs c'est fun, vous testez direct. Tapez le code, ouvrez DevTools, jouez avec les valeurs en live. C'est plus marquant que de me regarder faire.
 
 ### Consigne
 
@@ -316,6 +272,21 @@ Reprendre le checkpoint Module 6 et :
    - `--ml-color-border`
 
 6. **Vérifier** dans DevTools → Rendering → `prefers-color-scheme: dark` que la bascule fonctionne sans rien d'autre à modifier.
+
+### 🎮 Tests live à faire vous-même (l'effet wow, en direct)
+
+Une fois le checkpoint en place, jouez dans DevTools :
+
+- **Test 1 — One-line re-harmonisation** : modifier `--ml-color-brand-primary` à la volée sur `:root` (essayez `#1976d2` bleu, `#2e7d32` vert). Hover / active / disabled suivent **tout seuls** grâce à color-mix.
+- **Test 2 — Bascule système** : DevTools → Rendering → `prefers-color-scheme: dark`. Toute l'app passe en sombre, **zéro `@media`**.
+- **Test 3 — Toggle manuel** : Console DevTools, bascule indépendante de la préférence OS (utile pour un bouton dans l'UI) :
+
+  ```javascript
+  document.documentElement.dataset.theme = 'dark';
+  document.documentElement.dataset.theme = 'light';
+  ```
+
+- **Test 4 — Casser pour comprendre** : retirer `in oklab` d'un `color-mix()`. La couleur disparaît silencieusement (DevTools n'alerte pas). Rappel : **toujours préciser l'espace**.
 
 ### Pièges fréquents
 

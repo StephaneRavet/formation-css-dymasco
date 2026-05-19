@@ -206,7 +206,7 @@ Reprendre le checkpoint Module 5 et :
 
 1. Déclarer `.apriso-machine-grid` comme conteneur (`container-type: inline-size`, nom `machine-zone`).
 
-2. Sur `.apriso-machine-card__metrics` (le `dl` qui contient les 2 metrics OEE / Disponibilité dans la card) :
+2. Sur `.apriso-machine-card__metrics` (le `<dl>` qui contient les 2 metrics OEE / Disponibilité dans la card) :
    - Par défaut : 1 colonne, gap réduit.
    - `@container (min-width: 280px)` : 2 colonnes côte à côte.
 

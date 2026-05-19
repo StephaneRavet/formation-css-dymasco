@@ -80,7 +80,7 @@ Avant d'entrer dans `:is()` / `:has()`, les **combinateurs** de base qui revienn
 | `,` | Liste de sélecteurs | `h1, h2, h3` | l'un **ou** l'autre — applique à chacun |
 | `&` | Référence parent (nesting) | `.card { &:hover { … } }` | équivalent imbriqué de `.card:hover` (Baseline 2023) |
 
-> 💡 Tous ces combinateurs fonctionnent **à l'intérieur** de `:is()`, `:where()`, `:not()` et `:has()`. C'est ce qui rend `:has(+ .alert)` ou `:has(> img)` possibles.
+> 💡 Tous ces combinateurs fonctionnent **à l'intérieur** de `:is()`, `:where()`, `:not()` et `:has()`.
 
 ### 1. `:is()` — la factorisation de sélecteurs (5 min)
 
