@@ -1,4 +1,4 @@
-# 📝 QCM — Fin Jour 2 (10 min)
+# 📝 QCM — Fin Jour 2 (9 min)
 
 > Auto-évaluation. Une seule bonne réponse sauf mention contraire. Corrigé en bas.
 

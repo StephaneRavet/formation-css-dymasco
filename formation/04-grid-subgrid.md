@@ -261,7 +261,7 @@ Pour un journal d'événements lisible, retenir 4 règles :
 ```css
 .apriso-event-log__table td:first-child {   /* colonne Heure */
   font-variant-numeric: tabular-nums;
-  text-align: right;          /* ou start, selon convention métier */
+  text-align: right;          /* ou left, selon convention métier */
 }
 ```
 

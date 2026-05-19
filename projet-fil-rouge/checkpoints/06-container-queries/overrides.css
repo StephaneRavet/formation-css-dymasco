@@ -9,7 +9,7 @@
    - .apriso-machine-grid déclarée comme conteneur (machine-zone)
    - .apriso-machine-card__metrics : 1 col compact / 2 cols >= 280px
    - .apriso-machine-card__last-event : caché en compact, affiché >= 280px
-   - .apriso-machine-card__title : font-size en cqi (suit le conteneur)
+   - .apriso-machine-card__title : font-size en cqw (suit le conteneur)
    ============================================================================
 */
 
@@ -98,8 +98,8 @@
         --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
         --ml-fs-kpi-label: clamp(10px, 0.9vw, 13px);
         --ml-fs-kpi-value: clamp(20px, 2.4vw, 40px);
-        /* Card-title : suit le CONTENEUR (cqi), plus le viewport */
-        --ml-fs-card-title: clamp(13px, 4cqi, 18px);
+        /* Card-title : suit le CONTENEUR (cqw), plus le viewport */
+        --ml-fs-card-title: clamp(13px, 4cqw, 18px);
 
         /* Dimensions */
         --ml-dashboard-max-width: 1920px;
@@ -284,7 +284,7 @@
             flex: 1 1 auto;
             min-width: 0;
             font-size: var(--ml-fs-card-title);
-            /* clamp(13px, 4cqi, 18px) */
+            /* clamp(13px, 4cqw, 18px) */
             color: var(--ml-color-text);
             overflow: hidden;
             text-overflow: ellipsis;

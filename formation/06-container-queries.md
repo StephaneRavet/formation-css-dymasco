@@ -2,7 +2,7 @@
 formateur:
   prerequis_formateur:
     - savoir différence container-type inline-size vs size (size casse souvent layout)
-    - connaître unités cq* (cqi = 1% inline-size conteneur)
+    - connaître unités cq* (cqw = 1% largeur conteneur)
     - savoir qu'une @container sans container-type quelque part = SILENCE total
     - widely available 2023 — OK Dymasco
   ressources_demo_a_preparer:
@@ -22,7 +22,7 @@ formateur:
     - "@container interroge LE CONTENEUR, pas le viewport"
     - "container-type: inline-size 95% du temps — size casse layout"
     - "container-name optionnel mais RECOMMANDÉ (lisibilité + scoping)"
-    - "cqi = 1% inline-size conteneur (vs vw = viewport)"
+    - "cqw = 1% largeur conteneur (vs vw = viewport)"
     - "tester en resizant le CONTENEUR, pas le viewport — sinon démo ratée"
   pieges_apprenants:
     - oublier container-type sur l'ancêtre → @container silencieux jamais déclenché
@@ -129,19 +129,17 @@ Container Queries (`container-type`, `@container`) : **Widely available** depuis
 
 ### 4. Unités relatives au conteneur (3 min)
 
-Comme `vw`/`vh` pour le viewport, il existe `cqw`/`cqh`/`cqi`/`cqb` pour le conteneur.
+Comme `vw`/`vh` pour le viewport, il existe `cqw`/`cqh` pour le conteneur.
 
 | Unité | Sens |
 |---|---|
 | `cqw` | 1% de la largeur du conteneur |
-| `cqh` | 1% de la hauteur |
-| `cqi` | 1% de l'inline-size (= largeur du conteneur) |
-| `cqb` | 1% du block-size (hauteur en horizontal) |
+| `cqh` | 1% de la hauteur du conteneur |
 | `cqmin` / `cqmax` | min/max des deux dimensions |
 
 ```css
 .apriso-machine-card__title {
-  font-size: clamp(13px, 4cqi, 18px);   /* 4% de la largeur du conteneur, borné */
+  font-size: clamp(13px, 4cqw, 18px);   /* 4% de la largeur du conteneur, borné */
 }
 ```
 
@@ -217,7 +215,7 @@ Reprendre le checkpoint Module 5 et :
    - `@container (min-width: 280px)` : `display: block`, line-clamp 2 (Module 3).
 
 4. Sur `.apriso-machine-card__title` :
-   - Font-size en `clamp(13px, 4cqi, 18px)` → suit la largeur du conteneur, pas de l'écran.
+   - Font-size en `clamp(13px, 4cqw, 18px)` → suit la largeur du conteneur, pas de l'écran.
 
 5. **Test à faire** : DevTools, faire varier la **largeur de la sidebar** ou de la **grille machines** en direct. Observer que les cards **internes** se reconfigurent. Faire varier le viewport seul → les cards ne bougent **pas** (la grille reste à la même taille).
 
@@ -257,11 +255,11 @@ Un composant peut être **conteneur** ET **enfant** d'un autre conteneur. Permet
 
 ```css
 .apriso-machine-card__value {
-  font-size: clamp(14px, 6cqi, 32px);
+  font-size: clamp(14px, 6cqw, 32px);
 }
 ```
 
-→ Borne la valeur "en cqi" → meilleur des deux mondes (fluide + sécurisé).
+→ Borne la valeur "en cqw" → meilleur des deux mondes (fluide + sécurisé).
 
 ### Ressources
 
@@ -277,7 +275,7 @@ Un composant peut être **conteneur** ET **enfant** d'un autre conteneur. Permet
 - [ ] Je sais expliquer la différence entre `@media` (viewport) et `@container` (conteneur)
 - [ ] Je déclare `container-type: inline-size` (et **pas** `size`) par défaut
 - [ ] Je nomme mes conteneurs avec `container-name`
-- [ ] Je connais l'unité `cqi` (= 1% de la largeur du conteneur)
+- [ ] Je connais l'unité `cqw` (= 1% de la largeur du conteneur)
 - [ ] Je teste mes composants en faisant varier la largeur du conteneur, **pas** du viewport
 
 > 🎯 **Mantra du module** : *"Mon composant ne demande plus 'quelle est la taille de l'écran ?' mais 'combien de place tu me donnes ?'"*

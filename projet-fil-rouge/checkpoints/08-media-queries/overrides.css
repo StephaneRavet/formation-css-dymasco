@@ -110,7 +110,7 @@
         --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
         --ml-fs-kpi-label: clamp(10px, 0.9vw, 13px);
         --ml-fs-kpi-value: clamp(20px, 2.4vw, 40px);
-        --ml-fs-card-title: clamp(13px, 4cqi, 18px);
+        --ml-fs-card-title: clamp(13px, 4cqw, 18px);
 
         --ml-dashboard-max-width: 1920px;
         --ml-card-width-min: 240px;
