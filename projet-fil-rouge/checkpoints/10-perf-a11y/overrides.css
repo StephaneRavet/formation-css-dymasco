@@ -147,22 +147,27 @@
         --ml-shadow-2: 0 4px 12px rgb(0 0 0 / 0.10);
     }
 
+    /* Mode sombre — étagement bg renforcé, text-muted/border bumpés pour AA
+       sur surfaces sombres. Status teintes éclaircies pour visibilité sur dark.
+       Dérivés statut-bg/hover réorientés vers mix(black) — sinon fond quasi
+       blanc + texte clair = illisible. */
     @media (prefers-color-scheme: dark) {
         :root {
-            --ml-color-bg-app: oklch(20% 0.02 60);
-            --ml-color-bg-cream: oklch(24% 0.02 60);
+            --ml-color-bg-app: oklch(16% 0.015 60);
+            --ml-color-bg-cream: oklch(22% 0.018 60);
             --ml-color-surface: oklch(28% 0.02 60);
-            --ml-color-text: oklch(95% 0.01 80);
-            --ml-color-text-muted: oklch(75% 0.01 80);
-            /* contrasté sur bg dark */
-            --ml-color-border: oklch(45% 0.02 60);
+            --ml-color-text: oklch(96% 0.01 80);
+            --ml-color-text-muted: oklch(78% 0.015 80);
+            --ml-color-border: oklch(48% 0.02 60);
 
             --ml-color-status-running: oklch(72% 0.18 145);
             --ml-color-status-alert: oklch(78% 0.18 60);
             --ml-color-status-maintenance: oklch(72% 0.16 250);
 
-            --ml-color-row-zebra: color-mix(in oklab, var(--ml-color-bg-cream), white 5%);
-            --ml-color-row-hover: color-mix(in oklab, var(--ml-color-brand-accent), black 30%);
+            --ml-color-status-alert-bg: color-mix(in oklab, var(--ml-color-status-alert), black 68%);
+            --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), black 58%);
+            --ml-color-row-zebra: color-mix(in oklab, var(--ml-color-bg-cream), white 4%);
+            --ml-color-row-hover: color-mix(in oklab, var(--ml-color-brand-accent), black 62%);
         }
     }
 
@@ -199,6 +204,29 @@
         background: var(--ml-color-bg-app);
         color: var(--ml-color-text);
         font-size: var(--ml-fs-base);
+    }
+
+    /* --- RE-TOKENISATION COULEURS TEXTE HARDCODÉES PAR APRISO ------------- */
+
+    :is(h1, h2, h3, h4) {
+        color: var(--ml-color-text);
+    }
+
+    .apriso-kpi__trend--neutral,
+    .apriso-machine-card__metric dt,
+    .apriso-machine-card__last-event,
+    .apriso-event-log__count,
+    .apriso-event--info td:last-child,
+    .apriso-footer__item--label {
+        color: var(--ml-color-text-muted);
+    }
+
+    .apriso-machine-card__metric dd {
+        color: var(--ml-color-text);
+    }
+
+    .apriso-kpi__trend--up {
+        color: var(--ml-color-status-running);
     }
 
     .apriso-dashboard {
@@ -315,6 +343,7 @@
     .apriso-kpi__value {
         font-size: var(--ml-fs-kpi-value);
         font-variant-numeric: tabular-nums;
+        color: var(--ml-color-text);
     }
 
     /* --- MACHINE GRID + CARD --------------------------------------------- */
@@ -376,6 +405,9 @@
             display: inline-flex;
             align-items: center;
             gap: var(--ml-spacing-1);
+            /* Neutralise patches bg + color hardcodés par variante Apriso */
+            background: transparent;
+            color: var(--ml-color-text-muted);
         }
 
         & .apriso-machine-card__metrics {
