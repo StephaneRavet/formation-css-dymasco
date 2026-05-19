@@ -22,7 +22,7 @@ Le sélecteur `:contains("texte")` :
 - C. **n'existe pas** en CSS — uniquement jQuery/Sizzle
 - D. existe mais nécessite `@supports`
 
-## 3. Propriétés logiques — équivalent RTL
+## 3. Propriétés logiques — équivalent physique → logique
 
 `margin-left: 12px` devient en propriété logique :
 
@@ -100,7 +100,7 @@ Bonne pratique pour préserver les couleurs à l'impression ?
 
 1. **B** — `:has()` prend la spécificité du plus spécifique dans sa liste : `#header` = 1,0,0, plus `.card` = 1,1,0, plus `.badge` = 1,2,0
 2. **C** — `:contains()` n'existe **pas** en CSS, jamais (jQuery uniquement)
-3. **A** — `margin-inline-start` (suit la direction du texte)
+3. **A** — `margin-inline-start` (axe inline = direction du texte ; couplable avec shorthand `margin-inline`)
 4. **A** — `container-type: inline-size` sur le parent (ou `size`)
 5. **D** — wide gamut **et** perceptuellement uniforme
 6. **B** — `var(--brand)` à 80 %, blanc à 20 % → brand éclaircie

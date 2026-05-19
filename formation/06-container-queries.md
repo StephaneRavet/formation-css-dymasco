@@ -135,7 +135,7 @@ Comme `vw`/`vh` pour le viewport, il existe `cqw`/`cqh`/`cqi`/`cqb` pour le cont
 |---|---|
 | `cqw` | 1% de la largeur du conteneur |
 | `cqh` | 1% de la hauteur |
-| `cqi` | 1% de l'inline-size (largeur en LTR) |
+| `cqi` | 1% de l'inline-size (= largeur en writing-mode horizontal) |
 | `cqb` | 1% du block-size (hauteur en horizontal) |
 | `cqmin` / `cqmax` | min/max des deux dimensions |
 

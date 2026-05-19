@@ -4,12 +4,10 @@ formateur:
     - savoir que :has() prend la spécificité du PLUS SPÉCIFIQUE dans sa liste (idem :is())
     - connaître coût perf :has() (recalcule à chaque mutation DOM)
     - avoir testé :has() sur navigateur cible (widely 2024)
-    - savoir basculer dir="rtl" dans DevTools (Elements → html → ajouter attr)
     - liste mapping physique → logique en tête (margin-left → margin-inline-start)
   ressources_demo_a_preparer:
     - checkpoint Module 4 ouvert
     - HTML avec card alerte Laminoir Léon visible
-    - DevTools prêt pour basculer html lang="ar" dir="rtl"
     - tableau mapping logique imprimé
   pitch_ouverture: >
     "Levez la main si vous avez écrit du JS pour 'si la card contient un badge alert,
@@ -23,20 +21,20 @@ formateur:
     - ":has() = sélecteur PARENT, ENFIN possible — sans JS"
     - "spécificité :is() / :has() = celle du plus spécifique dans la liste"
     - ":where() = spécificité ZÉRO (rappel Module 1) — idéal resets/utilities"
-    - "propriétés logiques = i18n RTL gratuite + writing-mode"
+    - "propriétés logiques = shorthand cohérent (inline/block) + future-proof writing-mode"
     - "tester :has() côté perf si DOM mute beaucoup (rare en dashboard)"
   pieges_apprenants:
     - croire :has() = ralenti TOUJOURS — non, recalcule à mutation, mesurer avant optim
     - :is(#x, .y) = spécificité 1,0,0 (id) — surprise garantie
     - mélanger physique + logique sur même élément → cascade imprévisible
-    - oublier que logique dépend de writing-mode ET direction (les deux)
+    - oublier que logique dépend de writing-mode (axe inline/block bascule en vertical-*)
   questions_probables:
     - q: ":has() coûte combien en perf ?"
       r: négligeable sur 20-100 éléments. À mesurer si DOM mute 10×/sec sur 10k lignes.
     - q: "Pas de :contains() en CSS ?"
       r: non — uniquement jQuery. Passer par classe métier sur l'élément.
-    - q: "RTL en industrie, on en a vraiment besoin ?"
-      r: clients export Maghreb, suisse italien, futur. Coût zéro, hygiène pro.
+    - q: "Propriétés logiques, ça apporte quoi en pratique ?"
+      r: shorthand cohérent (margin-inline, padding-block), moins de propriétés à écrire, prêt si writing-mode vertical ou direction change un jour. Coût zéro, hygiène pro.
     - q: ":is() vs :where() je prends lequel par défaut ?"
       r: :where() pour base/reset/utility. :is() quand spé assumée nécessaire.
   transition_module_suivant: >
@@ -48,14 +46,14 @@ formateur:
 # Module 5 — Sélecteurs modernes & propriétés logiques
 
 > ⏱️ **Durée** : 1h45 — **J2 matin, ouverture**
-> 🧭 **Type** : module pratique (sélecteurs CSS modernes + i18n)
+> 🧭 **Type** : module pratique (sélecteurs CSS modernes + propriétés logiques)
 > 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/05-selecteurs/overrides.css`
 
 ---
 
 ## 🎯 Objectif (en 1 phrase)
 
-Maîtriser `:is()`, `:where()`, **`:has()`** (le sélecteur "parent enfin possible") et les **propriétés logiques** (`-inline`, `-block`) pour écrire moins de code et préparer l'i18n.
+Maîtriser `:is()`, `:where()`, **`:has()`** (le sélecteur "parent enfin possible") et les **propriétés logiques** (`-inline`, `-block`) pour écrire moins de code et gagner en cohérence (shorthand axe inline/block).
 
 ---
 
@@ -65,14 +63,14 @@ Trois cas concrets :
 
 1. **Mises en évidence métier sans JS** : "si une card contient un statut critique, surligne la card entière". Avant : JS. Maintenant : `.card:has(.status--alert)`.
 2. **Sélecteurs propres** sur des frameworks comme Apriso : `:is(.zone-a, .zone-b) .composant` au lieu de dupliquer.
-3. **Internationalisation** : un client fictif export Maghreb (RTL arabe), ou un libellé suisse (italien). Les propriétés logiques (`margin-inline-start` au lieu de `margin-left`) **suivent automatiquement** la direction du texte.
+3. **Propriétés logiques** : `margin-inline`, `padding-block`, `border-inline-start` — un seul shorthand pour les deux côtés d'un axe, au lieu de répéter `-left` / `-right`. Code plus court, intention plus claire (axe vs côté), et compatible writing-mode vertical (cas rare mais zéro coût).
 
 Aujourd'hui dans `apriso-base.css` :
 
 ```css
 .apriso-machine-card { border-left: 4px solid #6c757d; }   /* "left" en dur */
 .apriso-event-log__table th { text-align: left; }
-.apriso-machine-card { padding: 12px 14px; }   /* impossible à symétriser proprement en RTL */
+.apriso-machine-card { padding: 12px 14px; }                /* 2 valeurs au lieu d'un shorthand axe */
 ```
 
 Et aucune mise en évidence des cards en alerte (il faut chercher le badge orange à l'œil).
@@ -188,9 +186,9 @@ Depuis 2021, `:not()` accepte une **liste** de sélecteurs.
 
 ### 6. Propriétés logiques (10 min)
 
-Les propriétés CSS classiques sont **physiques** : `top`, `left`, `padding-left`, `margin-right`. Elles ne savent rien du sens d'écriture.
+Les propriétés CSS classiques sont **physiques** : `top`, `left`, `padding-left`, `margin-right`. Elles raisonnent par côté de l'écran.
 
-Les propriétés **logiques** suivent la direction du contenu (`ltr` vs `rtl`) :
+Les propriétés **logiques** raisonnent par **axe** (`inline` = sens du texte, `block` = sens des lignes). Avantages : shorthand cohérent par axe, moins de propriétés à écrire, et indépendance vis-à-vis du `writing-mode`.
 
 | Physique | Logique |
 |---|---|
@@ -207,9 +205,9 @@ Et les **shorthand** :
 
 ```css
 .apriso-machine-card {
-  margin-inline: var(--ml-spacing-2);     /* gauche+droite (en LTR) */
-  padding-block: var(--ml-spacing-3);     /* haut+bas */
-  inset-inline-start: 0;                  /* left en LTR / right en RTL */
+  margin-inline: var(--ml-spacing-2);     /* axe inline (gauche+droite) en 1 ligne */
+  padding-block: var(--ml-spacing-3);     /* axe block (haut+bas) en 1 ligne */
+  inset-inline-start: 0;                  /* début d'axe inline */
 }
 ```
 
@@ -220,14 +218,12 @@ Avant :
 .apriso-machine-card { border-left: 4px solid var(--ml-color-status-idle); }
 ```
 
-→ En RTL (arabe), la bordure colorée sera **à gauche** alors que le visuel attend "côté début de carte".
-
 Après :
 ```css
 .apriso-machine-card { border-inline-start: 4px solid var(--ml-color-status-idle); }
 ```
 
-→ Bordure côté **début** de lecture, peu importe LTR ou RTL.
+→ Bordure côté **début** de l'axe inline. Sémantique alignée avec `padding-inline`, `margin-inline-start`, `text-align: start` — toute la card raisonne sur le même axe.
 
 #### Cible Baseline
 
@@ -268,11 +264,9 @@ Bonus : `:has()` sur le tableau d'événements pour surligner les lignes critiqu
 }
 ```
 
-### Étape 3 — Switch RTL (5 min)
+### Étape 3 — Refactor physique → logique (5 min)
 
-Dans DevTools : forcer `dir="rtl"` sur le `<html>`. Sans propriétés logiques → bordures et marges restent côté gauche, layout cassé.
-
-Refactorer 3 propriétés en logiques (`border-inline-start`, `padding-inline`, `margin-inline-start`) → tout suit.
+Sur la card machine : remplacer `border-left`, `padding-left/right`, `margin-left/right` par leurs équivalents logiques (`border-inline-start`, `padding-inline`, `margin-inline`). Constat : moins de lignes, intention plus claire (axe vs côté), shorthand unique par axe.
 
 ### Étape 4 — `:where()` reset (2 min)
 
@@ -302,19 +296,16 @@ Reprendre le checkpoint Module 4 et :
 
 6. **`:not()` liste** : appliquer un `outline: 1px dashed` aux cards qui ne sont **ni** running **ni** idle (cf. concept §4).
 
-### Test RTL
+### Vérif refactor logique
 
-Dans `index.html`, ajouter temporairement `<html dir="rtl">` (ou via DevTools). Vérifier que :
-- La bordure colorée des cards passe à droite.
-- Le sélecteur de ligne reste lisible.
-- Les colonnes du journal s'inversent proprement.
+Après refactor : aucun `*-left` / `*-right` résiduel dans le bloc traité. `padding-inline` remplace bien la paire `padding-left` + `padding-right`. `text-align: start` partout au lieu de `text-align: left`.
 
 ### Pièges fréquents
 
 - ❌ `:has()` avec une chaîne lourde côté gauche → recalculs perf à mesurer si DOM mute beaucoup.
 - ❌ Spécificité de `:is()` / `:has()` = celle du **plus spécifique** dans la liste. `:is(#x, .y)` = spécificité d'un id.
 - ❌ Mélanger propriétés physiques et logiques sur le même élément → cascade imprévisible. Choisir une convention.
-- ❌ Oublier qu'une propriété logique **dépend du `writing-mode` ET du `direction`**. Tester explicitement les deux modes.
+- ❌ Oublier qu'une propriété logique **dépend du `writing-mode`** (vertical-rl bascule les axes). Cas rare, mais à connaître.
 
 ### Corrigé attendu
 
@@ -370,6 +361,6 @@ input:user-invalid { border-color: var(--ml-color-status-alert); }
 - [ ] Je sais que `:has()` / `:is()` prennent la spécificité du **plus spécifique** dans la liste
 - [ ] Je remplace `margin-left/right` par `margin-inline-start/end` (ou `margin-inline`)
 - [ ] Je remplace `text-align: left` par `text-align: start`
-- [ ] Je teste mes layouts en `dir="rtl"` au moins une fois
+- [ ] J'utilise les shorthand `margin-inline` / `padding-block` quand les 2 côtés d'un axe partagent la même valeur
 
 > 🎯 **Mantra du module** : *"Avant `:has()`, on ajoutait du JS. Maintenant, on écrit une ligne de CSS."*

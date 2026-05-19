@@ -45,7 +45,7 @@ formateur:
   transition_module_suivant: >
     "Layout maîtrisé. Mais le code commence à charger — sélecteurs longs, répétitions.
     Module 5 : sélecteurs modernes :is() :where() :has() — moins de code, plus de
-    puissance. Et propriétés logiques bonus i18n."
+    puissance. Et propriétés logiques pour un code plus court et cohérent par axe."
 ---
 
 # Module 4 — Grid Layout & layouts denses

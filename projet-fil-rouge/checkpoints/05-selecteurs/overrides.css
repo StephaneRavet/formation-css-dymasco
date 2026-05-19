@@ -22,7 +22,7 @@
 
 /* ----------------------------------------------------------------------------
    PRIORITY — escalade !important pour battre les 6 !important Apriso
-   border-inline-start-color écrit border-left-color en LTR (et right en RTL).
+   border-inline-start-color = équivalent logique de border-left-color (axe inline).
    ---------------------------------------------------------------------------- */
 
 @layer priority {
@@ -346,7 +346,7 @@
     }
 
     .apriso-footer__item--time {
-        margin-inline-start: auto;     /* logique = "auto à la fin" en LTR comme RTL */
+        margin-inline-start: auto;     /* équivalent logique de margin-left: auto */
         font-variant-numeric: tabular-nums;
     }
 
