@@ -2,12 +2,12 @@
 
 ## Code de départ et corrigé d'un exercice
 
-Règle : **jamais embarquer le code en bloc dans le `.md`**. Toujours un lien — autant pour le **Code de départ** que pour le **Corrigé attendu**.
+Règle : **jamais embarquer le code en bloc dans le `.md`** support de formation. Toujours un lien — autant pour le **Code de départ** que pour le **Corrigé attendu**.
 
-| Contexte | Cible du lien |
-|---|---|
-| Projet local (IDE / GitHub) | Fichier source (`projet-fil-rouge/...`) |
-| Notion (publication) | Page Notion dédiée contenant le code |
+| Contexte | Cible du lien | Forme du code |
+|---|---|---|
+| Projet local (IDE / GitHub) | Fichier source (`projet-fil-rouge/...`) | Le fichier source EST le code |
+| Notion (publication) | Page Notion dédiée | Code **intégré en code block** dans la page (le repo n'est pas publié — pas de lien `projet-fil-rouge/...` exposé au stagiaire) |
 
 ### Forme
 
@@ -59,19 +59,41 @@ Voir [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet
 
 ### Publication Notion
 
-Lors du sync vers Notion, remplacer le lien fichier par lien vers page Notion contenant le même code. Maintenir les deux en cohérence.
+**Contrainte** : le repo `projet-fil-rouge/` n'est PAS pushé publiquement. Aucun lien `projet-fil-rouge/...` ne doit apparaître dans Notion — le stagiaire ne peut pas l'ouvrir.
+
+Forme attendue d'une page corrigé Notion :
+
+1. Titre — `Corrigé Module N — overrides.css après Module N`
+2. Phrase d'intro — `État attendu de \`overrides.css\` après le **Module N — …**`
+3. (Optionnel) Bullets « Ajouts vs checkpoint Module N-1 »
+4. **Code block `css` contenant le contenu intégral du fichier `projet-fil-rouge/checkpoints/NN-…/overrides.css`**
+
+Interdit dans Notion :
+- Lien vers `projet-fil-rouge/...` (chemin local non navigable)
+- Phrase « Le code complet est dans le fichier local … »
+- Code tronqué ou résumé
+
+### Procédure de sync Notion
+
+À chaque modification d'un checkpoint :
+
+1. Lire le fichier `projet-fil-rouge/checkpoints/NN-…/overrides.css` en entier
+2. Mettre à jour la page Notion correspondante via MCP :
+   - `mcp__claude_ai_Notion__notion-update-page` command `replace_content`
+   - Contenu = intro + bullets + code block ```css contenant 100 % du fichier
+3. Vérifier après update qu'aucune chaîne `projet-fil-rouge` ne subsiste dans la page
 
 Pages Notion existantes :
 
-| Module | Page Corrigé Notion |
+| Module | Page ID |
 |---|---|
-| M01 | [Corrigé Module 1](https://www.notion.so/36539bb934678196a89c0d31fcfed90b3) |
-| M02 | [Corrigé Module 2](https://www.notion.so/36539bb9346781808282c3df8ee6040a43) |
-| M03 | [Corrigé Module 3](https://www.notion.so/36539bb93467881b9a069f10b1a9669ef) |
-| M04 | [Corrigé Module 4](https://www.notion.so/36539bb9346781d79ff1c3ab4e3b8226) |
-| M05 | [Corrigé Module 5](https://www.notion.so/36539bb93467816091d1d769168a35fc) |
-| M06 | [Corrigé Module 6](https://www.notion.so/36539bb9346781858fbdc5fa7a87d1f9) |
-| M07 | [Corrigé Module 7](https://www.notion.so/36539bb93467810aa7d6f49068c43c0c) |
-| M08 | [Corrigé Module 8](https://www.notion.so/36539bb93467810e9ffeea156a347323) |
-| M09 | [Corrigé Module 9](https://www.notion.so/36539bb93467814f8bf4fecee78ed5c6) |
-| M10 | [Corrigé Module 10](https://www.notion.so/36539bb934678101b6f3db9573008a67) |
+| M01 | [36539bb93467819689c0d31fcfed90b3](https://www.notion.so/36539bb93467819689c0d31fcfed90b3) |
+| M02 | [36539bb93467818082c3df8ee6040a43](https://www.notion.so/36539bb93467818082c3df8ee6040a43) |
+| M03 | [36539bb9346781b9a069f10b1a9669ef](https://www.notion.so/36539bb9346781b9a069f10b1a9669ef) |
+| M04 | [36539bb9346781d79ff1c3ab4e3b8226](https://www.notion.so/36539bb9346781d79ff1c3ab4e3b8226) |
+| M05 | [36539bb93467816091d1d769168a35fc](https://www.notion.so/36539bb93467816091d1d769168a35fc) |
+| M06 | [36539bb9346781858fbdc5fa7a87d1f9](https://www.notion.so/36539bb9346781858fbdc5fa7a87d1f9) |
+| M07 | [36539bb93467810aa7d6f49068c43c0c](https://www.notion.so/36539bb93467810aa7d6f49068c43c0c) |
+| M08 | [36539bb93467810e9ffeea156a347323](https://www.notion.so/36539bb93467810e9ffeea156a347323) |
+| M09 | [36539bb93467814f8bf4fecee78ed5c6](https://www.notion.so/36539bb93467814f8bf4fecee78ed5c6) |
+| M10 | [36539bb934678101b6f3db9573008a67](https://www.notion.so/36539bb934678101b6f3db9573008a67) |
