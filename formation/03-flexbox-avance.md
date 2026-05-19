@@ -58,6 +58,7 @@ Maîtriser les patterns "**fixe + fluide**" en Flexbox, et **dompter les textes 
 ## ⚙️ Pour qui c'est utile chez Dymasco
 
 Vos dashboards manipulent du **texte métier** que vous ne contrôlez pas :
+
 - Noms de machines longs (*"Ligne d'extrusion sous-vide L2 — Conditionneuse Coco"*).
 - Messages d'événements verbeux (*"Dérive d'épaisseur supérieure à la tolérance — référence OF-2026-0428-L2-A"*).
 - Codes opérateur, références d'OF, libellés multi-langues.
@@ -83,7 +84,7 @@ Aujourd'hui, dans `apriso-base.css` :
 Flexbox = **un axe principal + un axe secondaire**. Conteneur (`display: flex`) + items.
 
 | Propriété | Sur le conteneur | Sur l'item |
-|---|---|---|
+| --- | --- | --- |
 | Direction | `flex-direction` | — |
 | Aller à la ligne | `flex-wrap` | — |
 | Espacement | `gap` | — |
@@ -99,14 +100,16 @@ Cible Baseline : Flexbox = **Widely available** depuis ~ 2015. ✅.
 flex: <flex-grow> <flex-shrink> <flex-basis>;
 ```
 
-| `flex-grow` | "à quelle vitesse cet item grandit s'il reste de la place" |
-| `flex-shrink` | "à quelle vitesse il rétrécit s'il manque de la place" |
-| `flex-basis` | "taille idéale de départ avant ajustement" |
+| Propriété | Sens |
+| --- | --- |
+| `flex-grow` | est ce que cet item grandit s'il reste de la place |
+| `flex-shrink` | est ce que il rétrécit s'il manque de la place |
+| `flex-basis` | taille idéale de départ |
 
 Patrons à mémoriser :
 
 | Code | Sens | Cas d'usage |
-|---|---|---|
+| --- | --- | --- |
 | `flex: 0 0 auto` | Fixe, jamais de variation | Logo, icône d'état |
 | `flex: 1 1 auto` | Partage l'espace, basé sur le contenu | Titre central qui prend ce qui reste |
 | `flex: 1 1 0` | Partage **égal** entre items, ignore le contenu | Colonnes égales |
@@ -198,7 +201,7 @@ Trois techniques selon le besoin :
 → "OF-2026-0428-L2-AAAAAAAA" peut être coupé en milieu de chaîne au lieu de déborder.
 
 | Valeur | Comportement |
-|---|---|
+| --- | --- |
 | `overflow-wrap: normal` | Casse seulement aux espaces. Défaut. |
 | `overflow-wrap: break-word` | Casse mots longs si nécessaire (legacy). |
 | `overflow-wrap: anywhere` | Idem, **et** compte le mot cassé pour le calcul de largeur. **Préféré.** |
@@ -273,6 +276,7 @@ Renommer une machine "Ligne d'extrusion sous-vide L2 — Conditionneuse Coco" da
 Sans gestion : la card grandit, la grille se décale.
 
 Ajouter :
+
 ```css
 .apriso-machine-card__title {
   overflow: hidden;
@@ -308,34 +312,234 @@ Tester avec un message long. → Trois petits points en fin de 2e ligne.
 Reprendre le checkpoint Module 2 et :
 
 1. **Header** — passer en pattern `fixe + fluide + fixe` :
-   - `.apriso-header` reçoit `display: flex`, `align-items: center`, `gap`.
-   - `.apriso-header__brand` → `flex: 0 0 auto`.
-   - `.apriso-header__title` → `flex: 1 1 auto`, `min-width: 0`, ellipsis si trop long.
-   - `.apriso-header__controls` → `flex: 0 0 auto`.
-
+    - `.apriso-header` reçoit `display: flex`, `align-items: center`, `gap`.
+    - `.apriso-header__brand` → `flex: 0 0 auto`.
+    - `.apriso-header__title` → `flex: 1 1 auto`, `min-width: 0`, ellipsis si trop long.
+    - `.apriso-header__controls` → `flex: 0 0 auto`.
 2. **Grille machines** — assouplir :
-   - `.apriso-machine-grid` reste flex-wrap, `gap` token.
-   - `.apriso-machine-card` → `flex: 1 1 var(--ml-card-width)` au lieu de `width: var(--ml-card-width)`. Garder un plafond raisonnable (`max-width: 360px` par exemple).
-
+    - `.apriso-machine-grid` reste flex-wrap, `gap` token.
+    - `.apriso-machine-card` → `flex: 1 1 var(--ml-card-width)` au lieu de `width: var(--ml-card-width)`. Garder un plafond raisonnable (`max-width: 360px` par exemple).
 3. **Card** — composition interne :
-   - `.apriso-machine-card` devient un flex-column avec gap.
-   - `.apriso-machine-card__header` flex-row, min-width 0.
-   - `.apriso-machine-card__title` ellipsis 1 ligne.
-   - `.apriso-machine-card__status` flex 0 0 auto.
-   - `.apriso-machine-card__last-event` line-clamp 2.
-
+    - `.apriso-machine-card` devient un flex-column avec gap.
+    - `.apriso-machine-card__header` flex-row, min-width 0.
+    - `.apriso-machine-card__title` ellipsis 1 ligne.
+    - `.apriso-machine-card__status` flex 0 0 auto.
+    - `.apriso-machine-card__last-event` line-clamp 2.
 4. **Journal d'événements** — débordement :
-   - `.apriso-event-log__table td` → `overflow-wrap: anywhere`.
-   - Sur la dernière colonne (message), `text-wrap: pretty` (rappel module 2) en bonus.
-
+    - `.apriso-event-log__table td` → `overflow-wrap: anywhere`.
+    - Sur la dernière colonne (message), `text-wrap: pretty` (rappel module 2) en bonus.
 5. **Test à faire** : éditer le HTML, donner à 2 machines un nom **très long**, recharger. Vérifier que :
-   - Le titre s'ellipse, ne fait pas grandir la card.
-   - La hauteur des cards reste alignée dans la grille.
-   - Le message d'événement long se clampe à 2 lignes.
+    - Le titre s'ellipse, ne fait pas grandir la card.
+    - La hauteur des cards reste alignée dans la grille.
+    - Le message d'événement long se clampe à 2 lignes.
 
-### Code de départ
+### 📁 Code de départ
 
-Le `overrides.css` issu du checkpoint Module 2.
+Partez de ce `overrides.css` (état après Module 2) :
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 2 — Typographie & dimensions fluides
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Démontre, en plus du Module 1 :
+   - clamp(), min(), max() sur largeurs et font-sizes
+   - aspect-ratio sur status dot
+   - text-wrap: balance sur titre header
+   - dvh pour hauteur d'app plein écran
+   - Tokens fluides --ml-fs-* (font-sizes calculées)
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("./apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ----------------------------------------------------------- */
+
+    :root {
+        /* Brand */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        /* Status */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        /* Spacing */
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typographie fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions fluides */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width:          clamp(220px, 22vw, 300px);
+        --ml-select-width:        max(180px, 14ch);
+
+        /* Radius / shadow */
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;                /* dynamic viewport — tablette friendly */
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+    }
+
+    /* --- HEADER ----------------------------------------------------------- */
+
+    .apriso-header {
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+        padding-inline: max(16px, 2vw);
+
+        & .apriso-header__title {
+            text-wrap: balance;        /* font-size escaladé dans @layer priority */
+        }
+    }
+
+    .apriso-line-selector__select {
+        width: var(--ml-select-width);
+    }
+
+    /* Status dot — taille suit la typo parent, jamais désaccordée */
+    .apriso-connection-status__dot {
+        width: 0.6em;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD -------------------------------------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi__label {
+        font-size: var(--ml-fs-kpi-label);
+    }
+
+    .apriso-kpi__value {
+        font-size: var(--ml-fs-kpi-value);
+    }
+
+    /* --- MACHINE CARD ----------------------------------------------------- */
+
+    .apriso-machine-card {
+        width: var(--ml-card-width);     /* fluide, sera assoupli en Module 3/6 */
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__title {
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+        }
+
+        &:hover {
+            box-shadow: var(--ml-shadow-2);
+        }
+
+        /* Status modifiers : Apriso pose !important sur border-left-color
+           (et background pour --alert). Overrides effectifs dans @layer priority. */
+    }
+
+    /* --- EVENT LOG -------------------------------------------------------- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-bottom-color: var(--ml-color-border);
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
+```
 
 ### Pièges fréquents
 
@@ -346,7 +550,262 @@ Le `overrides.css` issu du checkpoint Module 2.
 
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/03-flexbox/overrides.css`.
+#### ❌ Solution
+
+État attendu de `overrides.css` après le Module 3 (~250 lignes). Démontre flexbox avancé : header en flexbox avec ellipsis, min-width:0 sur les ancêtres, gap, alignements.
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 3 — Flexbox avancé + textes débordants
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Ajouts vs checkpoint Module 2 :
+   - Header en pattern fixe + fluide + fixe (flex 0 0 auto / 1 1 auto / 0 0 auto)
+   - Cards machine en flex: 1 1 var(--ml-card-width) — remplissent l'espace
+   - Triptyque textes : ellipsis 1 ligne, line-clamp 2, overflow-wrap anywhere
+   - min-width: 0 systématique sur les ancêtres flex de textes ellipsés
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("./apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ----------------------------------------------------------- */
+
+    :root {
+        /* Brand */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        /* Status */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        /* Spacing */
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typo fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width:          clamp(220px, 22vw, 300px);
+        --ml-card-max:            360px;
+        --ml-select-width:        max(180px, 14ch);
+
+        /* Radius / shadow */
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+    }
+
+    /* --- HEADER — pattern fixe + fluide + fixe ---------------------------- */
+
+    .apriso-header {
+        display: flex;
+        align-items: center;
+        gap: var(--ml-spacing-4);
+        padding-inline: max(16px, 2vw);
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+    }
+
+    .apriso-header__brand    { flex: 0 0 auto; }
+    .apriso-header__controls { flex: 0 0 auto; }
+
+    .apriso-header__title {
+        /* font-size : escaladé dans @layer priority (Apriso le pose en !important) */
+        flex: 1 1 auto;
+        min-width: 0;
+        text-wrap: balance;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .apriso-line-selector__select {
+        width: var(--ml-select-width);
+    }
+
+    .apriso-connection-status__dot {
+        width: 0.6em;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD -------------------------------------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); }
+
+    /* --- MACHINE GRID — assouplissement flexbox --------------------------- */
+
+    .apriso-machine-grid {
+        gap: var(--ml-spacing-3);
+        padding: var(--ml-spacing-4);
+    }
+
+    .apriso-machine-card {
+        /* Cible 240px, peut grandir et rétrécir, plafond raisonnable */
+        flex: 1 1 var(--ml-card-width);
+        max-width: var(--ml-card-max);
+        width: auto;        /* annule width fixe Apriso */
+        min-width: 0;       /* permet aux enfants de tronquer */
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--ml-spacing-2);
+
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--ml-spacing-2);
+            min-width: 0;       /* nécessaire pour ellipsis du titre */
+        }
+
+        & .apriso-machine-card__title {
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        & .apriso-machine-card__status {
+            flex: 0 0 auto;
+        }
+
+        & .apriso-machine-card__last-event {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        &:hover { box-shadow: var(--ml-shadow-2); }
+
+        /* Status modifiers escaladés dans @layer priority (Apriso !important) */
+    }
+
+    /* --- EVENT LOG — overflow textes longs -------------------------------- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-bottom-color: var(--ml-color-border);
+        }
+
+        & .apriso-event-log__table td {
+            overflow-wrap: anywhere;
+        }
+
+        /* Dernière colonne (message) — joli wrap typo */
+        & .apriso-event-log__table td:last-child {
+            text-wrap: pretty;
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
+```
 
 ---
 

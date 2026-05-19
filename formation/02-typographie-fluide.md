@@ -77,7 +77,7 @@ L'ennemi n°1 dans `apriso-base.css` :
 
 ## 📚 Concepts (15 min)
 
-### 1. `clamp(min, ideal, max)` — la valeur autorégulée
+### 1. `clamp(min, ideal, max)` — la valeur auto-régulée
 
 `clamp()` renvoie `ideal`, mais borne à `min` ou `max` selon le contexte.
 
@@ -111,6 +111,7 @@ Un seul code, trois résultats raisonnables.
 ```
 
 Règle simple :
+
 - **`min()`** = "ne dépasse pas".
 - **`max()`** = "ne descend pas en dessous".
 - **`clamp()`** = les deux, plus une valeur idéale.
@@ -138,24 +139,6 @@ Bye bye le `padding-top: 56.25%` et autres hacks de l'époque pré-2021.
 
 `aspect-ratio` : **Widely available** depuis 2021. Pour Dymasco : ✅.
 
-### 5. `text-wrap: balance` / `pretty` — la mise en forme automatique du texte
-
-Deux valeurs récentes pour `text-wrap`, **conçues pour titres et paragraphes**.
-
-```css
-h1 { text-wrap: balance; }    /* équilibre les lignes — idéal titres courts */
-p  { text-wrap: pretty; }     /* évite les "veuves" en bas de paragraphe */
-```
-
-`balance` répartit les mots pour que les lignes aient des largeurs proches. Évite le titre "long—long—court" disgracieux.
-
-`pretty` traite la dernière ligne pour qu'elle ne soit pas un orphelin d'un seul mot.
-
-#### Cible Baseline
-
-- `text-wrap: balance` : **Widely available** mi-2024.
-- `text-wrap: pretty` : **Newly available** (Chrome/Edge 117+, Safari 17.5+, Firefox 121+). Vérifier la cible client.
-
 ### 6. Unités à connaître pour Dymasco
 
 | Unité | Usage typique chez Dymasco |
@@ -164,7 +147,7 @@ p  { text-wrap: pretty; }     /* évite les "veuves" en bas de paragraphe */
 | `rem` | Espacements proportionnels au `font-size` racine |
 | `ch` | Largeurs basées sur le nombre de caractères (sélecteurs, inputs) |
 | `vw`/`vh` | Adaptation au format de l'écran physique |
-| `%` | Layout interne |
+| `%` | Parent doit avoir des valeurs fixes |
 | `dvh`/`svh` | Hauteur viewport sans/avec barre nav mobile (tablette opérateur) |
 
 > ⚠️ `vh` sur tablette = parfois bug avec la barre d'adresse. Préférer **`dvh`** (dynamic viewport height) pour la hauteur d'app plein écran.
@@ -203,11 +186,13 @@ p  { text-wrap: pretty; }     /* évite les "veuves" en bas de paragraphe */
 ### Bonus démo : `aspect-ratio` sur status dot
 
 Avant :
+
 ```css
 .apriso-connection-status__dot { width: 8px; height: 8px; border-radius: 50%; }
 ```
 
 Après :
+
 ```css
 .apriso-connection-status__dot { width: 0.6em; aspect-ratio: 1; border-radius: 50%; }
 ```
@@ -218,6 +203,100 @@ Après :
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez de ce `overrides.css` (état après Module 1) :
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 1 — Architecture CSS pour overrides
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+
+@import url("./apriso-base.css") layer(framework);
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) { margin: 0; }
+    :where(button, select, input, textarea) { font: inherit; color: inherit; }
+}
+
+@layer priority {
+    .apriso-header__title { font-size: 22px !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+@layer overrides {
+    :root {
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+        --ml-fs-header-title: 22px;
+        --ml-fs-card-title:   14px;
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    html { background: var(--ml-color-bg-app); color: var(--ml-color-text); }
+    .apriso-dashboard { background: var(--ml-color-surface); border-color: var(--ml-color-border); }
+
+    .apriso-header {
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+    }
+
+    .apriso-kpi-board { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
+
+    .apriso-machine-card {
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__title { font-size: var(--ml-fs-card-title); color: var(--ml-color-text); }
+        &:hover { box-shadow: var(--ml-shadow-2); }
+    }
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+        & .apriso-event-log__header { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
+    }
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+    }
+}
+```
+
 ### Consigne
 
 Compléter `overrides.css` (issu du checkpoint Module 1) pour rendre le dashboard fluide :
@@ -227,12 +306,8 @@ Compléter `overrides.css` (issu du checkpoint Module 1) pour rendre le dashboar
 3. **`.apriso-kpi__label`** → `font-size: clamp(10px, 0.9vw, 13px)`.
 4. **`.apriso-machine-card`** → `width: clamp(220px, 22vw, 300px)` (gardera flex pour Module 3).
 5. **`.apriso-line-selector__select`** → `width: max(180px, 14ch)`.
-6. **`.apriso-header__title`** → `font-size: clamp(16px, 1.6vw, 24px)`, `text-wrap: balance`.
+6. **`.apriso-header__title`** → `font-size: clamp(16px, 1.6vw, 24px)`.
 7. **Token typo** : ajouter `--ml-fs-kpi-value`, `--ml-fs-kpi-label` dans `:root` et les utiliser au lieu d'inliner les `clamp()` (bonus : tokens fluides).
-
-### Code de départ
-
-Le fichier `overrides.css` issu du checkpoint Module 1.
 
 ### Pièges fréquents
 
@@ -243,7 +318,142 @@ Le fichier `overrides.css` issu du checkpoint Module 1.
 
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/02-typography/overrides.css`.
+#### ❌ Solution
+
+État attendu de `overrides.css` après le Module 2 (~200 lignes). Ajoute les tokens fluides `--ml-fs-*` et `--ml-card-width`, applique `clamp()` sur le header title et les KPI, `aspect-ratio: 1` sur le status dot, `100dvh` sur le dashboard.
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 2 — Typographie & dimensions fluides
+   ----------------------------------------------------------------------------
+   Démontre, en plus du Module 1 :
+   - clamp(), min(), max() sur largeurs et font-sizes
+   - aspect-ratio sur status dot
+   - dvh pour hauteur d'app plein écran
+   - Tokens fluides --ml-fs-* (font-sizes calculées)
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+@import url("./apriso-base.css") layer(framework);
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) { margin: 0; }
+    :where(button, select, input, textarea) { font: inherit; color: inherit; }
+}
+
+@layer overrides {
+
+    :root {
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typographie fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions fluides */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width:          clamp(220px, 22vw, 300px);
+        --ml-select-width:        max(180px, 14ch);
+
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+    }
+
+    .apriso-header {
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+        padding-inline: max(16px, 2vw);
+    }
+
+    .apriso-line-selector__select { width: var(--ml-select-width); }
+
+    .apriso-connection-status__dot { width: 0.6em; height: auto; aspect-ratio: 1; }
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: min(12px, 1.5vw) min(16px, 2vw);
+    }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); }
+
+    .apriso-machine-card {
+        width: var(--ml-card-width);
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__title { font-size: var(--ml-fs-card-title); color: var(--ml-color-text); }
+        &:hover { box-shadow: var(--ml-shadow-2); }
+    }
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+        & .apriso-event-log__header { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
+    }
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
+```
 
 ---
 
@@ -272,18 +482,11 @@ padding-inline: max(16px, 5vw);   /* marges qui respirent sur grand écran */
 
 ### Bonus 3 — `text-wrap: pretty` sur les messages d'événement
 
-```css
-.apriso-event-log__table td:last-child { text-wrap: pretty; }
-```
-
-→ Évite qu'un message long se termine par un mot orphelin de 3 lettres.
-
 ### Ressources
 
 - [MDN — clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
 - [MDN — aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
-- [MDN — text-wrap](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap)
-- [Utopia.fyi](https://utopia.fyi/) — générateur d'échelles typo fluides
+- [Utopia.fyi](https://utopia.fyi) — générateur d'échelles typo fluides
 
 ---
 
@@ -294,7 +497,6 @@ padding-inline: max(16px, 5vw);   /* marges qui respirent sur grand écran */
 - [ ] Je remplace **toute** largeur figée en `px` par une expression fluide ou `min(value, 100%)`
 - [ ] Je définis les `font-size` des éléments-clés (KPI, titres) en `clamp()`
 - [ ] J'utilise `aspect-ratio` au lieu des hacks `padding-top`
-- [ ] Je connais `text-wrap: balance` (titres) et `text-wrap: pretty` (paragraphes)
 - [ ] J'utilise `dvh` plutôt que `vh` pour les hauteurs plein écran sur tablette
 
 > 🎯 **Mantra du module** : *"Une seule règle CSS pour 3 tailles d'écran."*

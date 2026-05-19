@@ -89,7 +89,7 @@ Ces réponses se traduisent en une **cible navigateur écrite** dans le projet. 
 
 Syntaxe utile :
 
-```
+```plain text
 # .browserslistrc — exemple cible "client industriel récent"
 last 2 Chrome versions
 last 2 Edge versions
@@ -98,14 +98,14 @@ not dead
 
 > 📦 **`not dead` — définition**
 >
-> Filtre qui **exclut les navigateurs morts** : sans mise à jour officielle depuis **24 mois** ET part de marché globale **< 0,5 %**.
+> Filtre qui **exclut les navigateurs morts** : sans mise à jour officielle depuis **24 mois** ET part de marché globale **\< 0,5 %**.
 >
 > Concrètement, retire de la cible : IE 10/11, IE Mobile, BlackBerry Browser, vieilles Opera Mini, KaiOS Browser, anciennes Samsung Internet.
 >
 > Liste maintenue par le projet `browserslist` via `caniuse-lite`. Pour la voir :
-> ```bash
+> `bash
 > npx browserslist "dead"
-> ```
+> `
 >
 > **Pourquoi le garder** : `last 2 versions` peut embarquer la dernière version d'un navigateur fossile (ex : IE 11 est la "dernière version" d'IE). `not dead` agit comme filet de sécurité — combiné avec une autre query, jamais seul.
 >
@@ -113,7 +113,7 @@ not dead
 
 Ou en version "client conservateur" :
 
-```
+```plain text
 Edge >= 110
 Chrome >= 110
 not dead
@@ -176,8 +176,6 @@ Sans `@supports`, un vieux navigateur ignore silencieusement une propriété qu'
 
 Quand on doit livrer pour une cible mixte, `@supports` permet d'écrire un **chemin moderne** + un **fallback**.
 
-
-
 Variante avec négation :
 
 ```css
@@ -209,7 +207,7 @@ Pour chaque CDC : produire **(a)** un `.browserslistrc` argumenté (versions fix
 **Découpage** :
 
 - **Exercice 1** — démonstration faite **ensemble** au tableau (15 min).
-- **Exercices 2 et 3** — chaque apprenant seul **5 min** sur sa feuille, puis correction **dérouée en live** (~5 min) — même format que l'exercice 1.
+- **Exercices 2 et 3** — chaque stagiaire seul **5 min** sur sa feuille, puis correction **dérouée en live** (~5 min) — même format que l'exercice 1.
 
 ---
 
@@ -220,7 +218,7 @@ Pour chaque CDC : produire **(a)** un `.browserslistrc` argumenté (versions fix
 #### Étape 1 — Extraire la cible du CDC
 
 | Élément CDC | Traduction technique |
-| --- | --- |
+|---|---|
 | Postes superviseurs Windows 11, Edge installé par l'IT, MAJ auto | **Edge récent**, retard max ~6 mois sur stable |
 | 4 tablettes Galaxy Tab Active5, Android 14, Chrome stable | **Chrome Android récent** (Play Store à jour) |
 | Pas d'usage public web | **Pas de Firefox ni Safari** dans le parc → on ne les porte pas |
@@ -228,7 +226,7 @@ Pour chaque CDC : produire **(a)** un `.browserslistrc` argumenté (versions fix
 
 #### Étape 2 — Le `.browserslistrc` argumenté
 
-```text
+```plain text
 # .browserslistrc — projet Mamie Lulu / Forge override
 # Cible parc : Edge superviseurs (Win11, auto-update IT)
 #            + Chrome Android (Galaxy Tab Active5, Android 14)
@@ -258,7 +256,7 @@ npx browserslist "Edge >= 120, ChromeAndroid >= 120, not dead"
 #### Étape 3 — Tableau de décision "feature → décision"
 
 | Feature | Baseline | Première version OK | Statut cible Mamie Lulu | Décision | Note livraison |
-| --- | --- | --- | --- | --- | --- |
+|---|---|---|---|---|---|
 | `@layer` (Module 1) | [**Widely** depuis mars 2022](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) | [Edge 99 / Chrome 99](https://caniuse.com/css-cascade-layers) | Plancher 120 ≫ 99 (+21) | ✅ Utiliser directement | Pierre angulaire de l'archi `overrides.css` |
 | `:has()` (Module 5) | [**Widely** depuis déc 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) | [Edge 105 / Chrome 105](https://caniuse.com/css-has) | Plancher 120 ≫ 105 (+15) | ✅ Utiliser directement | Styling parent-driven (lignes critiques) |
 | `@container` (Module 6) | [**Widely** depuis févr 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) | [Edge 105 / Chrome 105](https://caniuse.com/css-container-queries) | Plancher 120 ≫ 105 (+15) | ✅ Utiliser directement | Préférer aux media queries pour composants dashboard |
@@ -287,12 +285,12 @@ On documente le verdict en tête d'`overrides.css` :
 
 **5 min** pour produire votre propre `.browserslistrc` + tableau de décision. Puis on déroule la correction ensemble.
 
-#### 🔑 Correction — Exercice 2 (à dérouler après les 5 min)
+#### ❌ Solution — Exercice 2
 
 ##### Étape 1 — Extraction (exo 2)
 
 | Élément CDC | Traduction technique |
-| --- | --- |
+|---|---|
 | Win 10 LTSC, Edge non mis à jour auto, version figée par DSI | **Edge plancher inconnu** → **à demander à la DSI client** avant validation |
 | Validation IT pour toute MAJ | Le plancher d'aujourd'hui sera quasi le plancher dans 1 an |
 | Durée de vie 5 ans | On s'engage jusqu'en 2031 sur le parc **actuel** — pas sur le futur |
@@ -302,7 +300,7 @@ On documente le verdict en tête d'`overrides.css` :
 
 ##### Étape 2 — `.browserslistrc` (exo 2)
 
-```text
+```plain text
 # .browserslistrc — projet Automobile / Atelier override
 # Cible parc : Edge desktop figé DSI (Win 10 LTSC, MAJ manuelle)
 # Plancher HYPOTHÈSE — à confirmer par mail DSI client avant validation finale
@@ -322,12 +320,12 @@ Justification :
 ##### Étape 3 — Tableau de décision (exo 2, plancher Edge 110)
 
 | Feature | Première version OK | Statut cible (plancher 110) | Décision |
-| --- | --- | --- | --- |
+|---|---|---|---|
 | `@layer` | Edge 99 | 110 ≫ 99 (+11) | ✅ Utiliser directement |
 | `:has()` | Edge 105 | 110 ≫ 105 (+5, marge fine) | ⚠️ Utiliser, mais **prévoir `@supports selector(:has(*))`** pour les blocs critiques |
 | `@container` | Edge 105 | 110 ≫ 105 (+5) | ✅ Utiliser, marge correcte |
-| `oklch()` | Edge 111 | 110 < 111 (−1) | ❌ **Fallback hex/rgb obligatoire** via `@supports (color: oklch(0% 0 0))` |
-| Subgrid | Edge 117 | 110 < 117 (−7) | ❌ **Refuser ou fallback grid simple** — pas de bricolage |
+| `oklch()` | Edge 111 | 110 \< 111 (−1) | ❌ **Fallback hex/rgb obligatoire** via `@supports (color: oklch(0% 0 0))` |
+| Subgrid | Edge 117 | 110 \< 117 (−7) | ❌ **Refuser ou fallback grid simple** — pas de bricolage |
 
 ##### Étape 4 — Bilan (exo 2)
 
@@ -348,12 +346,12 @@ Cible figée + 5 ans de durée de vie = **2 features sortent du périmètre Base
 
 **5 min** pour produire votre propre `.browserslistrc` + tableau de décision. Puis correction ensemble.
 
-#### 🔑 Correction — Exercice 3 (à dérouler après les 5 min)
+#### ❌ Solution — Exercice 3
 
 ##### Étape 1 — Extraction (exo 3)
 
 | Élément CDC | Traduction technique |
-| --- | --- |
+|---|---|
 | 12 internes Chrome récent géré IT | Chrome desktop **récent**, fenêtre courte (auto-update) |
 | 30 sous-traitants BYOD, aucune contrainte | **Tout est possible** : Chrome / Edge / Firefox / Safari (desktop + mobile), versions inconnues |
 | Aucune contrainte navigateur imposée aux partenaires | **Maillon faible pilote** la cible — on doit s'aligner sur le pire plausible |
@@ -363,7 +361,7 @@ Cible figée + 5 ans de durée de vie = **2 features sortent du périmètre Base
 
 ##### Étape 2 — `.browserslistrc` (exo 3)
 
-```text
+```plain text
 # .browserslistrc — projet Agroalimentaire / Dashboard partenaires
 # Cible parc : Chrome internes + BYOD sous-traitants (desktop + mobile)
 # Engagement contractuel : navigateurs stables sortis dans les 24 derniers mois
@@ -388,7 +386,7 @@ Justification :
 ##### Étape 3 — Tableau de décision (exo 3, plancher commun)
 
 | Feature | Première version OK (toutes plateformes) | Statut cible (plancher commun) | Décision |
-| --- | --- | --- | --- |
+|---|---|---|---|
 | `@layer` | Chrome 99 / FF 97 / Safari 15.4 | Plancher 120/121/17 ≫ tous seuils | ✅ Utiliser directement |
 | `:has()` | Chrome 105 / FF 121 / Safari 15.4 | Plancher 121 = seuil FF (+0) | ✅ Utiliser, **mais plancher Firefox calé pile** — surveiller en revue |
 | `@container` | Chrome 105 / FF 110 / Safari 16 | Plancher ≫ tous seuils | ✅ Utiliser directement |
@@ -438,9 +436,9 @@ Plus précis que `@supports (display: grid)` quand on cible un sélecteur récen
 
 1. Ajouter un `.browserslistrc` à la racine de chaque projet d'override.
 2. Mettre une **ligne de commentaire en tête** de chaque `overrides.css` :
-   ```css
-   /* Target: <browserslist query> — last reviewed: YYYY-MM-DD */
-   ```
+	```css
+/* Target: <browserslist query> — last reviewed: YYYY-MM-DD */
+	```
 3. Au moindre doute sur une feature : `Baseline` → `caniuse` → décision écrite.
 
 ---

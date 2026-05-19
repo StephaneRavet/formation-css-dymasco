@@ -45,7 +45,7 @@ formateur:
   transition_module_suivant: >
     "Layout maîtrisé. Mais le code commence à charger — sélecteurs longs, répétitions.
     Module 5 : sélecteurs modernes :is() :where() :has() — moins de code, plus de
-    puissance. Et propriétés logiques pour un code plus court et cohérent par axe."
+    puissance."
 ---
 
 # Module 4 — Grid Layout & layouts denses
@@ -100,7 +100,7 @@ Grid = **2D** (lignes ET colonnes), contrairement à Flex (1D + wrap).
 Unités spécifiques Grid :
 
 | Unité | Sens |
-|---|---|
+| --- | --- |
 | `1fr` | "1 part de l'espace restant" |
 | `auto` | Taille du contenu |
 | `min-content` / `max-content` | Plus petit / plus grand contenu |
@@ -152,7 +152,7 @@ Lecture : "Crée autant de colonnes que possible, chacune entre 240px et 1fr."
 #### `auto-fit` vs `auto-fill`
 
 | Valeur | Comportement |
-|---|---|
+| --- | --- |
 | `auto-fill` | Crée toutes les colonnes possibles, **garde les vides** s'il en reste. |
 | `auto-fit` | Idem, mais **collapse les colonnes vides** → les items remplissent l'espace. |
 
@@ -161,7 +161,7 @@ Pour un dashboard : **`auto-fit` quasi systématique**. `auto-fill` utile si on 
 #### Comparaison avec Flex (Module 3)
 
 | Approche | Code | Avantage |
-|---|---|---|
+| --- | --- | --- |
 | Flex | `flex: 1 1 240px` | Simple, items s'étirent |
 | Grid `auto-fit` | `repeat(auto-fit, minmax(240px, 1fr))` | Items strictement alignés en colonnes, gap parfait |
 
@@ -187,14 +187,11 @@ Cas Apriso : le KPI Board est un vrai `<table>`, on n'a pas la main sur le HTML.
 ```
 
 **Comment ça marche** :
+
 - `display: contents` rend l'élément **invisible au layout** : ses enfants prennent sa place dans la cascade de layout.
 - `<table>` et `<tbody>` "disparaissent". Le `<tr>` devient le conteneur grid direct, ses `<td>` deviennent les items.
 
-⚠️ **Piège accessibilité** : `display: contents` retire l'élément de l'**arbre d'accessibilité** dans certains navigateurs anciens. Bug largement corrigé depuis 2023, mais à vérifier sur la cible client (Module 0). Pour un `<table>` sémantique critique → préférer `role="presentation"` côté HTML, mais ce n'est pas notre sujet ici (KPI = présentation, pas un tableau de données).
-
 > 🚫 **Quand refuser `display: contents` sur `<table>`** : si le tableau porte de **vraies données tabulaires** (export CSV, lecture lecteur d'écran ligne par ligne, tri colonne) → ne **jamais** casser la sémantique table. Réservé aux tableaux purement présentationnels (KPI board, layout détourné). En cas de doute → garder `<table>` natif et styler avec `border-collapse` / `table-layout: fixed`.
-
-<!-- -->
 
 > 💡 **Note pédagogique — Subgrid** : la propriété `subgrid` (aligner les enfants d'une card sur la grille du parent) est **volontairement sortie du tronc commun**. Le module est déjà dense (Grid + areas + auto-fit + display:contents + sticky + scrollbar-gutter + tableaux denses). Subgrid est traité en **démo de clôture de 5 min**, sans exercice — voir § *Pour aller plus loin* en bas de module.
 
@@ -248,6 +245,7 @@ Sur Windows et Linux, les scrollbars **prennent de la place**. Quand le contenu 
 → Le navigateur **réserve la place** de la scrollbar même si elle n'est pas visible. Plus de saut.
 
 Variante :
+
 ```css
 scrollbar-gutter: stable both-edges;   /* symétrie visuelle */
 ```
@@ -290,7 +288,7 @@ Pour un journal d'événements lisible, retenir 4 règles :
 #### d) Alignement métier
 
 | Type de colonne | `text-align` | `font-variant-numeric` |
-|---|---|---|
+| --- | --- | --- |
 | Heure / horodatage | `end` ou `start` | `tabular-nums` |
 | Code / référence | `start` | — |
 | Libellé long | `start` | — |
@@ -345,27 +343,24 @@ Ajouter `tabular-nums` sur la colonne Heure, zebra `:nth-child(even)`, hover dis
 Reprendre le checkpoint Module 3 et :
 
 1. **Layout dashboard** : réécrire `.apriso-dashboard` en utilisant `grid-template-areas` (4 zones : header, kpi, main, footer ; `main` lui-même est split en `machines + sidebar`).
-
 2. **Grille machines** : remplacer le `flex: 1 1` du Module 3 par :
-   ```css
-   .apriso-machine-grid {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(var(--ml-card-width-min), 1fr));
-     gap: var(--ml-spacing-3);
-     padding: var(--ml-spacing-4);
-   }
-   ```
-   Et **retirer** `flex` / `width` / `max-width` sur la card.
-
+	```css
+.apriso-machine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--ml-card-width-min), 1fr));
+  gap: var(--ml-spacing-3);
+  padding: var(--ml-spacing-4);
+}
+	```
+	Et **retirer** `flex` / `width` / `max-width` sur la card.
 3. **KPI Board** : transformer le `<table>` en Grid 4 colonnes via `display: contents` (cf. concept §4).
-
 4. **Journal d'événements** :
-   - `<thead> th` → `position: sticky; top: 0; background; z-index`.
-   - `.apriso-event-log__container` → `scrollbar-gutter: stable`.
-   - Première colonne (Heure) → `tabular-nums`, alignement `end`.
-   - Dernière colonne (Sévérité) → alignement `end`.
-   - Lignes paires → background zebra (token `--ml-color-bg-cream`).
-   - Hover discret sur les lignes.
+	- `<thead> th` → `position: sticky; top: 0; background; z-index`.
+	- `.apriso-event-log__container` → `scrollbar-gutter: stable`.
+	- Première colonne (Heure) → `tabular-nums`, alignement `end`.
+	- Dernière colonne (Sévérité) → alignement `end`.
+	- Lignes paires → background zebra (token `--ml-color-bg-cream`).
+	- Hover discret sur les lignes.
 
 ### Tests à faire
 
@@ -383,9 +378,587 @@ Reprendre le checkpoint Module 3 et :
 - ❌ Confondre `auto-fit` (collapse vides) et `auto-fill` (conserve vides) → grille avec items étirés non voulu.
 - ❌ Utiliser `1fr` sans `minmax(min, 1fr)` → items qui peuvent devenir illisibles à très petit écran.
 
+### 📁 Code de départ
+
+Partez de ce `overrides.css` (état après Module 3) :
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 3 — Flexbox avancé + textes débordants
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Ajouts vs checkpoint Module 2 :
+   - Header en pattern fixe + fluide + fixe (flex 0 0 auto / 1 1 auto / 0 0 auto)
+   - Cards machine en flex: 1 1 var(--ml-card-width) — remplissent l'espace
+   - Triptyque textes : ellipsis 1 ligne, line-clamp 2, overflow-wrap anywhere
+   - min-width: 0 systématique sur les ancêtres flex de textes ellipsés
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("./apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ----------------------------------------------------------- */
+
+    :root {
+        /* Brand */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        /* Status */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        /* Spacing */
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typo fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width:          clamp(220px, 22vw, 300px);
+        --ml-card-max:            360px;
+        --ml-select-width:        max(180px, 14ch);
+
+        /* Radius / shadow */
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+    }
+
+    /* --- HEADER — pattern fixe + fluide + fixe ---------------------------- */
+
+    .apriso-header {
+        display: flex;
+        align-items: center;
+        gap: var(--ml-spacing-4);
+        padding-inline: max(16px, 2vw);
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+    }
+
+    .apriso-header__brand    { flex: 0 0 auto; }
+    .apriso-header__controls { flex: 0 0 auto; }
+
+    .apriso-header__title {
+        /* font-size : escaladé dans @layer priority (Apriso le pose en !important) */
+        flex: 1 1 auto;
+        min-width: 0;
+        text-wrap: balance;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .apriso-line-selector__select {
+        width: var(--ml-select-width);
+    }
+
+    .apriso-connection-status__dot {
+        width: 0.6em;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD -------------------------------------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); }
+
+    /* --- MACHINE GRID — assouplissement flexbox --------------------------- */
+
+    .apriso-machine-grid {
+        gap: var(--ml-spacing-3);
+        padding: var(--ml-spacing-4);
+    }
+
+    .apriso-machine-card {
+        /* Cible 240px, peut grandir et rétrécir, plafond raisonnable */
+        flex: 1 1 var(--ml-card-width);
+        max-width: var(--ml-card-max);
+        width: auto;        /* annule width fixe Apriso */
+        min-width: 0;       /* permet aux enfants de tronquer */
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--ml-spacing-2);
+
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--ml-spacing-2);
+            min-width: 0;       /* nécessaire pour ellipsis du titre */
+        }
+
+        & .apriso-machine-card__title {
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        & .apriso-machine-card__status {
+            flex: 0 0 auto;
+        }
+
+        & .apriso-machine-card__last-event {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        &:hover { box-shadow: var(--ml-shadow-2); }
+
+        /* Status modifiers escaladés dans @layer priority (Apriso !important) */
+    }
+
+    /* --- EVENT LOG — overflow textes longs -------------------------------- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-bottom-color: var(--ml-color-border);
+        }
+
+        & .apriso-event-log__table td {
+            overflow-wrap: anywhere;
+        }
+
+        /* Dernière colonne (message) — joli wrap typo */
+        & .apriso-event-log__table td:last-child {
+            text-wrap: pretty;
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
+```
+
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/04-grid/overrides.css`.
+#### ❌ Solution
+
+État attendu de `overrides.css` après le Module 4 (~316 lignes). Démontre Grid Layout : `grid-template-areas`, `repeat(auto-fit, minmax())` sur la grille machines, `position: sticky` sur l'en-tête du journal, `display: contents` sur le KPI board.
+
+```css
+/* ============================================================================
+   FORGE × PÂTES MAMIE LULU — overrides.css
+   ----------------------------------------------------------------------------
+   Checkpoint après Module 4 — Grid Layout, Subgrid & layouts denses
+   Cible : Edge/Chromium <= 3 ans (Baseline widely available OK)
+   Last reviewed : 2026-05-18
+   ----------------------------------------------------------------------------
+   Ajouts vs checkpoint Module 3 :
+   - Layout dashboard via grid-template-areas
+   - Grille machines via repeat(auto-fit, minmax(...))
+   - KPI Board <table> transformé en Grid via display: contents
+   - Journal : sticky thead + scrollbar-gutter
+   - Tableau dense : tabular-nums, alignement métier, zebra rows, hover
+   ============================================================================
+*/
+
+@layer reset, priority, framework, overrides;
+
+/* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
+   apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
+@import url("./apriso-base.css") layer(framework);
+
+/* ----------------------------------------------------------------------------
+   PRIORITY — escalade !important pour battre les 6 !important Apriso
+   ---------------------------------------------------------------------------- */
+
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------------------- */
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) {
+        margin: 0;
+    }
+
+    :where(button, select, input, textarea) {
+        font: inherit;
+        color: inherit;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   OVERRIDES
+   ---------------------------------------------------------------------------- */
+
+@layer overrides {
+
+    /* --- TOKENS ----------------------------------------------------------- */
+
+    :root {
+        /* Brand */
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        /* Status */
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        /* Spacing */
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typo fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width-min:      240px;
+        --ml-sidebar-width:       380px;
+        --ml-select-width:        max(180px, 14ch);
+
+        /* Radius / shadow */
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    /* --- APP -------------------------------------------------------------- */
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    /* --- DASHBOARD — layout via grid-template-areas ----------------------- */
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 1fr var(--ml-sidebar-width);
+        grid-template-areas:
+            "header  header"
+            "kpi     kpi"
+            "main    sidebar"
+            "footer  footer";
+    }
+
+    .apriso-header        { grid-area: header; }
+    .apriso-kpi-board     { grid-area: kpi; }
+    .apriso-main          { grid-area: main; display: contents; }
+    .apriso-machine-grid  { grid-area: main; }
+    .apriso-event-log     { grid-area: sidebar; }
+    .apriso-footer        { grid-area: footer; }
+
+    /* --- HEADER ----------------------------------------------------------- */
+
+    .apriso-header {
+        display: flex;
+        align-items: center;
+        gap: var(--ml-spacing-4);
+        padding-inline: max(16px, 2vw);
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+    }
+
+    .apriso-header__brand    { flex: 0 0 auto; }
+    .apriso-header__controls { flex: 0 0 auto; }
+
+    .apriso-header__title {
+        /* font-size : escaladé dans @layer priority (Apriso !important) */
+        flex: 1 1 auto;
+        min-width: 0;
+        text-wrap: balance;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .apriso-line-selector__select { width: var(--ml-select-width); }
+
+    .apriso-connection-status__dot {
+        width: 0.6em;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    /* --- KPI BOARD — <table> transformé en Grid --------------------------- */
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi-board__table,
+    .apriso-kpi-board__table tbody {
+        display: contents;
+    }
+
+    .apriso-kpi-board__table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--ml-spacing-4);
+    }
+
+    .apriso-kpi {
+        border-right: 1px solid var(--ml-color-border);
+    }
+
+    .apriso-kpi:last-child { border-right: none; }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); font-variant-numeric: tabular-nums; }
+
+    /* --- MACHINE GRID — Grid avec auto-fit + minmax ----------------------- */
+
+    .apriso-machine-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--ml-card-width-min), 1fr));
+        gap: var(--ml-spacing-3);
+        padding: var(--ml-spacing-4);
+        align-content: start;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        background: var(--ml-color-bg-app);
+    }
+
+    .apriso-machine-card {
+        /* annule width / flex hérités des modules précédents */
+        width: auto;
+        max-width: none;
+        flex: initial;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--ml-spacing-2);
+        min-width: 0;
+
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--ml-spacing-2);
+            min-width: 0;
+        }
+
+        & .apriso-machine-card__title {
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: var(--ml-fs-card-title);
+            color: var(--ml-color-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        & .apriso-machine-card__status { flex: 0 0 auto; }
+
+        & .apriso-machine-card__last-event {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        &:hover { box-shadow: var(--ml-shadow-2); }
+
+        /* Status modifiers escaladés dans @layer priority (Apriso !important) */
+    }
+
+    /* --- EVENT LOG — sticky header + scrollbar-gutter + tableau dense ----- */
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+
+        & .apriso-event-log__header {
+            background: var(--ml-color-bg-cream);
+            border-bottom-color: var(--ml-color-border);
+        }
+
+        & .apriso-event-log__container {
+            scrollbar-gutter: stable;
+        }
+
+        & .apriso-event-log__table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--ml-color-bg-cream);
+            border-bottom: 1px solid var(--ml-color-border);
+        }
+
+        /* Alignement métier */
+        & .apriso-event-log__table td:first-child {        /* Heure */
+            font-variant-numeric: tabular-nums;
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td:last-child {         /* Sévérité */
+            text-align: end;
+            white-space: nowrap;
+        }
+
+        & .apriso-event-log__table td {
+            overflow-wrap: anywhere;
+        }
+
+        /* Zebra rows — :where() pour garder la spécificité basse */
+        & :where(.apriso-event-log__table tbody tr:nth-child(even)) {
+            background: color-mix(in oklab, var(--ml-color-bg-cream), white 30%);
+        }
+
+        & .apriso-event-log__table tbody tr:hover {
+            background: color-mix(in oklab, var(--ml-color-brand-accent), white 88%);
+        }
+    }
+
+    /* --- FOOTER ----------------------------------------------------------- */
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
+```
 
 ---
 
