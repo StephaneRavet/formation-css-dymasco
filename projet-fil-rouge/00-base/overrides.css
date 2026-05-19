@@ -1,19 +1,130 @@
 /* ============================================================================
-   OVERRIDES — Pâtes Mamie Lulu
+   FORGE × PÂTES MAMIE LULU — overrides.css
    ----------------------------------------------------------------------------
-   Personnalisation du dashboard Forge pour le client Pâtes Mamie Lulu.
-   Toutes les surcharges du framework apriso-base.css se font ici.
-
-   ⚠️ Règles :
-   - Ne pas modifier index.html
-   - Ne pas modifier apriso-base.css
-   - Ne pas utiliser de préprocesseur (Sass, Less)
-   - Ne pas utiliser de JavaScript
-
-   À chaque module, vous enrichissez ce fichier en suivant les exercices fil rouge.
+   Checkpoint après Module 2 — Typographie & dimensions fluides
+   ----------------------------------------------------------------------------
+   Démontre, en plus du Module 1 :
+   - clamp(), min(), max() sur largeurs et font-sizes
+   - aspect-ratio sur status dot
+   - dvh pour hauteur d'app plein écran
+   - Tokens fluides --ml-fs-* (font-sizes calculées)
    ============================================================================
 */
 
-/* Vous êtes ici. Le voyage commence dans le module 1. */
+@layer reset, priority, framework, overrides;
+@import url("./apriso-base.css") layer(framework);
 
-/* Target: Edge/Chromium <= 3 ans — last reviewed: 2026-05-18 */
+@layer priority {
+    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--alert {
+        border-left-color: var(--ml-color-status-alert) !important;
+        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
+    }
+}
+
+@layer reset {
+    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) { margin: 0; }
+    :where(button, select, input, textarea) { font: inherit; color: inherit; }
+}
+
+@layer overrides {
+
+    :root {
+        --ml-color-brand-primary: #c2410c;
+        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-bg-cream:      #fef6e4;
+        --ml-color-bg-app:        #faf3e0;
+        --ml-color-text:          #1f1f1f;
+        --ml-color-text-muted:    #6b5d4f;
+        --ml-color-border:        #e5d4b1;
+        --ml-color-surface:       #ffffff;
+
+        --ml-color-status-running:     #2e7d32;
+        --ml-color-status-idle:        #6c757d;
+        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-maintenance: #1976d2;
+
+        --ml-spacing-1: 4px;
+        --ml-spacing-2: 8px;
+        --ml-spacing-3: 12px;
+        --ml-spacing-4: 16px;
+        --ml-spacing-5: 24px;
+
+        /* Typographie fluide */
+        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
+        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+
+        /* Dimensions fluides */
+        --ml-dashboard-max-width: 1920px;
+        --ml-card-width:          clamp(220px, 22vw, 300px);
+        --ml-select-width:        max(180px, 14ch);
+
+        --ml-radius-sm: 4px;
+        --ml-radius:    8px;
+        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+    }
+
+    html {
+        background: var(--ml-color-bg-app);
+        color: var(--ml-color-text);
+        font-size: var(--ml-fs-base);
+    }
+
+    .apriso-dashboard {
+        width: min(var(--ml-dashboard-max-width), 100%);
+        height: 100dvh;
+        background: var(--ml-color-surface);
+        border-color: var(--ml-color-border);
+    }
+
+    .apriso-header {
+        background: var(--ml-color-brand-primary);
+        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+        padding-inline: max(16px, 2vw);
+    }
+
+    .apriso-line-selector__select { width: var(--ml-select-width); }
+
+    .apriso-connection-status__dot { width: 0.6em; height: auto; aspect-ratio: 1; }
+
+    .apriso-kpi-board {
+        background: var(--ml-color-bg-cream);
+        border-bottom-color: var(--ml-color-border);
+        padding: max(12px, 1.5vw) max(16px, 2vw);
+    }
+
+    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
+    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); }
+
+    .apriso-machine-card {
+        width: var(--ml-card-width);
+        background: var(--ml-color-bg-cream);
+        border: 1px solid var(--ml-color-border);
+        border-left: 4px solid var(--ml-color-status-idle);
+        border-radius: var(--ml-radius);
+        padding: var(--ml-spacing-3) var(--ml-spacing-4);
+
+        & .apriso-machine-card__title { font-size: var(--ml-fs-card-title); color: var(--ml-color-text); }
+        &:hover { box-shadow: var(--ml-shadow-2); }
+    }
+
+    .apriso-event-log {
+        background: var(--ml-color-surface);
+        border-left-color: var(--ml-color-border);
+        & .apriso-event-log__header { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
+    }
+
+    .apriso-footer {
+        background: var(--ml-color-bg-cream);
+        border-top-color: var(--ml-color-border);
+        color: var(--ml-color-text-muted);
+        padding-inline: max(16px, 2vw);
+    }
+}
