@@ -55,7 +55,7 @@ formateur:
 
 ## 🎯 Objectif (en 1 phrase)
 
-Reprendre la **main sur la cascade** d'un framework hostile (`apriso-base.css`) sans escalader la spécificité ni empiler des `!important`.
+Sous-tableau spécificité (rang 7) — du plus fort au plus faible :
 
 ---
 C'est **le** module qui va définir votre rapport quotidien à Apriso. Aujourd'hui, votre `overrides.css` ressemble probablement à ça :
@@ -91,15 +91,16 @@ Après ce module :
 
 Comment le navigateur tranche entre deux règles — du plus fort au plus faible :
 
-| Rang | Mécanisme | Niveau / Score | Exemple | Bat quoi ? |
-| --- | --- | --- | --- | --- |
-| 1 | **`!important` user-agent** | Origine — niveau max | navigateur natif | tout |
-| 2 | **`!important` CSS dev** (notre code) | Origine | `.btn { color: red !important; }` | tout CSS dev non-`!important` |
-| 3 | **Style inline `style=""`** | Origine "author override" | `<div style="color:red">` | tout CSS dev non-`!important` ⚠️ pas un score `(1,0,0,0)` |
-| 4 | **Couches `@layer`** (ordre décl.) | Couche déclarée **en dernier** gagne | `@layer base, theme;` → `theme` > `base` | rangs 5 + 6 |
-| 5 | **Unlayered** (hors `@layer`) | Bat toute couche (non-`!important`) | `.btn { ... }` direct | toute déclaration layered |
-| 6 | **Spécificité `(a, b, c)`** | a = ID, b = classe/attr/pseudo-classe, c = élément/pseudo-élément | voir sous-tableau ↓ | rang 7 à score égal |
-| 7 | **Ordre d'apparition** | Dernière déclaration gagne | 2 règles identiques → la 2ᵉ | rien |
+| Niveau de force | Mécanisme CSS | Règle d'or en clair |
+| :---: | :--- | :--- |
+| **1** | 👑 `style="" !important` | **L'invincible.** Écrit directement dans le HTML avec un `!important`, rien ne peut l'écraser. |
+| **2** | 💥 `!important` Hors couche (*Unlayered*) | Un `!important` classique dans ton fichier CSS. Il bat le `!important` des `@layer`. |
+| **3** | 🔄 `!important` dans un `@layer` | **Logique inversée :** La *première* couche déclarée (ex: `base`) bat la *dernière* (ex: `theme`). |
+| **4** | ⚡ Style Inline normal (`style=""`) | Écrit dans le HTML sans `!important`. Bat tous les sélecteurs de tes fichiers `.css`. |
+| **5** | 📂 CSS Hors couche (*Unlayered*) | Le CSS écrit normalement dans tes fichiers bat n'importe quel CSS normal situé dans un `@layer`. |
+| **6** | 🥞 Couches `@layer` normales | **Logique normale :** La *dernière* couche déclarée (ex: `theme`) bat la *première* (ex: `base`). |
+| **7** | 🎯 Spécificité du sélecteur | Le fameux score `(ID, Classe, Élément)`. Ne sert à départager des sélecteurs **que s'ils sont au même niveau** (ex: tous les deux hors couche, ou tous les deux dans la même couche). |
+| **8** | 🕒 Ordre d'apparition | En cas d'égalité absolue sur les 7 points précédents, le code écrit le plus bas dans le fichier gagne. |
 
 Sous-tableau spécificité (rang 6) — du plus fort au plus faible :
 
