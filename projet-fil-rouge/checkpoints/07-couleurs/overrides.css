@@ -20,7 +20,7 @@
 
 /* Apriso amené dans la cascade via une couche nommée. Le <link> direct vers
    apriso-base.css doit être retiré du HTML. Voir Module 1 §3. */
-@import url("../../00-base/apriso-base.css") layer(framework);
+@import url("./apriso-base.css") layer(framework);
 
 /* ----------------------------------------------------------------------------
    PRIORITY — escalade !important pour battre les 6 !important Apriso
