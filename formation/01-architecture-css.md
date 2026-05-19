@@ -184,7 +184,7 @@ Stratégie de repli :
 - Pour qu'un **utility class** (`.text-center`) reste battable par un composant plus spécifique.
 ```javascript
 @layer reset {
-	:where(h1, h2, h3, h4) { margin: 0; }
+	:where(h1, h2, h3, h4, h5, h6) { margin: 0; }
 }
 /* h2 dans n'importe quel composant gagne sans effort */
 ```
@@ -257,7 +257,7 @@ Architecture cible pour `overrides.css` :
 @layer reset, priority, framework, overrides;
 @import url("./apriso-base.css") layer(framework);
 @layer reset {
-	:where(h1, h2, h3, h4) { margin: 0; }
+	:where(h1, h2, h3, h4, h5, h6) { margin: 0; }
 }
 @layer overrides {
 	:root { /* tokens */ }
@@ -336,20 +336,125 @@ Fichiers de départ pour l'exercice :
 - CSS framework (à ne pas modifier) : [projet-fil-rouge/00-base/apriso-base.css](../projet-fil-rouge/00-base/apriso-base.css)
 - CSS de travail (à compléter) : [projet-fil-rouge/00-base/overrides.css](../projet-fil-rouge/00-base/overrides.css)
 
-/* ----------------------------------------------------------------------------
-   KPI BOARD
-   Built with | Avant | Après cible |
+### Consigne
+
+Refactorer `overrides.css` (vide) pour produire l'**état attendu après Module 1** du dashboard Mamie Lulu :
+
+1. **Modifier le HTML** : retirer `<link rel="stylesheet" href="apriso-base.css">`. Apriso sera chargé via `@import` dans overrides.css.
+2. **Déclarer la pyramide** en tête : `@layer reset, priority, framework, overrides;` puis `@import url("./apriso-base.css") layer(framework);`.
+3. **Définir le bloc** `:root` dans `@layer overrides` avec les **tokens Mamie Lulu** (cf. concept §6 ci-dessus).
+4. `@layer overrides` — surcharger sans `!important`, sélecteurs courts :
+   - `.apriso-header` → fond `--ml-color-brand-primary`
+   - `.apriso-header__title` → `font-size: 22px` (Apriso a `!important` ici → exception, voir §5 ci-dessous)
+   - `.apriso-machine-card` → fond `--ml-color-bg-cream`, bord `--ml-color-border`, radius `--ml-radius`
+   - `.apriso-machine-card--running` → bord gauche `--ml-color-status-running` (Apriso a `!important` → §5)
+   - `.apriso-machine-card--idle` → bord gauche `--ml-color-status-idle` (idem §5)
+   - `.apriso-machine-card--alert` → bord gauche `--ml-color-status-alert` (idem §5)
+   - `.apriso-machine-card--maintenance` → bord gauche `--ml-color-status-maintenance` (idem §5)
+5. `@layer priority` — pour chaque rule où Apriso pose `!important`, écrire la version override **avec** `!important` ici. Ce sont les 6 cas suivants (à grep dans `apriso-base.css`) :
+   - `.apriso-header__title { font-size: ... !important }`
+   - `.apriso-machine-card--running { border-left-color: ... !important }`
+   - `.apriso-machine-card--idle { border-left-color: ... !important }`
+   - `.apriso-machine-card--alert { border-left-color: ... !important; background: ... !important }`
+   - `.apriso-machine-card--maintenance { border-left-color: ... !important }`
+6. **Nesting natif** dans `.apriso-machine-card`.
+7. `:where()` : ajouter dans `@layer reset` un `:where(h1, h2, h3, h4, h5, h6) { margin: 0 }`.
+
+### Pièges fréquents (à anticiper)
+
+- ❌ **Oublier de retirer le** `<link>` vers apriso-base.css du HTML → Apriso est chargé deux fois, dont une unlayered, qui reprend la main. **Vérifier dans DevTools → Network que apriso-base.css n'est chargé qu'une seule fois.**
+- ❌ Oublier de **déclarer l'ordre** des couches en tête → ordre dépend de l'ordre d'apparition, imprévisible.
+- ❌ Mettre `:root` dans `@layer reset` ou `priority` → tokens héritent partout, mais leur **valeur** doit vivre dans la couche qui les pilote (ici `overrides`).
+- ❌ Imbriquer un `&:hover` sans le `&` → erreur de parsing silencieuse selon le nav.
+- ❌ Utiliser `:where()` **autour du sélecteur cible** (ex : `:where(.machine-card)`) → la cible elle-même tombe à 0 spécificité. `:where()` enveloppe le **scope**, pas la cible.
+- ❌ Hardcoder un `!important` "au cas où" dans `@layer overrides` → marche techniquement, mais brouille la lecture. La règle : `!important` **uniquement** dans `@layer priority`, et **uniquement** quand Apriso impose un `!important`.
+
+### Corrigé attendu
+
+État attendu de `overrides.css` après le Module 1 (~150 lignes) — voir [projet-fil-rouge/checkpoints/01-architecture/overrides.css](../projet-fil-rouge/checkpoints/01-architecture/overrides.css). Démontre la pyramide `@layer reset, priority, framework, overrides`, `:where()` pour le reset à spécificité 0, le nesting natif sur `.apriso-machine-card`, les tokens `--ml-*` dans `:root`, et la couche `priority` pour les 6 `!important` Apriso.
+
+---
+
+## 🧪 Drill DevTools — Audit cascade en live (10 min, optionnel si temps)
+
+> 🎯 **Pourquoi** : 80 % du temps, vous n'écrivez pas du CSS — vous **lisez** la cascade dans DevTools pour comprendre pourquoi votre règle ne s'applique pas. Ce drill rend ce geste réflexe.
+
+### Drill 1 — Lire le panneau Styles
+
+1. Ouvrir le fil rouge état checkpoint M01, sélectionner `.apriso-machine-card--alert` dans Elements.
+2. Dans le panneau **Styles**, repérer pour chaque déclaration :
+   - le **nom de la couche** (`Layer: framework` / `Layer: overrides` / `Layer: priority`)
+   - les déclarations **barrées** (overridées) avec l'icône d'info au survol
+3. Question piège à se poser : *"si je vois `priority > framework > overrides`, qui gagne sur une déclaration normale ?"* (réponse : `overrides`, dernière couche pour les normales).
+
+### Drill 2 — Computed + filtre
+
+1. Onglet **Computed** → colonne **Source** : montre **le fichier + la couche** d'où vient la valeur finale.
+2. Filtrer par propriété (`background`, `border-left-color`) → ne voir que les valeurs effectives.
+3. Cliquer sur la valeur → DevTools déroule **toute la chaîne** des déclarations rejetées avec raison.
+
+### Drill 3 — CSS Overview (Chrome/Edge)
+
+`F12 → More tools → CSS Overview → Capture overview`. Affiche :
+
+- nombre de **couleurs uniques** (avant tokens : 47, après : 9 → preuve que tokens sont utiles)
+- nombre de **déclarations !important** (avant : 23, après pyramide : 6, **uniquement** dans `priority`)
+- **contrast ratios** WCAG par paire (anticipe M10)
+
+À faire **avant et après** votre refacto pour quantifier le gain.
+
+### Drill 4 — Spécificité interactive
+
+Inspecter un sélecteur Apriso à 5 classes dans Styles → DevTools affiche le tuple `(0, 5, 0)` au survol. Comparer avec votre override `(0, 1, 0)` dans `@layer overrides` → DevTools montre **explicitement** que la spé perd, mais la **couche** gagne. Démonstration visuelle imparable du module.
+
+---
+
+## 🛠️ Exercice alternatif — Migration legacy "vrai monde sale" (45 min, variant pour stagiaires avancés)
+
+> 🎯 **Pourquoi** : le fil rouge Mamie Lulu part d'un `overrides.css` vide. La réalité Dymasco = vous héritez d'un fichier de 600-1200 lignes accumulé sur 3 ans, chaînes 5 classes + `!important` partout, 0 token. Cet exo simule **ce vrai cas**.
+
+### Code de départ
+
+Fichier `legacy-overrides.css` de 500+ lignes avec les pathologies typiques :
+
+- 47 occurrences de `!important`
+- chaînes moyennes 4,2 classes
+- 23 couleurs hardcodées hex/rgb (jamais de variables)
+- pas de structure (composants mélangés, ordre chronologique de commits)
+
+### Consigne — Plan en 5 étapes (à appliquer **dans cet ordre**)
+
+1. **Auditer** (5 min) : lancer CSS Overview, archiver compteur `!important`, couleurs uniques, spé moyenne. **Point de départ chiffré**.
+2. **Ajouter la pyramide sans rien casser** (5 min) :
+   ```css
+   @layer reset, priority, framework, overrides, legacy;
+   @import url("./apriso-base.css") layer(framework);
+   /* legacy/* contenu actuel reste unlayered le temps de la migration */
+   ```
+   Pourquoi déclarer `legacy` même si vide ? Pour avoir l'ordre verrouillé quand on commencera à y mettre des choses. La règle "unlayered = couche implicite finale" vous **protège** : votre legacy continue de marcher.
+3. **Extraire les tokens** (15 min) : grep les 23 couleurs, créer `:root` dans `@layer overrides`, remplacer **uniquement** les hex/rgb dans les déclarations qui n'ont pas `!important` (les autres viendront en étape 4).
+4. **Migrer composant par composant** (15 min) : pour chaque section thématique (header, cards, footer…), déplacer les règles dans `@layer overrides` (sans `!important`) et `@layer priority` (avec `!important` uniquement si le framework l'impose). Tester après chaque composant. **Jamais de big bang.**
+5. **Vider** `legacy` (5 min) : à terme la couche `legacy` doit être vide et supprimée. Si elle ne l'est pas après 2 sprints → revue d'équipe, c'est probablement du JS qui pose des inline styles.
+
+### Critères de succès
+
+| Avant | Après cible |
 |---|---|
 | 47 `!important` | ≤ 8, **tous** dans `priority` |
 | Chaînes moy 4,2 classes | ≤ 1,5 classe |
 | 23 couleurs hex | 9 tokens sources + dérivés `color-mix` |
-| 0 documentation cible | Header avec `browserslist`  • date de revue |
+| 0 documentation cible | Header avec `browserslist` • date de revue |
+
 ### Pièges spécifiques migration
+
 - ❌ Tout migrer en une seule PR → ingérable, code review impossible, régressions invisibles. **Une PR par composant**.
 - ❌ Supprimer un `!important` legacy sans vérifier qu'il battait vraiment quelque chose → certains sont historiques, plus aucune utilité. Tester avec DevTools : désactiver `!important` à la main, observer si autre déclaration prend le dessus. Si non → `!important` mort, à virer.
 - ❌ Oublier le commentaire `/* migré depuis legacy l.234 — 2026-05-18 */` dans la nouvelle règle → traçabilité perdue au prochain merge.
+
 ### Livrable
+
 Diff git annoté + CSS Overview avant/après + commentaire de PR avec les 4 chiffres du tableau de succès. C'est le **vrai livrable Dymasco**, pas un fichier "qui rend bien".
+
 ---
 ## 🚀 Pour aller plus loin
 ### Bonus 1 — Couches imbriquées

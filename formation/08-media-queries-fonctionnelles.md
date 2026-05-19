@@ -276,10 +276,6 @@ DevTools → "Rendering → Emulate CSS media feature `forced-colors: active`". 
 
 ## 🛠️ Exercice fil rouge (25 min)
 
-### 📁 Code de départ
-
-Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
-
 ### Consigne
 
 Reprendre le checkpoint Module 7 et :
@@ -317,9 +313,13 @@ Reprendre le checkpoint Module 7 et :
 - ❌ Tester `forced-colors` uniquement en DevTools sans valider sur un vrai poste Windows HC → certains comportements (scrollbars, focus système) ne s'émulent pas.
 - ❌ Oublier `:focus-visible { outline: 3px solid Highlight }` en HC → focus invisible, navigation clavier perdue.
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
+
 ### Corrigé attendu
 
-Voir `projet-fil-rouge/checkpoints/08-media-queries/overrides.css`.
+Voir [projet-fil-rouge/checkpoints/08-media-queries/overrides.css](../projet-fil-rouge/checkpoints/08-media-queries/overrides.css).
 
 ---
 
