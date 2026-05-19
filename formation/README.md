@@ -5,7 +5,7 @@
 À l'issue de cette formation, vous serez capable d'intervenir **en contexte industriel** sur une application existante (Dymasco / DELMIA Apriso) en appliquant une **méthodologie d'overrides CSS** : corriger, étendre et adapter l'UI **sans polluer** le code d'origine ni déclencher des régressions en cascade.
 
 - Mettre en place une **stratégie d'overrides maintenable** : isolation des surcharges, organisation des couches, règles de nommage, variables et points d'extension.
-- **Arbitrer** l'usage des fonctionnalités CSS modernes (Grid/Subgrid, Container Queries, propriétés logiques, etc.) **selon le parc navigateur réel** (Windows LTSC, tablettes d'atelier, contraintes IT) en s'appuyant sur des outils factuels : **Baseline**, **Can I Use**, **Browserslist** (et une politique de dégradation/contournement).
+- **Arbitrer** l'usage des fonctionnalités CSS modernes (Grid/Subgrid, Container Queries, `:has()`, etc.) **selon le parc navigateur réel** (Windows LTSC, tablettes d'atelier, contraintes IT) en s'appuyant sur des outils factuels : **Baseline**, **Can I Use**, **Browserslist** (et une politique de dégradation/contournement).
 - Diagnostiquer et résoudre les **guerres de cascade** : spécificité incontrôlée, héritage inattendu, styles inline, IDs dynamiques, frameworks/legacy, sans tomber dans une escalade systématique de `!important`.
 - **Briser proprement les verrous de spécificité** (scopage, couches, sélecteurs ciblés, stratégie `!important` maîtrisée si nécessaire) en gardant un CSS lisible, traçable et réversible.
 
@@ -46,7 +46,7 @@
 
 ### Jour 2 — matin (3h15)
 
-- [🧠 05 — Sélecteurs modernes & propriétés logiques](./05-selecteurs-modernes.md) — 1h45
+- [🧠 05 — Sélecteurs modernes](./05-selecteurs-modernes.md) — 1h45
 - [📦 06 — Container Queries](./06-container-queries.md) — 0h45
 - [🎨 07 — Couleurs modernes & thèmes](./07-couleurs-themes.md) — 0h45
 

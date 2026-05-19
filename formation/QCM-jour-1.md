@@ -81,8 +81,8 @@ Quelle est la largeur réelle ?
 Quelle déclaration interdit à un flex item de descendre sous sa taille de contenu ?
 
 - A. `flex-shrink: 1`
-- B. `min-inline-size: 0`
-- C. `flex-shrink: 0` (ou `min-inline-size: auto` selon le cas)
+- B. `min-width: 0`
+- C. `flex-shrink: 0` (ou `min-width: auto` selon le cas)
 - D. `flex-basis: 0`
 
 ## 10. Grid — `display: contents` sur `<table>`

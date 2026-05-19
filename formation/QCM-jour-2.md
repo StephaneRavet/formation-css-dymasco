@@ -22,16 +22,7 @@ Le sélecteur `:contains("texte")` :
 - C. **n'existe pas** en CSS — uniquement jQuery/Sizzle
 - D. existe mais nécessite `@supports`
 
-## 3. Propriétés logiques — équivalent physique → logique
-
-`margin-left: 12px` devient en propriété logique :
-
-- A. `margin-inline-start: 12px`
-- B. `margin-block-start: 12px`
-- C. `margin-inline-end: 12px`
-- D. `margin-start: 12px`
-
-## 4. Container queries — pré-requis
+## 3. Container queries — pré-requis
 
 Pour qu'un composant puisse être interrogé par `@container`, son **parent** doit avoir :
 
@@ -40,7 +31,7 @@ Pour qu'un composant puisse être interrogé par `@container`, son **parent** do
 - C. `position: relative`
 - D. `contain: layout`
 
-## 5. `oklch()` vs `hsl()`
+## 4. `oklch()` vs `hsl()`
 
 Pourquoi préférer `oklch()` à `hsl()` pour un design system ?
 
@@ -49,7 +40,7 @@ Pourquoi préférer `oklch()` à `hsl()` pour un design system ?
 - C. `oklch()` est mieux supporté par Safari
 - D. **A et B**
 
-## 6. `color-mix()` — usage typique
+## 5. `color-mix()` — usage typique
 
 `color-mix(in oklab, var(--brand) 80%, white)` produit :
 
@@ -58,7 +49,7 @@ Pourquoi préférer `oklch()` à `hsl()` pour un design system ?
 - C. une erreur — `color-mix` n'accepte pas `var()`
 - D. la couleur blanche teintée à 20 % de brand
 
-## 7. `@media (hover: hover) and (pointer: fine)`
+## 6. `@media (hover: hover) and (pointer: fine)`
 
 Pourquoi combiner les deux conditions ?
 
@@ -67,7 +58,7 @@ Pourquoi combiner les deux conditions ?
 - C. `(pointer: fine)` est obsolète mais requis pour Safari
 - D. `(hover: hover)` ne fonctionne pas sans `(pointer: fine)`
 
-## 8. `prefers-reduced-motion` — implémentation
+## 7. `prefers-reduced-motion` — implémentation
 
 Bloc correct pour respecter la préférence utilisateur ?
 
@@ -76,7 +67,7 @@ Bloc correct pour respecter la préférence utilisateur ?
 - C. utiliser un JS qui détecte le système
 - D. ne rien faire — c'est au navigateur
 
-## 9. `content-visibility: auto` — piège
+## 8. `content-visibility: auto` — piège
 
 Sur quel type de contenu est-ce **risqué** ?
 
@@ -85,7 +76,7 @@ Sur quel type de contenu est-ce **risqué** ?
 - C. texte critique recherché par **Ctrl+F** ou lu par lecteur d'écran
 - D. footer
 
-## 10. `print-color-adjust: exact`
+## 9. `print-color-adjust: exact`
 
 Bonne pratique pour préserver les couleurs à l'impression ?
 
@@ -100,11 +91,10 @@ Bonne pratique pour préserver les couleurs à l'impression ?
 
 1. **B** — `:has()` prend la spécificité du plus spécifique dans sa liste : `#header` = 1,0,0, plus `.card` = 1,1,0, plus `.badge` = 1,2,0
 2. **C** — `:contains()` n'existe **pas** en CSS, jamais (jQuery uniquement)
-3. **A** — `margin-inline-start` (axe inline = direction du texte ; couplable avec shorthand `margin-inline`)
-4. **A** — `container-type: inline-size` sur le parent (ou `size`)
-5. **D** — wide gamut **et** perceptuellement uniforme
-6. **B** — `var(--brand)` à 80 %, blanc à 20 % → brand éclaircie
-7. **B** — tablettes hybrides Surface matchent `(hover: hover)` seul, ciblage trop large sans `(pointer: fine)`
-8. **B** — bloc reset universel avec `!important` (le seul `!important` toléré)
-9. **C** — texte recherché Ctrl+F ou lu par lecteur d'écran peut être skippé
-10. **B** — cibler badges/statuts uniquement, jamais en wildcard `*` (surconsommation d'encre)
+3. **A** — `container-type: inline-size` sur le parent (ou `size`)
+4. **D** — wide gamut **et** perceptuellement uniforme
+5. **B** — `var(--brand)` à 80 %, blanc à 20 % → brand éclaircie
+6. **B** — tablettes hybrides Surface matchent `(hover: hover)` seul, ciblage trop large sans `(pointer: fine)`
+7. **B** — bloc reset universel avec `!important` (le seul `!important` toléré)
+8. **C** — texte recherché Ctrl+F ou lu par lecteur d'écran peut être skippé
+9. **B** — cibler badges/statuts uniquement, jamais en wildcard `*` (surconsommation d'encre)

@@ -461,7 +461,7 @@ Partez de ce `overrides.css` (état après Module 2) :
     .apriso-header {
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
 
         & .apriso-header__title {
             text-wrap: balance;        /* font-size escaladé dans @layer priority */
@@ -536,7 +536,7 @@ Partez de ce `overrides.css` (état après Module 2) :
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }
 ```
@@ -679,7 +679,7 @@ Partez de ce `overrides.css` (état après Module 2) :
         display: flex;
         align-items: center;
         gap: var(--ml-spacing-4);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
     }
@@ -802,7 +802,7 @@ Partez de ce `overrides.css` (état après Module 2) :
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }
 ```

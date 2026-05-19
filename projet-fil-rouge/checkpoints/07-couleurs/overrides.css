@@ -28,11 +28,11 @@
 
 @layer priority {
     .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
-    .apriso-machine-card--running     { border-inline-start-color: var(--ml-color-status-running) !important; }
-    .apriso-machine-card--idle        { border-inline-start-color: var(--ml-color-status-idle) !important; }
-    .apriso-machine-card--maintenance { border-inline-start-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
+    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
+    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
     .apriso-machine-card--alert {
-        border-inline-start-color: var(--ml-color-status-alert) !important;
+        border-left-color: var(--ml-color-status-alert) !important;
         background: var(--ml-color-status-alert-bg) !important;
     }
 }
@@ -135,7 +135,7 @@
 
     .apriso-dashboard {
         width: min(var(--ml-dashboard-max-width), 100%);
-        block-size: 100dvh;
+        height: 100dvh;
         background: var(--ml-color-surface);
         border-color: var(--ml-color-border);
 
@@ -162,9 +162,9 @@
         display: flex;
         align-items: center;
         gap: var(--ml-spacing-4);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
         background: var(--ml-color-brand-primary);
-        border-block-end-color: var(--ml-color-brand-primary-darker);
+        border-bottom-color: var(--ml-color-brand-primary-darker);
     }
 
     :is(.apriso-header__brand, .apriso-header__controls) {
@@ -174,18 +174,18 @@
     .apriso-header__title {
         /* font-size : escaladé dans @layer priority (Apriso !important) */
         flex: 1 1 auto;
-        min-inline-size: 0;
+        min-width: 0;
         text-wrap: balance;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    .apriso-line-selector__select { inline-size: var(--ml-select-width); }
+    .apriso-line-selector__select { width: var(--ml-select-width); }
 
     .apriso-connection-status__dot {
-        inline-size: 0.6em;
-        block-size: auto;
+        width: 0.6em;
+        height: auto;
         aspect-ratio: 1;
     }
 
@@ -193,7 +193,7 @@
 
     .apriso-kpi-board {
         background: var(--ml-color-bg-cream);
-        border-block-end-color: var(--ml-color-border);
+        border-bottom-color: var(--ml-color-border);
         padding: max(12px, 1.5vw) max(16px, 2vw);
     }
 
@@ -209,11 +209,11 @@
     }
 
     .apriso-kpi {
-        border-inline-end: 1px solid var(--ml-color-border);
-        text-align: start;
+        border-right: 1px solid var(--ml-color-border);
+        text-align: left;
     }
 
-    .apriso-kpi:last-child { border-inline-end: none; }
+    .apriso-kpi:last-child { border-right: none; }
 
     .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
     .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); font-variant-numeric: tabular-nums; }
@@ -235,32 +235,32 @@
     }
 
     .apriso-machine-card {
-        inline-size: auto;
-        max-inline-size: none;
+        width: auto;
+        max-width: none;
         flex: initial;
 
         display: flex;
         flex-direction: column;
         gap: var(--ml-spacing-2);
-        min-inline-size: 0;
+        min-width: 0;
 
         background: var(--ml-color-bg-cream);
         border: 1px solid var(--ml-color-border);
-        border-inline-start: 4px solid var(--ml-color-status-idle);
+        border-left: 4px solid var(--ml-color-status-idle);
         border-radius: var(--ml-radius);
-        padding-block: var(--ml-spacing-3);
-        padding-inline: var(--ml-spacing-4);
+        padding-top: var(--ml-spacing-3); padding-bottom: var(--ml-spacing-3);
+        padding-left: var(--ml-spacing-4); padding-right: var(--ml-spacing-4);
 
         & .apriso-machine-card__header {
             display: flex;
             align-items: center;
             gap: var(--ml-spacing-2);
-            min-inline-size: 0;
+            min-width: 0;
         }
 
         & .apriso-machine-card__title {
             flex: 1 1 auto;
-            min-inline-size: 0;
+            min-width: 0;
             font-size: var(--ml-fs-card-title);
             color: var(--ml-color-text);
             overflow: hidden;
@@ -313,8 +313,8 @@
 
     @container machine-zone (min-width: 480px) {
         .apriso-machine-card {
-            padding-block: var(--ml-spacing-4);
-            padding-inline: var(--ml-spacing-5);
+            padding-top: var(--ml-spacing-4); padding-bottom: var(--ml-spacing-4);
+            padding-left: var(--ml-spacing-5); padding-right: var(--ml-spacing-5);
         }
         .apriso-machine-card__metrics {
             grid-template-columns: 1fr 1fr 1fr;
@@ -325,32 +325,32 @@
 
     .apriso-event-log {
         background: var(--ml-color-surface);
-        border-inline-start-color: var(--ml-color-border);
+        border-left-color: var(--ml-color-border);
 
         & .apriso-event-log__header {
             background: var(--ml-color-bg-cream);
-            border-block-end-color: var(--ml-color-border);
+            border-bottom-color: var(--ml-color-border);
         }
 
         & .apriso-event-log__container { scrollbar-gutter: stable; }
 
         & .apriso-event-log__table thead th {
             position: sticky;
-            inset-block-start: 0;
+            top: 0;
             z-index: 1;
             background: var(--ml-color-bg-cream);
-            border-block-end: 1px solid var(--ml-color-border);
-            text-align: start;
+            border-bottom: 1px solid var(--ml-color-border);
+            text-align: left;
         }
 
         & .apriso-event-log__table td:first-child {
             font-variant-numeric: tabular-nums;
-            text-align: end;
+            text-align: right;
             white-space: nowrap;
         }
 
         & .apriso-event-log__table td:last-child {
-            text-align: end;
+            text-align: right;
             white-space: nowrap;
         }
 
@@ -377,13 +377,13 @@
 
     .apriso-footer {
         background: var(--ml-color-bg-cream);
-        border-block-start-color: var(--ml-color-border);
+        border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 
     .apriso-footer__item--time {
-        margin-inline-start: auto;
+        margin-left: auto;
         font-variant-numeric: tabular-nums;
     }
 

@@ -93,7 +93,7 @@ Un SVG inline dans le HTML peut être stylé via CSS, comme n'importe quel élé
 ```
 
 ```css
-.apriso-status-icon { color: var(--ml-color-status-running); inline-size: 1em; }
+.apriso-status-icon { color: var(--ml-color-status-running); width: 1em; }
 ```
 
 → Le `fill="currentColor"` du SVG hérite de la `color` CSS. **Une icône, N teintes** selon le contexte.
@@ -131,8 +131,8 @@ Bibliothèque utile : [Lucide](https://lucide.dev/), [Tabler](https://tabler.io/
 
 ```css
 .apriso-status-icon {
-  inline-size: 1em;
-  block-size: 1em;
+  width: 1em;
+  height: 1em;
   vertical-align: -0.125em;
   flex: 0 0 auto;
 }
@@ -212,8 +212,8 @@ Coller un SVG Lucide `triangle-alert` dans le `<span class="apriso-machine-card_
 
 ```css
 .apriso-machine-card__status .apriso-status-icon {
-  inline-size: 14px;
-  margin-inline-end: var(--ml-spacing-1);
+  width: 14px;
+  margin-right: var(--ml-spacing-1);
 }
 ```
 
@@ -250,7 +250,7 @@ Reprendre le checkpoint Module 8 et :
 2. **Ajouter aria-hidden="true"** sur chaque SVG décoratif.
 
 3. **Styler `.apriso-status-icon`** :
-   - `inline-size: 1em`, `block-size: 1em`.
+   - `width: 1em`, `height: 1em`.
    - `flex: 0 0 auto`.
    - `vertical-align: -0.125em` pour aligner sur la baseline du texte.
 

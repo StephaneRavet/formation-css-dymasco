@@ -261,7 +261,7 @@ Pour un journal d'événements lisible, retenir 4 règles :
 ```css
 .apriso-event-log__table td:first-child {   /* colonne Heure */
   font-variant-numeric: tabular-nums;
-  text-align: end;          /* ou start, selon convention métier */
+  text-align: right;          /* ou start, selon convention métier */
 }
 ```
 
@@ -507,7 +507,7 @@ Partez de ce `overrides.css` (état après Module 3) :
         display: flex;
         align-items: center;
         gap: var(--ml-spacing-4);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
     }
@@ -630,7 +630,7 @@ Partez de ce `overrides.css` (état après Module 3) :
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }
 ```
@@ -785,7 +785,7 @@ Partez de ce `overrides.css` (état après Module 3) :
         display: flex;
         align-items: center;
         gap: var(--ml-spacing-4);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
     }
@@ -926,12 +926,12 @@ Partez de ce `overrides.css` (état après Module 3) :
         /* Alignement métier */
         & .apriso-event-log__table td:first-child {        /* Heure */
             font-variant-numeric: tabular-nums;
-            text-align: end;
+            text-align: right;
             white-space: nowrap;
         }
 
         & .apriso-event-log__table td:last-child {         /* Sévérité */
-            text-align: end;
+            text-align: right;
             white-space: nowrap;
         }
 
@@ -955,7 +955,7 @@ Partez de ce `overrides.css` (état après Module 3) :
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }
 ```

@@ -87,7 +87,7 @@
     .apriso-header {
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 
     .apriso-line-selector__select { width: var(--ml-select-width); }
@@ -125,6 +125,6 @@
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }

@@ -4,37 +4,34 @@ formateur:
     - savoir que :has() prend la spécificité du PLUS SPÉCIFIQUE dans sa liste (idem :is())
     - connaître coût perf :has() (recalcule à chaque mutation DOM)
     - avoir testé :has() sur navigateur cible (widely 2024)
-    - liste mapping physique → logique en tête (margin-left → margin-inline-start)
-  ressources_demo_a_preparer:
+> ⏱️ **Durée** : 1h45 — **J2 matin, ouverture**
+>
+> 🧭 **Type** : module pratique (sélecteurs CSS modernes + propriétés logiques)
+>
+> 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/05-selecteurs/overrides.css`
     - checkpoint Module 4 ouvert
     - HTML avec card alerte Laminoir Léon visible
-    - tableau mapping logique imprimé
   pitch_ouverture: >
     "Levez la main si vous avez écrit du JS pour 'si la card contient un badge alert,
     colorier le parent'. C'est fini. Une ligne de CSS suffit. Bienvenue dans :has()."
   energie_attendue: haute — démarrage J2, café, effet "wow" :has() garanti
   duree_cible: 105 min — découpage 40 concepts / 20 démo / 35 exo / 10 récap
   variantes_timing:
-    si_en_retard: zapper bonus :user-invalid + inset shorthand, condenser :not() en 1 min
+    si_en_retard: zapper bonus :user-invalid, condenser :not() en 1 min
     si_en_avance: faire chercher 3 cas :has() dans LEUR base code actuelle (mental)
   points_a_marteler:
     - ":has() = sélecteur PARENT, ENFIN possible — sans JS"
     - "spécificité :is() / :has() = celle du plus spécifique dans la liste"
     - ":where() = spécificité ZÉRO (rappel Module 1) — idéal resets/utilities"
-    - "propriétés logiques = shorthand cohérent (inline/block) + future-proof writing-mode"
     - "tester :has() côté perf si DOM mute beaucoup (rare en dashboard)"
   pieges_apprenants:
     - croire :has() = ralenti TOUJOURS — non, recalcule à mutation, mesurer avant optim
     - :is(#x, .y) = spécificité 1,0,0 (id) — surprise garantie
-    - mélanger physique + logique sur même élément → cascade imprévisible
-    - oublier que logique dépend de writing-mode (axe inline/block bascule en vertical-*)
   questions_probables:
     - q: ":has() coûte combien en perf ?"
       r: négligeable sur 20-100 éléments. À mesurer si DOM mute 10×/sec sur 10k lignes.
     - q: "Pas de :contains() en CSS ?"
       r: non — uniquement jQuery. Passer par classe métier sur l'élément.
-    - q: "Propriétés logiques, ça apporte quoi en pratique ?"
-      r: shorthand cohérent (margin-inline, padding-block), moins de propriétés à écrire, prêt si writing-mode vertical ou direction change un jour. Coût zéro, hygiène pro.
     - q: ":is() vs :where() je prends lequel par défaut ?"
       r: :where() pour base/reset/utility. :is() quand spé assumée nécessaire.
   transition_module_suivant: >
@@ -43,41 +40,47 @@ formateur:
     réutilisable, 45 minutes effet wow."
 ---
 
-# Module 5 — Sélecteurs modernes & propriétés logiques
+# Module 5 — Sélecteurs modernes
 
 > ⏱️ **Durée** : 1h45 — **J2 matin, ouverture**
-> 🧭 **Type** : module pratique (sélecteurs CSS modernes + propriétés logiques)
+> 🧭 **Type** : module pratique (sélecteurs CSS modernes)
 > 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/05-selecteurs/overrides.css`
 
 ---
 
 ## 🎯 Objectif (en 1 phrase)
 
-Maîtriser `:is()`, `:where()`, **`:has()`** (le sélecteur "parent enfin possible") et les **propriétés logiques** (`-inline`, `-block`) pour écrire moins de code et gagner en cohérence (shorthand axe inline/block).
+> 💡 Tous ces combinateurs fonctionnent **à l'intérieur** des pseudo-classes fontionnelles `:is()`, `:where()`, `:not()` et `:has()`.
 
 ---
 
 ## ⚙️ Pour qui c'est utile chez Dymasco
 
-Trois cas concrets :
+Deux cas concrets :
 
 1. **Mises en évidence métier sans JS** : "si une card contient un statut critique, surligne la card entière". Avant : JS. Maintenant : `.card:has(.status--alert)`.
 2. **Sélecteurs propres** sur des frameworks comme Apriso : `:is(.zone-a, .zone-b) .composant` au lieu de dupliquer.
-3. **Propriétés logiques** : `margin-inline`, `padding-block`, `border-inline-start` — un seul shorthand pour les deux côtés d'un axe, au lieu de répéter `-left` / `-right`. Code plus court, intention plus claire (axe vs côté), et compatible writing-mode vertical (cas rare mais zéro coût).
 
-Aujourd'hui dans `apriso-base.css` :
-
-```css
-.apriso-machine-card { border-left: 4px solid #6c757d; }   /* "left" en dur */
-.apriso-event-log__table th { text-align: left; }
-.apriso-machine-card { padding: 12px 14px; }                /* 2 valeurs au lieu d'un shorthand axe */
-```
-
-Et aucune mise en évidence des cards en alerte (il faut chercher le badge orange à l'œil).
+Aujourd'hui, aucune mise en évidence des cards en alerte (il faut chercher le badge orange à l'œil).
 
 ---
 
 ## 📚 Concepts (40 min)
+
+### 0. Rappel — combinateurs CSS
+
+Avant d'entrer dans `:is()` / `:has()`, les **combinateurs** de base qui reviennent partout :
+
+| Combinateur | Nom | Exemple | Sens |
+|---|---|---|---|
+| (espace) | Descendant | `.card p` | un `p` **n'importe où** sous `.card` |
+| `>` | Enfant direct | `.card > p` | un `p` qui est **enfant immédiat** de `.card` |
+| `+` | Frère adjacent | `h2 + p` | le `p` qui suit **immédiatement** un `h2` (même parent, juste après) |
+| `~` | Frère général | `h2 ~ p` | tout `p` qui suit un `h2` au même niveau (pas forcément collé) |
+| `,` | Liste de sélecteurs | `h1, h2, h3` | l'un **ou** l'autre — applique à chacun |
+| `&` | Référence parent (nesting) | `.card { &:hover { … } }` | équivalent imbriqué de `.card:hover` (Baseline 2023) |
+
+> 💡 Tous ces combinateurs fonctionnent **à l'intérieur** de `:is()`, `:where()`, `:not()` et `:has()`. C'est ce qui rend `:has(+ .alert)` ou `:has(> img)` possibles.
 
 ### 1. `:is()` — la factorisation de sélecteurs (5 min)
 
@@ -177,12 +180,12 @@ Depuis 2021, `:not()` accepte une **liste** de sélecteurs.
 | Sélecteur | Sens |
 |---|---|
 | `:nth-child(n)` | n-ième enfant (tout type) |
-| `:nth-of-type(n)` | n-ième de **son type** |
+| `:nth-of-type(n)` | n-ième de **son type** — ex : `article p:nth-of-type(2)` = le 2ᵉ `<p>` de l'`<article>`, en ignorant les `<h2>` ou `<ul>` intercalés (`:nth-child(2)` aurait visé le 2ᵉ enfant tout type confondu) |
 | `:first-child` / `:last-child` | premier / dernier enfant |
 | `:only-child` | seul enfant |
 | `:empty` | pas de contenu |
 | `:nth-child(odd)` / `(even)` | impairs / pairs |
-| `:nth-child(2n+1 of .selector)` | filtré par sélecteur (Baseline newly available) |
+| `:nth-child(2n+1 of .selector)` | filtré par sélecteur (Baseline newly available) — ex : `tr:nth-child(odd of .apriso-event--critical)` = 1 ligne sur 2 **parmi les lignes critiques uniquement** (le compteur ignore les autres `tr`, contrairement à `tr.apriso-event--critical:nth-child(odd)` qui compte sur l'ensemble) |
 
 ```css
 /* Première card de chaque ligne dans la grille */
@@ -190,51 +193,6 @@ Depuis 2021, `:not()` accepte une **liste** de sélecteurs.
   /* ... */
 }
 ```
-
-### 6. Propriétés logiques (10 min)
-
-Les propriétés CSS classiques sont **physiques** : `top`, `left`, `padding-left`, `margin-right`. Elles raisonnent par côté de l'écran.
-
-Les propriétés **logiques** raisonnent par **axe** (`inline` = sens du texte, `block` = sens des lignes). Avantages : shorthand cohérent par axe, moins de propriétés à écrire, et indépendance vis-à-vis du `writing-mode`.
-
-| Physique | Logique |
-|---|---|
-| `margin-left` | `margin-inline-start` |
-| `margin-right` | `margin-inline-end` |
-| `padding-top` | `padding-block-start` |
-| `padding-bottom` | `padding-block-end` |
-| `border-left` | `border-inline-start` |
-| `width` | `inline-size` |
-| `height` | `block-size` |
-| `text-align: left` | `text-align: start` |
-
-Et les **shorthand** :
-
-```css
-.apriso-machine-card {
-  margin-inline: var(--ml-spacing-2);     /* axe inline (gauche+droite) en 1 ligne */
-  padding-block: var(--ml-spacing-3);     /* axe block (haut+bas) en 1 ligne */
-  inset-inline-start: 0;                  /* début d'axe inline */
-}
-```
-
-#### Cas concret : la bordure colorée des cards
-
-Avant :
-```css
-.apriso-machine-card { border-left: 4px solid var(--ml-color-status-idle); }
-```
-
-Après :
-```css
-.apriso-machine-card { border-inline-start: 4px solid var(--ml-color-status-idle); }
-```
-
-→ Bordure côté **début** de l'axe inline. Sémantique alignée avec `padding-inline`, `margin-inline-start`, `text-align: start` — toute la card raisonne sur le même axe.
-
-#### Cible Baseline
-
-Propriétés logiques : **Widely available** depuis 2022 (`-inline`, `-block`, shorthand inclus). ✅.
 
 ---
 
@@ -271,11 +229,7 @@ Bonus : `:has()` sur le tableau d'événements pour surligner les lignes critiqu
 }
 ```
 
-### Étape 3 — Refactor physique → logique (5 min)
-
-Sur la card machine : remplacer `border-left`, `padding-left/right`, `margin-left/right` par leurs équivalents logiques (`border-inline-start`, `padding-inline`, `margin-inline`). Constat : moins de lignes, intention plus claire (axe vs côté), shorthand unique par axe.
-
-### Étape 4 — `:where()` reset (2 min)
+### Étape 3 — `:where()` reset (2 min)
 
 Rappel Module 1 : utiliser `:where()` pour rendre les défauts de notre overrides facilement battables par les composants.
 
@@ -293,26 +247,14 @@ Reprendre le checkpoint Module 4 et :
 
 3. **`:has()` sur le footer** : si le `<footer>` contient un élément `.apriso-footer__item--alert` (à imaginer), changer le fond. Cas conceptuel — pas obligé d'ajouter le HTML, suffit d'écrire le CSS.
 
-4. **Propriétés logiques — refactor systématique** :
-   - `border-left-color` sur `.apriso-machine-card` → `border-inline-start-color`.
-   - `margin-left: auto` sur le footer item time → `margin-inline-start: auto`.
-   - Tous les `padding-left` / `padding-right` → `padding-inline`.
-   - Tous les `text-align: left/right` → `text-align: start/end`.
+4. **`:is()` factorisation** : trouver une chaîne dupliquée dans `overrides.css` et la factoriser via `:is()`.
 
-5. **`:is()` factorisation** : trouver une chaîne dupliquée dans `overrides.css` et la factoriser via `:is()`.
-
-6. **`:not()` liste** : appliquer un `outline: 1px dashed` aux cards qui ne sont **ni** running **ni** idle (cf. concept §4).
-
-### Vérif refactor logique
-
-Après refactor : aucun `*-left` / `*-right` résiduel dans le bloc traité. `padding-inline` remplace bien la paire `padding-left` + `padding-right`. `text-align: start` partout au lieu de `text-align: left`.
+5. **`:not()` liste** : appliquer un `outline: 1px dashed` aux cards qui ne sont **ni** running **ni** idle.
 
 ### Pièges fréquents
 
 - ❌ `:has()` avec une chaîne lourde côté gauche → recalculs perf à mesurer si DOM mute beaucoup.
 - ❌ Spécificité de `:is()` / `:has()` = celle du **plus spécifique** dans la liste. `:is(#x, .y)` = spécificité d'un id.
-- ❌ Mélanger propriétés physiques et logiques sur le même élément → cascade imprévisible. Choisir une convention.
-- ❌ Oublier qu'une propriété logique **dépend du `writing-mode`** (vertical-rl bascule les axes). Cas rare, mais à connaître.
 
 ### Corrigé attendu
 
@@ -340,22 +282,11 @@ input:user-invalid { border-color: var(--ml-color-status-alert); }
 
 → Marque erreur **uniquement après interaction** (pas dès le chargement).
 
-### Bonus 3 — `inset` shorthand logique
-
-```css
-.tooltip {
-  position: absolute;
-  inset-inline: 0;        /* left + right */
-  inset-block-start: 100%; /* top */
-}
-```
-
 ### Ressources
 
 - [MDN — :has()](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
 - [MDN — :is()](https://developer.mozilla.org/en-US/docs/Web/CSS/:is)
 - [MDN — :where()](https://developer.mozilla.org/en-US/docs/Web/CSS/:where)
-- [MDN — Propriétés logiques](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values)
 - Bramus, [The CSS :has() selector is way more than just a parent selector](https://www.bram.us/2021/12/21/the-css-has-selector/)
 
 ---
@@ -366,8 +297,5 @@ input:user-invalid { border-color: var(--ml-color-status-alert); }
 - [ ] Je sais utiliser `:where()` pour neutraliser la spécificité
 - [ ] Je connais 3 cas d'usage `:has()` chez Dymasco
 - [ ] Je sais que `:has()` / `:is()` prennent la spécificité du **plus spécifique** dans la liste
-- [ ] Je remplace `margin-left/right` par `margin-inline-start/end` (ou `margin-inline`)
-- [ ] Je remplace `text-align: left` par `text-align: start`
-- [ ] J'utilise les shorthand `margin-inline` / `padding-block` quand les 2 côtés d'un axe partagent la même valeur
 
 > 🎯 **Mantra du module** : *"Avant `:has()`, on ajoutait du JS. Maintenant, on écrit une ligne de CSS."*

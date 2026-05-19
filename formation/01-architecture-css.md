@@ -743,7 +743,7 @@ Diff git annoté + CSS Overview avant/après + commentaire de PR avec les 4 chif
 		.apriso-machine-card { ... }
 	}
 	@layer utilities {
-		.text-end { text-align: end; }
+		.text-end { text-align: right; }
 	}
 }
 ```

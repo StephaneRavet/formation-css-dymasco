@@ -349,16 +349,16 @@ Voir `projet-fil-rouge/checkpoints/10-perf-a11y/overrides.css`.
 ```css
 .apriso-skip-link {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
 }
 .apriso-skip-link:focus-visible {
   position: fixed;
-  inset-block-start: 0;
-  inline-size: auto;
-  block-size: auto;
+  top: 0;
+  width: auto;
+  height: auto;
   padding: var(--ml-spacing-3);
   background: var(--ml-color-brand-primary);
   color: white;

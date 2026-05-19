@@ -175,8 +175,8 @@ C'est **le** module pour Dymasco qui livre sur **tablettes opérateurs** (souven
   }
 
   /* Cibles tactiles plus grandes */
-  .apriso-line-selector__select { min-block-size: 44px; }
-  button, a { min-block-size: 44px; }
+  .apriso-line-selector__select { min-height: 44px; }
+  button, a { min-height: 44px; }
 }
 ```
 
@@ -288,7 +288,7 @@ Reprendre le checkpoint Module 7 et :
    - Encapsuler le `:hover` des cards dans `@media (hover: hover) and (pointer: fine)`.
    - Ajouter dans `@media (hover: none) and (pointer: coarse)` :
      - `:active` avec `transform: scale(0.98)`.
-     - `min-block-size: 44px` sur `select`, `button`, `a`.
+     - `min-height: 44px` sur `select`, `button`, `a`.
 
 4. **Contraste** : ajouter un bloc `@media (prefers-contrast: more)` qui assombrit le texte et épaissit les bordures.
 

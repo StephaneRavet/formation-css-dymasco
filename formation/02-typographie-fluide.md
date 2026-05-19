@@ -98,7 +98,7 @@ Un seul code, trois résultats raisonnables.
 | Cas | Code |
 |---|---|
 | KPI value qui grandit avec l'écran | `font-size: clamp(20px, 2.4vw, 40px)` |
-| Padding latéral fluide | `padding-inline: clamp(12px, 2vw, 32px)` |
+| Padding latéral fluide | `padding: 0 clamp(12px, 2vw, 32px)` |
 | Largeur de card adaptative | `width: clamp(220px, 22vw, 320px)` |
 
 ### 2. `min()` et `max()` — les bornes seules
@@ -412,7 +412,7 @@ Compléter `overrides.css` (issu du checkpoint Module 1) pour rendre le dashboar
     .apriso-header {
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 
     .apriso-line-selector__select { width: var(--ml-select-width); }
@@ -450,7 +450,7 @@ Compléter `overrides.css` (issu du checkpoint Module 1) pour rendre le dashboar
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-inline: max(16px, 2vw);
+        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
     }
 }
 ```
@@ -477,7 +477,7 @@ Pattern "type scale" basé sur un ratio (1.2, 1.25, 1.333…) appliqué fluide :
 ### Bonus 2 — `min()` créatif pour les marges
 
 ```css
-padding-inline: max(16px, 5vw);   /* marges qui respirent sur grand écran */
+padding-left: max(16px, 5vw); padding-right: max(16px, 5vw);   /* marges qui respirent sur grand écran */
 ```
 
 ### Bonus 3 — `text-wrap: pretty` sur les messages d'événement

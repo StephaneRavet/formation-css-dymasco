@@ -95,7 +95,7 @@ Container Queries inversent la perspective : le composant **interroge son conten
 | `container-type` | Sens |
 |---|---|
 | `normal` | Pas de container query (défaut) |
-| `inline-size` | Tracker la largeur (axe inline) — **le plus utilisé** |
+| `inline-size` | Tracker la largeur — **le plus utilisé** |
 | `size` | Tracker largeur ET hauteur (impose un layout 2D, plus rare) |
 
 > ⚠️ `container-type: size` impose au conteneur une **taille intrinsèque connue** → souvent casse le layout (le conteneur ne grandit plus avec son contenu). Utiliser `inline-size` 95% du temps.
@@ -135,7 +135,7 @@ Comme `vw`/`vh` pour le viewport, il existe `cqw`/`cqh`/`cqi`/`cqb` pour le cont
 |---|---|
 | `cqw` | 1% de la largeur du conteneur |
 | `cqh` | 1% de la hauteur |
-| `cqi` | 1% de l'inline-size (= largeur en writing-mode horizontal) |
+| `cqi` | 1% de l'inline-size (= largeur du conteneur) |
 | `cqb` | 1% du block-size (hauteur en horizontal) |
 | `cqmin` / `cqmax` | min/max des deux dimensions |
 
