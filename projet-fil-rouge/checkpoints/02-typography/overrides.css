@@ -25,10 +25,22 @@
    ---------------------------------------------------------------------------- */
 
 @layer priority {
-    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
-    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
-    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
-    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-header__title {
+        font-size: var(--ml-fs-header-title) !important;
+    }
+
+    .apriso-machine-card--running {
+        border-left-color: var(--ml-color-status-running) !important;
+    }
+
+    .apriso-machine-card--idle {
+        border-left-color: var(--ml-color-status-idle) !important;
+    }
+
+    .apriso-machine-card--maintenance {
+        border-left-color: var(--ml-color-status-maintenance) !important;
+    }
+
     .apriso-machine-card--alert {
         border-left-color: var(--ml-color-status-alert) !important;
         background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
@@ -61,18 +73,18 @@
     :root {
         /* Brand */
         --ml-color-brand-primary: #c2410c;
-        --ml-color-brand-accent:  #f59e0b;
-        --ml-color-bg-cream:      #fef6e4;
-        --ml-color-bg-app:        #faf3e0;
-        --ml-color-text:          #1f1f1f;
-        --ml-color-text-muted:    #6b5d4f;
-        --ml-color-border:        #e5d4b1;
-        --ml-color-surface:       #ffffff;
+        --ml-color-brand-accent: #f59e0b;
+        --ml-color-bg-cream: #fef6e4;
+        --ml-color-bg-app: #faf3e0;
+        --ml-color-text: #1f1f1f;
+        --ml-color-text-muted: #6b5d4f;
+        --ml-color-border: #e5d4b1;
+        --ml-color-surface: #ffffff;
 
         /* Status */
-        --ml-color-status-running:     #2e7d32;
-        --ml-color-status-idle:        #6c757d;
-        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-running: #2e7d32;
+        --ml-color-status-idle: #6c757d;
+        --ml-color-status-alert: #f57c00;
         --ml-color-status-maintenance: #1976d2;
 
         /* Spacing */
@@ -83,22 +95,22 @@
         --ml-spacing-5: 24px;
 
         /* Typographie fluide */
-        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-base: clamp(13px, 0.95vw, 15px);
         --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
-        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
-        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
-        --ml-fs-card-title:  clamp(13px, 1vw, 16px);
+        --ml-fs-kpi-label: clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value: clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title: clamp(13px, 1vw, 16px);
 
         /* Dimensions fluides */
         --ml-dashboard-max-width: 1920px;
-        --ml-card-width:          clamp(220px, 22vw, 300px);
-        --ml-select-width:        max(180px, 14ch);
+        --ml-card-width: clamp(220px, 22vw, 300px);
+        --ml-select-width: max(180px, 14ch);
 
         /* Radius / shadow */
         --ml-radius-sm: 4px;
-        --ml-radius:    8px;
-        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
-        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+        --ml-radius: 8px;
+        --ml-shadow-1: 0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2: 0 4px 12px rgb(0 0 0 / 0.10);
     }
 
     /* --- APP -------------------------------------------------------------- */
@@ -111,7 +123,8 @@
 
     .apriso-dashboard {
         width: min(var(--ml-dashboard-max-width), 100%);
-        height: 100dvh;                /* dynamic viewport — tablette friendly */
+        height: 100dvh;
+        /* dynamic viewport — tablette friendly */
         background: var(--ml-color-surface);
         border-color: var(--ml-color-border);
     }
@@ -121,10 +134,12 @@
     .apriso-header {
         background: var(--ml-color-brand-primary);
         border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
-        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
+        padding-left: max(16px, 2vw);
+        padding-right: max(16px, 2vw);
 
         & .apriso-header__title {
-            text-wrap: balance;        /* font-size escaladé dans @layer priority */
+            text-wrap: balance;
+            /* font-size escaladé dans @layer priority */
         }
     }
 
@@ -144,7 +159,7 @@
     .apriso-kpi-board {
         background: var(--ml-color-bg-cream);
         border-bottom-color: var(--ml-color-border);
-        padding: max(12px, 1.5vw) max(16px, 2vw);
+        padding: min(12px, 1.5vw) min(16px, 2vw);
     }
 
     .apriso-kpi__label {
@@ -158,7 +173,8 @@
     /* --- MACHINE CARD ----------------------------------------------------- */
 
     .apriso-machine-card {
-        width: var(--ml-card-width);     /* fluide, sera assoupli en Module 3/6 */
+        width: var(--ml-card-width);
+        /* fluide, sera assoupli en Module 3/6 */
         background: var(--ml-color-bg-cream);
         border: 1px solid var(--ml-color-border);
         border-left: 4px solid var(--ml-color-status-idle);
@@ -196,6 +212,7 @@
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
+        padding-left: max(16px, 2vw);
+        padding-right: max(16px, 2vw);
     }
 }

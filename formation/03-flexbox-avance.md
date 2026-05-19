@@ -484,7 +484,7 @@ Partez de ce `overrides.css` (état après Module 2) :
     .apriso-kpi-board {
         background: var(--ml-color-bg-cream);
         border-bottom-color: var(--ml-color-border);
-        padding: max(12px, 1.5vw) max(16px, 2vw);
+        padding: min(12px, 1.5vw) min(16px, 2vw);
     }
 
     .apriso-kpi__label {
@@ -712,7 +712,7 @@ Partez de ce `overrides.css` (état après Module 2) :
     .apriso-kpi-board {
         background: var(--ml-color-bg-cream);
         border-bottom-color: var(--ml-color-border);
-        padding: max(12px, 1.5vw) max(16px, 2vw);
+        padding: min(12px, 1.5vw) min(16px, 2vw);
     }
 
     .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }

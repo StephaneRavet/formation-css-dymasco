@@ -26,10 +26,22 @@
    ---------------------------------------------------------------------------- */
 
 @layer priority {
-    .apriso-header__title { font-size: var(--ml-fs-header-title) !important; }
-    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
-    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
-    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
+    .apriso-header__title {
+        font-size: var(--ml-fs-header-title) !important;
+    }
+
+    .apriso-machine-card--running {
+        border-left-color: var(--ml-color-status-running) !important;
+    }
+
+    .apriso-machine-card--idle {
+        border-left-color: var(--ml-color-status-idle) !important;
+    }
+
+    .apriso-machine-card--maintenance {
+        border-left-color: var(--ml-color-status-maintenance) !important;
+    }
+
     .apriso-machine-card--alert {
         border-left-color: var(--ml-color-status-alert) !important;
         background: var(--ml-color-status-alert-bg) !important;
@@ -64,29 +76,29 @@
 
         /* Sources hex (charte client telle quelle — pas de conversion oklch) */
         --ml-color-brand-primary: #c2410c;
-        --ml-color-brand-accent:  #f59e0b;
+        --ml-color-brand-accent: #f59e0b;
 
-        --ml-color-brand-primary-hover:    color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
-        --ml-color-brand-primary-active:   color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
+        --ml-color-brand-primary-hover: color-mix(in oklab, var(--ml-color-brand-primary), black 10%);
+        --ml-color-brand-primary-active: color-mix(in oklab, var(--ml-color-brand-primary), black 20%);
         --ml-color-brand-primary-disabled: color-mix(in oklab, var(--ml-color-brand-primary), white 50%);
-        --ml-color-brand-primary-darker:   color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
+        --ml-color-brand-primary-darker: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
 
-        --ml-color-bg-app:     #faf3e0;
-        --ml-color-bg-cream:   #fef6e4;
-        --ml-color-surface:    #ffffff;
-        --ml-color-text:       #1f1f1f;
+        --ml-color-bg-app: #faf3e0;
+        --ml-color-bg-cream: #fef6e4;
+        --ml-color-surface: #ffffff;
+        --ml-color-text: #1f1f1f;
         --ml-color-text-muted: #6b5d4f;
-        --ml-color-border:     #e5d4b1;
+        --ml-color-border: #e5d4b1;
 
-        --ml-color-status-running:     #2e7d32;
-        --ml-color-status-idle:        #6c757d;
-        --ml-color-status-alert:       #f57c00;
+        --ml-color-status-running: #2e7d32;
+        --ml-color-status-idle: #6c757d;
+        --ml-color-status-alert: #f57c00;
         --ml-color-status-maintenance: #1976d2;
 
-        --ml-color-status-alert-bg:    color-mix(in oklab, var(--ml-color-status-alert), white 88%);
+        --ml-color-status-alert-bg: color-mix(in oklab, var(--ml-color-status-alert), white 88%);
         --ml-color-status-critical-bg: color-mix(in oklab, var(--ml-color-status-alert), white 92%);
-        --ml-color-row-zebra:          color-mix(in oklab, var(--ml-color-bg-cream), white 30%);
-        --ml-color-row-hover:          color-mix(in oklab, var(--ml-color-brand-accent), white 88%);
+        --ml-color-row-zebra: color-mix(in oklab, var(--ml-color-bg-cream), white 30%);
+        --ml-color-row-hover: color-mix(in oklab, var(--ml-color-brand-accent), white 88%);
 
         --ml-spacing-1: 4px;
         --ml-spacing-2: 8px;
@@ -94,33 +106,33 @@
         --ml-spacing-4: 16px;
         --ml-spacing-5: 24px;
 
-        --ml-fs-base:        clamp(13px, 0.95vw, 15px);
+        --ml-fs-base: clamp(13px, 0.95vw, 15px);
         --ml-fs-header-title: clamp(16px, 1.6vw, 24px);
-        --ml-fs-kpi-label:   clamp(10px, 0.9vw, 13px);
-        --ml-fs-kpi-value:   clamp(20px, 2.4vw, 40px);
-        --ml-fs-card-title:  clamp(13px, 4cqi, 18px);
+        --ml-fs-kpi-label: clamp(10px, 0.9vw, 13px);
+        --ml-fs-kpi-value: clamp(20px, 2.4vw, 40px);
+        --ml-fs-card-title: clamp(13px, 4cqi, 18px);
 
         --ml-dashboard-max-width: 1920px;
-        --ml-card-width-min:      240px;
-        --ml-sidebar-width:       380px;
-        --ml-select-width:        max(180px, 14ch);
+        --ml-card-width-min: 240px;
+        --ml-sidebar-width: 380px;
+        --ml-select-width: max(180px, 14ch);
 
         --ml-radius-sm: 4px;
-        --ml-radius:    8px;
-        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
-        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
+        --ml-radius: 8px;
+        --ml-shadow-1: 0 1px 2px rgb(0 0 0 / 0.06);
+        --ml-shadow-2: 0 4px 12px rgb(0 0 0 / 0.10);
     }
 
     /* --- MODE SOMBRE — équipe nuit --------------------------------------- */
 
     @media (prefers-color-scheme: dark) {
         :root {
-            --ml-color-bg-app:     oklch(20% 0.02 60);
-            --ml-color-bg-cream:   oklch(24% 0.02 60);
-            --ml-color-surface:    oklch(28% 0.02 60);
-            --ml-color-text:       oklch(95% 0.01 80);
+            --ml-color-bg-app: oklch(20% 0.02 60);
+            --ml-color-bg-cream: oklch(24% 0.02 60);
+            --ml-color-surface: oklch(28% 0.02 60);
+            --ml-color-text: oklch(95% 0.01 80);
             --ml-color-text-muted: oklch(72% 0.01 80);
-            --ml-color-border:     oklch(40% 0.02 60);
+            --ml-color-border: oklch(40% 0.02 60);
 
             --ml-color-row-zebra: color-mix(in oklab, var(--ml-color-bg-cream), white 5%);
             --ml-color-row-hover: color-mix(in oklab, var(--ml-color-brand-accent), black 30%);
@@ -131,11 +143,14 @@
 
     @media (prefers-contrast: more) {
         :root {
-            --ml-color-text:       oklch(10% 0 0);
+            --ml-color-text: oklch(10% 0 0);
             --ml-color-text-muted: oklch(30% 0 0);
-            --ml-color-border:     oklch(40% 0 0);
+            --ml-color-border: oklch(40% 0 0);
         }
-        .apriso-machine-card { border-width: 2px; }
+
+        .apriso-machine-card {
+            border-width: 2px;
+        }
     }
 
     /* --- APP -------------------------------------------------------------- */
@@ -164,12 +179,30 @@
             "footer  footer";
     }
 
-    .apriso-header        { grid-area: header; }
-    .apriso-kpi-board     { grid-area: kpi; }
-    .apriso-main          { grid-area: main; display: contents; }
-    .apriso-machine-grid  { grid-area: main; }
-    .apriso-event-log     { grid-area: sidebar; }
-    .apriso-footer        { grid-area: footer; }
+    .apriso-header {
+        grid-area: header;
+    }
+
+    .apriso-kpi-board {
+        grid-area: kpi;
+    }
+
+    .apriso-main {
+        grid-area: main;
+        display: contents;
+    }
+
+    .apriso-machine-grid {
+        grid-area: main;
+    }
+
+    .apriso-event-log {
+        grid-area: sidebar;
+    }
+
+    .apriso-footer {
+        grid-area: footer;
+    }
 
     /* --- HEADER ----------------------------------------------------------- */
 
@@ -177,12 +210,15 @@
         display: flex;
         align-items: center;
         gap: var(--ml-spacing-4);
-        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
+        padding-left: max(16px, 2vw);
+        padding-right: max(16px, 2vw);
         background: var(--ml-color-brand-primary);
         border-bottom-color: var(--ml-color-brand-primary-darker);
     }
 
-    :is(.apriso-header__brand, .apriso-header__controls) { flex: 0 0 auto; }
+    :is(.apriso-header__brand, .apriso-header__controls) {
+        flex: 0 0 auto;
+    }
 
     .apriso-header__title {
         /* font-size : escaladé dans @layer priority (Apriso !important) */
@@ -194,7 +230,9 @@
         white-space: nowrap;
     }
 
-    .apriso-line-selector__select { width: var(--ml-select-width); }
+    .apriso-line-selector__select {
+        width: var(--ml-select-width);
+    }
 
     .apriso-connection-status__dot {
         width: 0.6em;
@@ -207,7 +245,7 @@
     .apriso-kpi-board {
         background: var(--ml-color-bg-cream);
         border-bottom-color: var(--ml-color-border);
-        padding: max(12px, 1.5vw) max(16px, 2vw);
+        padding: min(12px, 1.5vw) min(16px, 2vw);
     }
 
     .apriso-kpi-board__table,
@@ -225,10 +263,19 @@
         border-right: 1px solid var(--ml-color-border);
         text-align: left;
     }
-    .apriso-kpi:last-child { border-right: none; }
 
-    .apriso-kpi__label { font-size: var(--ml-fs-kpi-label); }
-    .apriso-kpi__value { font-size: var(--ml-fs-kpi-value); font-variant-numeric: tabular-nums; }
+    .apriso-kpi:last-child {
+        border-right: none;
+    }
+
+    .apriso-kpi__label {
+        font-size: var(--ml-fs-kpi-label);
+    }
+
+    .apriso-kpi__value {
+        font-size: var(--ml-fs-kpi-value);
+        font-variant-numeric: tabular-nums;
+    }
 
     /* --- MACHINE GRID + CARD --------------------------------------------- */
 
@@ -260,8 +307,10 @@
         border: 1px solid var(--ml-color-border);
         border-left: 4px solid var(--ml-color-status-idle);
         border-radius: var(--ml-radius);
-        padding-top: var(--ml-spacing-3); padding-bottom: var(--ml-spacing-3);
-        padding-left: var(--ml-spacing-4); padding-right: var(--ml-spacing-4);
+        padding-top: var(--ml-spacing-3);
+        padding-bottom: var(--ml-spacing-3);
+        padding-left: var(--ml-spacing-4);
+        padding-right: var(--ml-spacing-4);
         transition: transform 0.18s ease, box-shadow 0.18s ease;
 
         & .apriso-machine-card__header {
@@ -281,7 +330,9 @@
             white-space: nowrap;
         }
 
-        & .apriso-machine-card__status { flex: 0 0 auto; }
+        & .apriso-machine-card__status {
+            flex: 0 0 auto;
+        }
 
         & .apriso-machine-card__metrics {
             display: grid;
@@ -289,7 +340,9 @@
             gap: var(--ml-spacing-2);
         }
 
-        & .apriso-machine-card__last-event { display: none; }
+        & .apriso-machine-card__last-event {
+            display: none;
+        }
 
         /* Status modifiers escaladés dans @layer priority (Apriso !important) */
 
@@ -340,6 +393,7 @@
         .apriso-machine-card__metrics {
             grid-template-columns: 1fr 1fr;
         }
+
         .apriso-machine-card__last-event {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -350,9 +404,12 @@
 
     @container machine-zone (min-width: 480px) {
         .apriso-machine-card {
-            padding-top: var(--ml-spacing-4); padding-bottom: var(--ml-spacing-4);
-            padding-left: var(--ml-spacing-5); padding-right: var(--ml-spacing-5);
+            padding-top: var(--ml-spacing-4);
+            padding-bottom: var(--ml-spacing-4);
+            padding-left: var(--ml-spacing-5);
+            padding-right: var(--ml-spacing-5);
         }
+
         .apriso-machine-card__metrics {
             grid-template-columns: 1fr 1fr 1fr;
         }
@@ -369,7 +426,9 @@
             border-bottom-color: var(--ml-color-border);
         }
 
-        & .apriso-event-log__container { scrollbar-gutter: stable; }
+        & .apriso-event-log__container {
+            scrollbar-gutter: stable;
+        }
 
         & .apriso-event-log__table thead th {
             position: sticky;
@@ -391,7 +450,9 @@
             white-space: nowrap;
         }
 
-        & .apriso-event-log__table td { overflow-wrap: anywhere; }
+        & .apriso-event-log__table td {
+            overflow-wrap: anywhere;
+        }
 
         & :where(.apriso-event-log__table tbody tr:nth-child(even)) {
             background: var(--ml-color-row-zebra);
@@ -412,7 +473,8 @@
         background: var(--ml-color-bg-cream);
         border-top-color: var(--ml-color-border);
         color: var(--ml-color-text-muted);
-        padding-left: max(16px, 2vw); padding-right: max(16px, 2vw);
+        padding-left: max(16px, 2vw);
+        padding-right: max(16px, 2vw);
     }
 
     .apriso-footer__item--time {
@@ -430,7 +492,10 @@
    ---------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
@@ -444,12 +509,12 @@
 
 @media print {
     :root {
-        --ml-color-bg-app:     white;
-        --ml-color-bg-cream:   white;
-        --ml-color-surface:    white;
-        --ml-color-text:       black;
+        --ml-color-bg-app: white;
+        --ml-color-bg-cream: white;
+        --ml-color-surface: white;
+        --ml-color-text: black;
         --ml-color-text-muted: #555;
-        --ml-color-border:     #999;
+        --ml-color-border: #999;
     }
 
     /* Cacher les zones non pertinentes pour une main courante */
@@ -470,10 +535,14 @@
         width: 100%;
     }
 
-    .apriso-event-log__table tr { break-inside: avoid; }
+    .apriso-event-log__table tr {
+        break-inside: avoid;
+    }
 
     /* Force l'impression des fonds (zebra, headers) si demandé par le navigateur */
-    * { print-color-adjust: exact; }
+    * {
+        print-color-adjust: exact;
+    }
 
     /* Afficher l'URL des liens (utile sur ordres de fab) */
     a::after {
