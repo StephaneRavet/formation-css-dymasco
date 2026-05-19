@@ -194,7 +194,7 @@ Trois paliers :
 
 ### Étape 3 — Effet wow (2 min)
 
-DevTools : passer le `<aside>` (sidebar) à `width: 600px` → cards intérieures basculent en mode XL. Repasser à `width: 200px` → mode compact. **Une seule règle CSS** pilote tout.
+DevTools : sélectionner `.apriso-machine-grid` (le `<main>`, déclaré comme conteneur), forcer `width: 600px` → cards intérieures basculent en mode XL. Repasser à `width: 260px` → mode compact. **Une seule règle CSS** pilote tout — le container query lit **son** conteneur, jamais le viewport.
 
 ---
 
