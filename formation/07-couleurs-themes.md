@@ -247,6 +247,10 @@ Outil : [oklch.com](https://oklch.com) — picker visuel hex ↔ oklch.
 
 > 🎨 **Pas de démo séparée** — les couleurs c'est fun, vous testez direct. Tapez le code, ouvrez DevTools, jouez avec les valeurs en live. C'est plus marquant que de me regarder faire.
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 6 : [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet-fil-rouge/checkpoints/06-container-queries/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 6 et :

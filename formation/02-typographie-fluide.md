@@ -205,97 +205,9 @@ Après :
 
 ### 📁 Code de départ
 
-Partez de ce `overrides.css` (état après Module 1) :
+Partez de ce fichier `overrides.css` (état après Module 1) :
 
-```css
-/* ============================================================================
-   FORGE × PÂTES MAMIE LULU — overrides.css
-   ----------------------------------------------------------------------------
-   Checkpoint après Module 1 — Architecture CSS pour overrides
-   ============================================================================
-*/
-
-@layer reset, priority, framework, overrides;
-
-@import url("./apriso-base.css") layer(framework);
-
-@layer reset {
-    :where(h1, h2, h3, h4, h5, h6, p, dl, dd, dt) { margin: 0; }
-    :where(button, select, input, textarea) { font: inherit; color: inherit; }
-}
-
-@layer priority {
-    .apriso-header__title { font-size: 22px !important; }
-    .apriso-machine-card--running     { border-left-color: var(--ml-color-status-running) !important; }
-    .apriso-machine-card--idle        { border-left-color: var(--ml-color-status-idle) !important; }
-    .apriso-machine-card--maintenance { border-left-color: var(--ml-color-status-maintenance) !important; }
-    .apriso-machine-card--alert {
-        border-left-color: var(--ml-color-status-alert) !important;
-        background: color-mix(in oklab, var(--ml-color-status-alert), white 90%) !important;
-    }
-}
-
-@layer overrides {
-    :root {
-        --ml-color-brand-primary: #c2410c;
-        --ml-color-brand-accent:  #f59e0b;
-        --ml-color-bg-cream:      #fef6e4;
-        --ml-color-bg-app:        #faf3e0;
-        --ml-color-text:          #1f1f1f;
-        --ml-color-text-muted:    #6b5d4f;
-        --ml-color-border:        #e5d4b1;
-        --ml-color-surface:       #ffffff;
-        --ml-color-status-running:     #2e7d32;
-        --ml-color-status-idle:        #6c757d;
-        --ml-color-status-alert:       #f57c00;
-        --ml-color-status-maintenance: #1976d2;
-        --ml-spacing-1: 4px;
-        --ml-spacing-2: 8px;
-        --ml-spacing-3: 12px;
-        --ml-spacing-4: 16px;
-        --ml-spacing-5: 24px;
-        --ml-fs-header-title: 22px;
-        --ml-fs-card-title:   14px;
-        --ml-radius-sm: 4px;
-        --ml-radius:    8px;
-        --ml-shadow-1:  0 1px 2px rgb(0 0 0 / 0.06);
-        --ml-shadow-2:  0 4px 12px rgb(0 0 0 / 0.10);
-    }
-
-    html { background: var(--ml-color-bg-app); color: var(--ml-color-text); }
-    .apriso-dashboard { background: var(--ml-color-surface); border-color: var(--ml-color-border); }
-
-    .apriso-header {
-        background: var(--ml-color-brand-primary);
-        border-bottom-color: color-mix(in oklab, var(--ml-color-brand-primary), black 15%);
-    }
-
-    .apriso-kpi-board { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
-
-    .apriso-machine-card {
-        background: var(--ml-color-bg-cream);
-        border: 1px solid var(--ml-color-border);
-        border-left: 4px solid var(--ml-color-status-idle);
-        border-radius: var(--ml-radius);
-        padding: var(--ml-spacing-3) var(--ml-spacing-4);
-
-        & .apriso-machine-card__title { font-size: var(--ml-fs-card-title); color: var(--ml-color-text); }
-        &:hover { box-shadow: var(--ml-shadow-2); }
-    }
-
-    .apriso-event-log {
-        background: var(--ml-color-surface);
-        border-left-color: var(--ml-color-border);
-        & .apriso-event-log__header { background: var(--ml-color-bg-cream); border-bottom-color: var(--ml-color-border); }
-    }
-
-    .apriso-footer {
-        background: var(--ml-color-bg-cream);
-        border-top-color: var(--ml-color-border);
-        color: var(--ml-color-text-muted);
-    }
-}
-```
+- [projet-fil-rouge/checkpoints/01-architecture/overrides.css](../projet-fil-rouge/checkpoints/01-architecture/overrides.css)
 
 ### Consigne
 

@@ -4,18 +4,14 @@ formateur:
     - savoir que :has() prend la spécificité du PLUS SPÉCIFIQUE dans sa liste (idem :is())
     - connaître coût perf :has() (recalcule à chaque mutation DOM)
     - avoir testé :has() sur navigateur cible (widely 2024)
-> ⏱️ **Durée** : 1h45 — **J2 matin, ouverture**
->
-> 🧭 **Type** : module pratique (sélecteurs CSS modernes + propriétés logiques)
->
-> 🎯 **Checkpoint** : `projet-fil-rouge/checkpoints/05-selecteurs/overrides.css`
+  ressources_a_preparer:
     - checkpoint Module 4 ouvert
     - HTML avec card alerte Laminoir Léon visible
   pitch_ouverture: >
     "Levez la main si vous avez écrit du JS pour 'si la card contient un badge alert,
     colorier le parent'. C'est fini. Une ligne de CSS suffit. Bienvenue dans :has()."
   energie_attendue: haute — démarrage J2, café, effet "wow" :has() garanti
-  duree_cible: 105 min — découpage 40 concepts / 20 démo / 35 exo / 10 récap
+  duree_cible: 105 min — découpage 40 concepts (dont 5 rappel combinateurs) / 20 démo / 35 exo / 10 récap
   variantes_timing:
     si_en_retard: zapper bonus :user-invalid, condenser :not() en 1 min
     si_en_avance: faire chercher 3 cas :has() dans LEUR base code actuelle (mental)
@@ -50,7 +46,7 @@ formateur:
 
 ## 🎯 Objectif (en 1 phrase)
 
-> 💡 Tous ces combinateurs fonctionnent **à l'intérieur** des pseudo-classes fontionnelles `:is()`, `:where()`, `:not()` et `:has()`.
+Maîtriser `:is()`, `:where()`, **`:has()`** (le sélecteur "parent enfin possible") pour écrire moins de code et rendre vos overrides plus robustes.
 
 ---
 
@@ -237,19 +233,26 @@ Rappel Module 1 : utiliser `:where()` pour rendre les défauts de notre override
 
 ## 🛠️ Exercice fil rouge (35 min)
 
+### 📄 Code de départ
+
+Deux fichiers servent de point de départ à l'exercice :
+
+- HTML : [projet-fil-rouge/00-base/Forge — Pâtes Mamie Lulu.html](<../projet-fil-rouge/00-base/Forge — Pâtes Mamie Lulu.html>) (partagé pour tout le projet fil rouge). Point d'attention M05 : le badge de Laminoir Léon porte la classe `apriso-machine-card__status--alert` (ajoutée pour permettre `:has(.apriso-machine-card__status--alert)`).
+- CSS : [projet-fil-rouge/checkpoints/04-grid/overrides.css](../projet-fil-rouge/checkpoints/04-grid/overrides.css) — état après Module 4 (Grid).
+
 ### Consigne
 
 Reprendre le checkpoint Module 4 et :
 
-1. **`:has()` sur cards alerte** : toute card avec un badge `--alert` reçoit un outline `--ml-color-status-alert`, fond légèrement teinté.
+1. **`:has()` sur cards alerte** : toute card qui **contient** un badge `.apriso-machine-card__status--alert` reçoit un `outline: 2px solid var(--ml-color-status-alert)` + `outline-offset: -2px`. (Le fond teinté est déjà posé par le modifier `.apriso-machine-card--alert` dans `@layer priority` — l'intérêt de `:has()` ici est de découpler la mise en évidence du modifier sur le parent.)
 
-2. **`:has()` sur lignes critiques du journal** : toute ligne `.apriso-event--critical` reçoit un fond rouge léger, et la première colonne (heure) est mise en gras.
+2. **`:has()` sur lignes critiques du journal** : toute ligne `.apriso-event--critical` reçoit un fond `--ml-color-status-alert` (teinte orange/alerte), et la première colonne (heure) est mise en gras.
 
 3. **`:has()` sur le footer** : si le `<footer>` contient un élément `.apriso-footer__item--alert` (à imaginer), changer le fond. Cas conceptuel — pas obligé d'ajouter le HTML, suffit d'écrire le CSS.
 
 4. **`:is()` factorisation** : trouver une chaîne dupliquée dans `overrides.css` et la factoriser via `:is()`.
 
-5. **`:not()` liste** : appliquer un `outline: 1px dashed` aux cards qui ne sont **ni** running **ni** idle.
+5. **`:not()` liste** : appliquer un `outline: 1px dashed` aux cards qui ne sont **dans aucun état standard** — c.-à-d. ni `running`, ni `idle`, ni `alert`, ni `maintenance` (filet de sécurité pour repérer un état non prévu).
 
 ### Pièges fréquents
 

@@ -276,6 +276,10 @@ DevTools → "Rendering → Emulate CSS media feature `forced-colors: active`". 
 
 ## 🛠️ Exercice fil rouge (25 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 7 et :

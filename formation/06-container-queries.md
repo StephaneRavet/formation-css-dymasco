@@ -200,6 +200,10 @@ DevTools : sélectionner `.apriso-machine-grid` (le `<main>`, déclaré comme co
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 5 et :

@@ -204,6 +204,10 @@ Ajouter `content-visibility: auto` sur les `<tr>`. Si le journal est long (simul
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 9 : [projet-fil-rouge/checkpoints/09-svg-animations/overrides.css](../projet-fil-rouge/checkpoints/09-svg-animations/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 9 et :
