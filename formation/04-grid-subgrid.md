@@ -338,6 +338,12 @@ Ajouter `tabular-nums` sur la colonne Heure, zebra `:nth-child(even)`, hover dis
 
 ## 🛠️ Exercice fil rouge (50 min)
 
+### 📁 Code de départ
+
+Partez de ce fichier `overrides.css` (état après Module 3) :
+
+- [projet-fil-rouge/checkpoints/03-flexbox/overrides.css](../projet-fil-rouge/checkpoints/03-flexbox/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 3 et :
@@ -377,12 +383,6 @@ Reprendre le checkpoint Module 3 et :
 - ❌ Mettre `overflow: hidden` sur un ancêtre → casse le sticky silencieusement.
 - ❌ Confondre `auto-fit` (collapse vides) et `auto-fill` (conserve vides) → grille avec items étirés non voulu.
 - ❌ Utiliser `1fr` sans `minmax(min, 1fr)` → items qui peuvent devenir illisibles à très petit écran.
-
-### 📁 Code de départ
-
-Partez de ce fichier `overrides.css` (état après Module 3) :
-
-- [projet-fil-rouge/checkpoints/03-flexbox/overrides.css](../projet-fil-rouge/checkpoints/03-flexbox/overrides.css)
 
 ### Corrigé attendu
 

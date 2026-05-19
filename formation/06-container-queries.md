@@ -200,6 +200,10 @@ DevTools : sélectionner `.apriso-machine-grid` (le `<main>`, déclaré comme co
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 5 et :
@@ -218,10 +222,6 @@ Reprendre le checkpoint Module 5 et :
    - Font-size en `clamp(13px, 4cqw, 18px)` → suit la largeur du conteneur, pas de l'écran.
 
 5. **Test à faire** : DevTools, faire varier la **largeur de la sidebar** ou de la **grille machines** en direct. Observer que les cards **internes** se reconfigurent. Faire varier le viewport seul → les cards ne bougent **pas** (la grille reste à la même taille).
-
-### 📁 Code de départ
-
-Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css)
 
 ### Pièges fréquents
 

@@ -18,18 +18,34 @@ Règle : **jamais embarquer le code en bloc dans le `.md`** support de formation
 
 ### Ordre dans la section Exercice fil rouge
 
-1. Consigne
-2. Tests à faire (si présent)
-3. Pièges fréquents
-4. 📁 Code de départ (lien)
+1. 📁 Code de départ (lien) — placé en TÊTE pour que le stagiaire sache d'où partir avant de lire la consigne
+2. Consigne
+3. Tests à faire / Tests live (si présent)
+4. Pièges fréquents
 5. Corrigé attendu (lien)
+
+Optionnel — si pas de démo séparée (démo fusionnée dans l'exo, pattern M07/M08), insérer une note d'intro `> 🎬 **Pas de démo séparée** — ...` juste après le titre `## 🛠️ Exercice fil rouge`, avant le bloc Code de départ.
 
 ### Exemple
 
 ```md
+## 🛠️ Exercice fil rouge (NN min)
+
 ### 📁 Code de départ
 
 Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css)
+
+### Consigne
+
+...
+
+### Tests à faire
+
+...
+
+### Pièges fréquents
+
+...
 
 ### Corrigé attendu
 

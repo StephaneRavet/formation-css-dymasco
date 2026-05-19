@@ -307,6 +307,12 @@ Tester avec un message long. → Trois petits points en fin de 2e ligne.
 
 ## 🛠️ Exercice fil rouge (25 min)
 
+### 📁 Code de départ
+
+Partez de ce fichier `overrides.css` (état après Module 2) :
+
+- [projet-fil-rouge/checkpoints/02-typography/overrides.css](../projet-fil-rouge/checkpoints/02-typography/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 2 et :
@@ -332,12 +338,6 @@ Reprendre le checkpoint Module 2 et :
     - Le titre s'ellipse, ne fait pas grandir la card.
     - La hauteur des cards reste alignée dans la grille.
     - Le message d'événement long se clampe à 2 lignes.
-
-### 📁 Code de départ
-
-Partez de ce fichier `overrides.css` (état après Module 2) :
-
-- [projet-fil-rouge/checkpoints/02-typography/overrides.css](../projet-fil-rouge/checkpoints/02-typography/overrides.css)
 
 ### Pièges fréquents
 

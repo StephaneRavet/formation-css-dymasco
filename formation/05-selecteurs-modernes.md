@@ -233,7 +233,7 @@ Rappel Module 1 : utiliser `:where()` pour rendre les défauts de notre override
 
 ## 🛠️ Exercice fil rouge (35 min)
 
-### 📄 Code de départ
+### 📁 Code de départ
 
 Deux fichiers servent de point de départ à l'exercice :
 

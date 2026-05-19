@@ -247,6 +247,10 @@ Outil : [oklch.com](https://oklch.com) — picker visuel hex ↔ oklch.
 
 > 🎨 **Pas de démo séparée** — les couleurs c'est fun, vous testez direct. Tapez le code, ouvrez DevTools, jouez avec les valeurs en live. C'est plus marquant que de me regarder faire.
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 6 : [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet-fil-rouge/checkpoints/06-container-queries/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 6 et :
@@ -294,10 +298,6 @@ Une fois le checkpoint en place, jouez dans DevTools :
 - ❌ Oublier l'espace de mix (`color-mix(<color-1>, <color-2>)` sans `in oklab`) → erreur silencieuse, valeur ignorée. **DevTools n'alerte pas, vérifier visuellement.**
 - ❌ `light-dark()` sans `color-scheme: light dark` déclaré → fonctionne, mais les composants UA (scrollbars, inputs) ne suivent pas. Toujours déclarer les deux.
 - ❌ Vouloir convertir toute la charte client en oklch "pour faire moderne" → perte de temps. Garder hex sources, mix en oklab.
-
-### 📁 Code de départ
-
-Partez du checkpoint Module 6 : [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet-fil-rouge/checkpoints/06-container-queries/overrides.css)
 
 ### Corrigé attendu
 

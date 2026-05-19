@@ -6,11 +6,12 @@ formateur:
     - savoir pourquoi !important justifié dans reset reduced-motion (override TOUT)
     - distinguer hover:hover/none ET pointer:fine/coarse (4 combinaisons possibles)
     - forced-colors + couleurs système (Canvas, CanvasText, Highlight) + forced-color-adjust
-  ressources_demo_a_preparer:
-    - checkpoint Module 7 ouvert
+  ressources_a_preparer:
+    - checkpoint Module 7 ouvert (point de départ exo)
     - DevTools → Rendering ouvert (émulation prefers-color-scheme, reduced-motion, forced-colors)
     - DevTools → Sensors prêt (Touch: Force enabled)
     - poste Windows avec profil HC prêt (idéal — fallback DevTools sinon)
+    - rappeler aux apprenants : pas de démo séparée, tests live pendant l'exo
   pitch_ouverture: >
     "Équipe nuit qui prend la lumière en pleine figure. Opérateur avec gants tactiles
     qui galère sur un select de 32px. apprenant sensible aux animations. Site qui
@@ -18,7 +19,7 @@ formateur:
     rectangle noir indiscernable. Ce module = passer de 'dashboard qui marche' à
     'dashboard respectueux'."
   energie_attendue: bonne — début aprem J2, post-déjeuner, sujets concrets/empathiques engagent
-  duree_cible: 75 min — découpage 30 concepts / 15 démo / 25 exo / 5 récap
+  duree_cible: 75 min — découpage 30 concepts / 40 exo (démo fusionnée) / 5 récap
   variantes_timing:
     si_en_retard: zapper bonus prefers-reduced-data + print + combinaisons
     si_en_avance: faire imaginer 1 cas usage hover/pointer dans LEUR contexte client
@@ -254,35 +255,21 @@ Quand HC est actif, on **n'écrit plus** `color: #1f1f1f` — on écrit `color: 
 
 ---
 
-## 🔍 Démonstration (15 min)
+## 🛠️ Exercice fil rouge (40 min)
 
-### Étape 1 — Mode sombre (5 min)
+> 🎬 **Pas de démo séparée** — les 4 media queries (dark, reduced-motion, hover/pointer, forced-colors) se testent en live au fil de l'exo. Vous tapez, vous basculez DevTools, vous voyez l'effet direct. Plus marquant que de me regarder faire.
 
-DevTools → "Emulate CSS prefers-color-scheme: dark" → bascule immédiate. Vérifier que toutes les surfaces, textes, bordures suivent.
+### 📁 Code de départ
 
-### Étape 2 — Reduced motion (3 min)
-
-DevTools → "Emulate CSS prefers-reduced-motion: reduce" → tester un hover sur card, vérifier que la transition est désactivée.
-
-### Étape 3 — Tactile vs souris (4 min)
-
-DevTools → "More tools → Sensors → Touch: Force enabled". Inspecter les media queries actives. Vérifier que `(hover: none)` matche.
-
-### Étape 4 — Forced colors / Windows HC (3 min)
-
-DevTools → "Rendering → Emulate CSS media feature `forced-colors: active`". Avant : badges status (running/alerte) deviennent indiscernables (rectangles noirs). Après application du bloc `@media (forced-colors: active)` : bordures restituées via `CanvasText`, badge alerte conserve son rouge via `forced-color-adjust: none`. Bascule en live + comparaison avant/après = **effet pédagogique fort**.
-
----
-
-## 🛠️ Exercice fil rouge (25 min)
+Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
 
 ### Consigne
 
 Reprendre le checkpoint Module 7 et :
 
-1. **Mode sombre** : ajouter un bloc `@media (prefers-color-scheme: dark)` qui redéfinit les tokens surfaces / texte / borders en oklch sombres. Tester via DevTools.
+1. **Mode sombre** : ajouter un bloc `@media (prefers-color-scheme: dark)` qui redéfinit les tokens surfaces / texte / borders en oklch sombres.
 
-2. **Reduced motion** : ajouter le bloc reset universal en `@media (prefers-reduced-motion: reduce)`. Vérifier qu'aucune transition ne se déclenche.
+2. **Reduced motion** : ajouter le bloc reset universal en `@media (prefers-reduced-motion: reduce)`.
 
 3. **Hover/pointer** :
    - Encapsuler le `:hover` des cards dans `@media (hover: hover) and (pointer: fine)`.
@@ -296,13 +283,16 @@ Reprendre le checkpoint Module 7 et :
    - Restaure les bordures via `CanvasText` sur cards / containers (Apriso les laissait à `background` only).
    - Préserve la sémantique couleur des badges status critiques via `forced-color-adjust: none` ciblé.
    - Met le focus ring sur `Highlight` (couleur système).
-   - Tester via DevTools `Rendering → forced-colors: active`, vérifier que badge alerte reste rouge et que cards "running" vs "alert" restent **distinguables**.
 
-### Tests à faire
+### 🎮 Tests live à faire vous-même (l'effet wow, en direct)
 
-- DevTools : émulation `prefers-color-scheme: dark` → vérifier lisibilité.
-- DevTools : émulation `prefers-reduced-motion: reduce` → vérifier que rien ne bouge au hover.
-- DevTools : Cmd+P → preview impression du journal.
+À chaque étape de la consigne, basculez DevTools pour vérifier en live :
+
+- **Test 1 — Mode sombre** : DevTools → Rendering → `Emulate CSS prefers-color-scheme: dark` → bascule immédiate. Vérifier que toutes les surfaces, textes, bordures suivent.
+- **Test 2 — Reduced motion** : DevTools → Rendering → `Emulate CSS prefers-reduced-motion: reduce` → tester un hover sur card, vérifier que la transition est désactivée.
+- **Test 3 — Tactile vs souris** : DevTools → More tools → Sensors → `Touch: Force enabled`. Inspecter les media queries actives. Vérifier que `(hover: none)` matche.
+- **Test 4 — Forced colors / Windows HC** : DevTools → Rendering → `Emulate CSS media feature forced-colors: active`. Avant le bloc : badges status (running/alerte) deviennent indiscernables (rectangles noirs). Après application : bordures restituées via `CanvasText`, badge alerte conserve son rouge via `forced-color-adjust: none`. Bascule en live + comparaison avant/après = **effet pédagogique fort**.
+- **Test 5 — Print preview** (bonus) : `Cmd+P` → preview impression du journal.
 
 ### Pièges fréquents
 
@@ -312,10 +302,6 @@ Reprendre le checkpoint Module 7 et :
 - ❌ `forced-color-adjust: none` en wildcard `*` → HC ne sert plus à rien. Cibler uniquement les éléments où la **couleur est l'information** (badge alerte critique).
 - ❌ Tester `forced-colors` uniquement en DevTools sans valider sur un vrai poste Windows HC → certains comportements (scrollbars, focus système) ne s'émulent pas.
 - ❌ Oublier `:focus-visible { outline: 3px solid Highlight }` en HC → focus invisible, navigation clavier perdue.
-
-### 📁 Code de départ
-
-Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
 
 ### Corrigé attendu
 

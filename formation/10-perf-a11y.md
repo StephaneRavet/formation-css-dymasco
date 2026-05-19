@@ -204,6 +204,10 @@ Ajouter `content-visibility: auto` sur les `<tr>`. Si le journal est long (simul
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 9 : [projet-fil-rouge/checkpoints/09-svg-animations/overrides.css](../projet-fil-rouge/checkpoints/09-svg-animations/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 9 et :
@@ -269,10 +273,6 @@ Reprendre le checkpoint Module 9 et :
 - ❌ `content-visibility: auto` sur des éléments **interactifs** → tab clavier saute la zone non rendue (à valider).
 - ❌ `content-visibility: auto` sur du contenu **textuel critique** → la recherche **Ctrl+F** ne trouve pas le texte hors viewport (Safari notamment). Idem pour les lecteurs d'écran qui parcourent le DOM.
 - ❌ Oublier `outline-offset` → le focus ring colle au bord, illisible sur fonds colorés.
-
-### 📁 Code de départ
-
-Partez du checkpoint Module 9 : [projet-fil-rouge/checkpoints/09-svg-animations/overrides.css](../projet-fil-rouge/checkpoints/09-svg-animations/overrides.css)
 
 ### Corrigé attendu
 

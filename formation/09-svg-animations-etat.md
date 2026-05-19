@@ -241,6 +241,10 @@ Ajouter le `@keyframes ml-pulse` + l'animation sur le picto des cards alert. Vé
 
 ## 🛠️ Exercice fil rouge (15 min)
 
+### 📁 Code de départ
+
+Partez du checkpoint Module 8 : [projet-fil-rouge/checkpoints/08-media-queries/overrides.css](../projet-fil-rouge/checkpoints/08-media-queries/overrides.css)
+
 ### Consigne
 
 Reprendre le checkpoint Module 8 et :
@@ -270,10 +274,6 @@ Reprendre le checkpoint Module 8 et :
 - ❌ Animer la **card entière** au lieu du picto → distrayant, performance dégradée.
 - ❌ Oublier `aria-hidden` → lecteurs d'écran annoncent un élément "image vide".
 - ❌ Durées > 300 ms sur du hover → impression de lourdeur.
-
-### 📁 Code de départ
-
-Partez du checkpoint Module 8 : [projet-fil-rouge/checkpoints/08-media-queries/overrides.css](../projet-fil-rouge/checkpoints/08-media-queries/overrides.css)
 
 ### Corrigé attendu
 
