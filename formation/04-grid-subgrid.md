@@ -344,6 +344,10 @@ Partez de ce fichier `overrides.css` (état après Module 3) :
 
 - [projet-fil-rouge/checkpoints/03-flexbox/overrides.css](../projet-fil-rouge/checkpoints/03-flexbox/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard a un **layout 2D propre** : `grid-template-areas` nomme les zones (header / kpi / main / footer), la grille machines reflow automatiquement (`auto-fit + minmax`) — autant de colonnes que de place. KPI board passe en Grid 4 colonnes via `display: contents` sur le `<table>`. Journal d'événements : en-tête `position: sticky`, lignes paires zebra, colonne heure en `tabular-nums` (chiffres alignés). Scroll du journal → en-tête reste visible. Resize fenêtre → grille machines reconfigure sans saut.
+
 ### Consigne
 
 Reprendre le checkpoint Module 3 et :

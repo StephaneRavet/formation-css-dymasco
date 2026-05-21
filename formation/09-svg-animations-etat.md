@@ -245,6 +245,10 @@ Ajouter le `@keyframes ml-pulse` + l'animation sur le picto des cards alert. Vé
 
 Partez du checkpoint Module 8 : [projet-fil-rouge/checkpoints/08-media-queries/overrides.css](../projet-fil-rouge/checkpoints/08-media-queries/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, chaque badge de statut porte un **picto SVG inline** qui prend la couleur du contexte via `currentColor` (running → vert, alert → rouge…) et s'aligne sur la baseline du texte. Le picto des cards `--alert` **pulse** discrètement (opacité 1 ↔ 0.55, 1.6s) pour attirer l'œil sans saturer. Transitions cards : seulement `transform` + `box-shadow` (GPU, fluide). Sous `prefers-reduced-motion: reduce` (héritage M08) : pulse et transitions désactivés automatiquement. Lecteurs d'écran ignorent les SVG (`aria-hidden`).
+
 ### Consigne
 
 Reprendre le checkpoint Module 8 et :

@@ -251,6 +251,10 @@ Outil : [oklch.com](https://oklch.com) — picker visuel hex ↔ oklch.
 
 Partez du checkpoint Module 6 : [projet-fil-rouge/checkpoints/06-container-queries/overrides.css](../projet-fil-rouge/checkpoints/06-container-queries/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, **une seule ligne** suffit pour réharmoniser toute la charte. Modifier `--ml-color-brand-primary` sur `:root` → hover/active/disabled dérivés via `color-mix()` se recalculent automatiquement, plus jamais à coordonner 5 teintes. Backgrounds statuts (alert, running) sont des tokens dérivés, plus de `color-mix()` inline. Bascule **dark mode** automatique via `light-dark()` + `color-scheme: light dark` : DevTools → Rendering → `prefers-color-scheme: dark` fait basculer toute l'app, **zéro `@media`**, sans bouton ni JS.
+
 ### Consigne
 
 Reprendre le checkpoint Module 6 et :

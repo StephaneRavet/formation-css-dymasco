@@ -263,6 +263,10 @@ Quand HC est actif, on **n'écrit plus** `color: #1f1f1f` — on écrit `color: 
 
 Partez du checkpoint Module 7 : [projet-fil-rouge/checkpoints/07-couleurs/overrides.css](../projet-fil-rouge/checkpoints/07-couleurs/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard **s'adapte à 4 contextes utilisateur réels** sans toucher au HTML. Mode sombre OS → bascule complète (surfaces, textes, bordures). `prefers-reduced-motion` → toutes les transitions/animations désactivées (utilisateur sensible, atelier sous médication). Tablette tactile → cibles 44px min, `:active` plutôt que `:hover`, plus de "hover fantôme" qui colle. Windows Mode Contrasté élevé (`forced-colors: active`) → bordures restaurées via `CanvasText`, badge alerte garde son rouge via `forced-color-adjust: none` ciblé, focus ring sur `Highlight`. Bascule DevTools en live = preuve immédiate par contexte.
+
 ### Consigne
 
 Reprendre le checkpoint Module 7 et :

@@ -204,6 +204,10 @@ DevTools : sélectionner `.apriso-machine-grid` (le `<main>`, déclaré comme co
 
 Partez du checkpoint Module 5 : [projet-fil-rouge/checkpoints/05-selecteurs/overrides.css](../projet-fil-rouge/checkpoints/05-selecteurs/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, les cards machines se reconfigurent selon **leur propre largeur**, pas celle du viewport. Card étroite (<280px) : metrics empilées 1 colonne, "last event" masqué, titre compact. Card large : metrics côte à côte, "last event" visible sur 2 lignes, titre confortable. Police du titre suit la largeur via `cqw`. Démo qui marque : faire varier la largeur de la **sidebar** ou de la **grille machines** en live → cards internes basculent ; faire varier le **viewport seul** → cards ne bougent pas (la grille hôte garde sa taille).
+
 ### Consigne
 
 Reprendre le checkpoint Module 5 et :

@@ -336,6 +336,10 @@ Fichiers de départ pour l'exercice :
 - CSS framework (à ne pas modifier) : [projet-fil-rouge/00-base/apriso-base.css](../projet-fil-rouge/00-base/apriso-base.css)
 - CSS de travail (à compléter) : [projet-fil-rouge/00-base/overrides.css](../projet-fil-rouge/00-base/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard Mamie Lulu doit basculer du look gris/standard Apriso à l'**identité visuelle Mamie Lulu** : header rouge brique sur fond crème, cards machines avec bord gauche coloré selon le statut (vert running, gris idle, rouge alerte, jaune maintenance), titre tronqué proprement. Aucune règle ne porte de `!important` sauf dans `@layer priority` (6 cas, **un par un**, en réponse aux `!important` d'Apriso). DevTools → panneau Styles affiche pour chaque déclaration la couche source (`Layer: overrides`, `Layer: priority`, `Layer: framework`) — preuve visible que la pyramide est en place.
+
 ### Consigne
 
 Refactorer `overrides.css` (vide) pour produire l'**état attendu après Module 1** du dashboard Mamie Lulu :

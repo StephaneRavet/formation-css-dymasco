@@ -240,6 +240,10 @@ Deux fichiers servent de point de départ à l'exercice :
 - HTML : [projet-fil-rouge/00-base/Forge — Pâtes Mamie Lulu.html](<../projet-fil-rouge/00-base/Forge — Pâtes Mamie Lulu.html>) (partagé pour tout le projet fil rouge). Point d'attention M05 : le badge de Laminoir Léon porte la classe `apriso-machine-card__status--alert` (ajoutée pour permettre `:has(.apriso-machine-card__status--alert)`).
 - CSS : [projet-fil-rouge/checkpoints/04-grid/overrides.css](../projet-fil-rouge/checkpoints/04-grid/overrides.css) — état après Module 4 (Grid).
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, la **structure du HTML pilote le style** sans JS. Toute card qui contient un badge `--alert` reçoit un outline rouge (via `:has()`) — découplé du modifier sur le parent. Les lignes critiques du journal se teintent automatiquement, les cards dans un état "non prévu" héritent d'un outline pointillé de sécurité. Plusieurs chaînes de sélecteurs Apriso ont été factorisées via `:is()`. Vérification DevTools : retirer/ajouter une classe `--alert` sur un badge → la card parent réagit instantanément sans recharger.
+
 ### Consigne
 
 Reprendre le checkpoint Module 4 et :

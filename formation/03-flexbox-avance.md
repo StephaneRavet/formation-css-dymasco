@@ -313,6 +313,10 @@ Partez de ce fichier `overrides.css` (état après Module 2) :
 
 - [projet-fil-rouge/checkpoints/02-typography/overrides.css](../projet-fil-rouge/checkpoints/02-typography/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard encaisse les **noms longs sans casser le layout**. Header en `fixe + fluide + fixe` (brand à gauche, titre tronqué au centre, contrôles à droite) — un titre interminable s'ellipse, ne pousse rien. Cards machines avec titre 1 ligne ellipsis et message événement clampé à 2 lignes, hauteurs alignées dans la grille. Journal d'événements : longs messages cassent en `overflow-wrap: anywhere`, pas de débordement horizontal. Test : éditer le HTML, donner un nom kilométrique à 2 machines → tout tient.
+
 ### Consigne
 
 Reprendre le checkpoint Module 2 et :

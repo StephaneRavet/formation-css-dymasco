@@ -209,6 +209,10 @@ Partez de ce fichier `overrides.css` (état après Module 1) :
 
 - [projet-fil-rouge/checkpoints/01-architecture/overrides.css](../projet-fil-rouge/checkpoints/01-architecture/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard doit s'adapter **fluidement** à toute taille d'écran (tablette opérateur 1024px → mural atelier 1920px) sans `@media query`. Titres et valeurs KPI grossissent et rétrécissent en continu via `clamp()`, jamais en escalier. Les cards machines ont une largeur bornée (220-300px) qui suit la place dispo, le dashboard occupe `100dvh` (correct sur tablette avec barre dynamique iOS). Resize de la fenêtre en live = preuve immédiate.
+
 ### Consigne
 
 Compléter `overrides.css` (issu du checkpoint Module 1) pour rendre le dashboard fluide :

@@ -208,6 +208,10 @@ Ajouter `content-visibility: auto` sur les `<tr>`. Si le journal est long (simul
 
 Partez du checkpoint Module 9 : [projet-fil-rouge/checkpoints/09-svg-animations/overrides.css](../projet-fil-rouge/checkpoints/09-svg-animations/overrides.css)
 
+### 🎯 Résultat attendu
+
+À la fin de l'implémentation, le dashboard passe la **revue qualité client** : navigation clavier complète avec focus ring visible sur **chaque** contrôle (`:focus-visible`, jamais au clic souris), tous les contrastes texte/fond ≥ 4.5:1 (validés DevTools, ratios documentés en commentaire). Journal d'événements prêt à scaler grâce à `content-visibility: auto` sur les lignes. CSS final clean : zéro `transition: all`, zéro `!important` non documenté, zéro hex hardcodé. Lighthouse Accessibility 95+, Performance 95+. Le tableau avant/après (Apriso seul → fil rouge M10) sert de **preuve chiffrée à montrer en revue de PR**.
+
 ### Consigne
 
 Reprendre le checkpoint Module 9 et :
